@@ -1,4 +1,6 @@
 
+/* helpers */
+
 jQuery.fn.changeClass = function(c1,c2) {
     return this.each(function() {
         this_class=jQuery(this).attr('class');
@@ -159,22 +161,35 @@ function getPageSize(){
 }
 
 
+function parseQuery ( query ) {
+   var Params = new Object ();
+   if ( ! query ) return Params; // return empty object
+   var Pairs = query.split(/[;&]/);
+   for ( var i = 0; i < Pairs.length; i++ ) {
+      var KeyVal = Pairs[i].split('=');
+      if ( ! KeyVal || KeyVal.length != 2 ) continue;
+      var key = unescape( KeyVal[0] );
+      var val = unescape( KeyVal[1] );
+      val = val.replace(/\+/g, ' ');
+      Params[key] = val;
+   }
+   return Params;
+}
+
 var Browser = {
 	maximized: false,
 	url: null,
 	field_name: null,
 	reference_script: null,
 	options: null,
-	typeView: 'image',
+	typeview: 'image',
 	left: 0,
 	top: 0,
 	width: 450,
 	height: 300,
-	fixedHeight: 0
+	fixedHeight: 0,
+	ispopup: false
 };
-
-
-Browser.init = function() {}
 
 Browser.fixHeight = function() {
 	return Browser.fixedHeight || (Browser.fixedHeight = (
@@ -189,15 +204,21 @@ Browser.fixHeight = function() {
 }
 
 Browser.close = function() {
-  jQuery('#plone-browser').remove();
-  Browser.window = null;
-  jQuery(window).unbind('resize');
+  if (Browser.ispopup) {
+      top.window.close();
+  }
+  else {
+      jQuery('#plone-browser').remove();
+      Browser.window = null;
+      jQuery(window).unbind('resize');
+  }    
 }
 
 Browser.maximize = function() {
-	var screenWidth = document.documentElement.clientWidth;
+	arrayPageSize = getPageSize();
+	var screenWidth = arrayPageSize [2];
+	var screenHeight =arrayPageSize [3];
 	Browser.width = screenWidth - Browser.left - 10;
-	var screenHeight = document.documentElement.clientHeight;
 	Browser.height = screenHeight - Browser.top - 100;
 	Browser.size({width: Browser.width, height: Browser.height});
 	Browser.window.center();
@@ -241,9 +262,9 @@ Browser.size = function(top, left, width, height) {
   jQuery('#plone-browser .overlay').fullsize();
 };
 
-Browser.setView = function(typeView) {
-	Browser.typeView = typeView;
-	if (typeView == 'file')
+Browser.setView = function(typeview) {
+	Browser.typeview = typeview;
+	if (typeview == 'file')
 		jQuery('#plone-browser-body .floatContainer')
 			.changeClass('floatContainer','listContainer')
 			.changeClass('portrait','portrait_icon')
@@ -254,20 +275,18 @@ Browser.setView = function(typeView) {
 			.changeClass('portrait_icon','portrait')
 			.changeClass('landscape_icon','landscape');			
 	jQuery('#menuViews a').removeClass('selected');
-	jQuery('#menuViews a.' + typeView + 'View').addClass('selected');
+	jQuery('#menuViews a.' + typeview + 'View').addClass('selected');
 };
 
-Browser.open = function(path, searchTerm, scope) {
+Browser.open = function(browsedpath, SearchableText) {
   var aUrl = '@@plone_finder';
 	var data = {
         field_name:  Browser.field_name,
-        path : 			 path,
-        type: 			 Browser.type,
-        typeView: 	 Browser.typeView,
-        searchTerm:  searchTerm,
-        scope: 			 scope
+        browsedpath: browsedpath,
+        typeview: 	 Browser.typeview,
+        SearchableText:  SearchableText
   };
-  data.path = encodeURI(data.path || '');
+  data.browsedpath = encodeURI(data.browsedpath || '');
   Browser.options = data;
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
 	jQuery.post(aUrl, data, function(html) {
@@ -289,21 +308,20 @@ Browser.open = function(path, searchTerm, scope) {
   });
 };
 
-Browser.update = function(path, searchTerm, scope, bstart, ie_hack) {
+Browser.update = function(browsedpath, SearchableText, bstart, ie_hack) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
   var aUrl = '@@plone_finder';
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
 	var data = {
     field_name:  Browser.field_name,
-    typeView: 	 Browser.typeView,
-    path: 			 path,
-    searchTerm:  searchTerm,
-    scope:       scope,
+    typeview: 	 Browser.typeview,
+    browsedpath: browsedpath,
+    SearchableText:  SearchableText,
     b_start: bstart,
     onlybody:		 true
   };
-  data.path = encodeURI(data.path || '');
+  data.browsedpath = encodeURI(data.browsedpath || '');
   Browser.options = data;
 	jQuery.post(aUrl, data, function(html) {
 		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu').remove();
@@ -374,10 +392,10 @@ Browser.drop = function(e) {
 		//.unmouseup(Browser.drop);
 };
 
-Browser.search = function(url, path, type, typeView) {
-  var searchTerm = jQuery('#searchTerm').val();
-  var scope = jQuery('#scope').val();
-  Browser.open(path, searchTerm, scope);	
+Browser.search = function() {
+  var SearchableText = jQuery('#SearchableText').val();
+  var browsedpath = jQuery('#browsedpath').val();
+  Browser.update(browsedpath, SearchableText);	
 };
 
 Browser.selectItem = function (UID) {
@@ -391,25 +409,38 @@ Browser.batch = function() {
       var batchUrl = this.href;
       var queryString = batchUrl.replace(/^[^\?]+\??/,'');
       var params = parseQuery( queryString );
-      Browser.update (params['path'], params['searchTerm'], params['scope'],params['b_start:int']);
+      Browser.update (params['browsedpath'], params['SearchableText'],params['b_start:int']);
       this.blur();
       return false;
     }
   );
 }
 
-function parseQuery ( query ) {
-   var Params = new Object ();
-   if ( ! query ) return Params; // return empty object
-   var Pairs = query.split(/[;&]/);
-   for ( var i = 0; i < Pairs.length; i++ ) {
-      var KeyVal = Pairs[i].split('=');
-      if ( ! KeyVal || KeyVal.length != 2 ) continue;
-      var key = unescape( KeyVal[0] );
-      var val = unescape( KeyVal[1] );
-      val = val.replace(/\+/g, ' ');
-      Params[key] = val;
-   }
-   return Params;
+
+Browser.Popup_init = function() {
+  Browser.window = jQuery('#plone-browser > .window');
+  arrayPageSize = getPageSize();
+  jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
+  Browser.batch();
+	var data = {
+        field_name:  Browser.field_name,
+        browsedpath: browsedpath,
+        typeview: 	 Browser.typeview,
+        SearchableText:  SearchableText
+  };
+  data.browsedpath = encodeURI(data.browsedpath || '');
+  Browser.options = data;
+};
+
+Browser.init = function() {
+    Browser.typeview = jQuery('#typeview').val();
+    if (jQuery('#plone-browser.popup')) {
+        Browser.ispopup =true;
+        Browser.Popup_init();
+    }    
 }
 
+
+jQuery(document).ready(function(){
+    Browser.init();
+})

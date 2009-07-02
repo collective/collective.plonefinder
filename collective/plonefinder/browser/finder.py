@@ -26,6 +26,7 @@ class Finder(BrowserView):
         portal = portal_url.getPortalObject()
         self.portal_url = portal_url()
         self.portal = portal 
+        self.portalpath = '/'.join(portal.getPhysicalPath())        
         browsedpath = request.get('browsedpath', '')          
         
         # use self.catalog to change catalog
@@ -45,6 +46,11 @@ class Finder(BrowserView):
                     break
                 folder = folder.aq_parent    
             self.scope = folder
+        self.browsedpath = ''
+        self.parentpath = ''
+        if not (self.scope is portal):
+              self.browsedpath = '/'.join(aq_inner(self.scope).getPhysicalPath())  
+              self.parentpath = '/'.join(aq_inner(self.scope).aq_parent.getPhysicalPath())       
         self.browsed_url = self.scope.absolute_url()
                     
         # use self.multiselect = False (or multiselect = False in request) to close window after selection
@@ -108,8 +114,12 @@ class Finder(BrowserView):
         # could be string
         self.fieldtype = 'list'  
         
-        # set self.ispopup = False to call it in ajax
-        self.ispopup = True
+        # set self.ispopup = False when calling view in ajax
+        if kwargs.has_key('ispopup') : 
+            ispopup = kwargs['ispopup']
+        else :
+            ispopup = True
+        self.ispopup = request.get('ispopup', ispopup)         
                           
         firstpassresults = self.finderResults()                    
         
@@ -145,7 +155,13 @@ class Finder(BrowserView):
         """    
         
         scope = self.scope
-        return utils.createBreadCrumbs(scope, self.request) 
+        breadcrumbs = utils.createBreadCrumbs(scope, self.request) 
+        portalpath = self.portalpath
+        newcrumbs = []
+        for crumb in breadcrumbs :
+            crumb['path'] = crumb['absolute_url'].replace(portalpath, '')
+            newcrumbs.append(crumb)
+        return newcrumbs
         
                           
     def finderQuery(self) :
@@ -169,6 +185,9 @@ class Finder(BrowserView):
             SearchableText = request.get('SearchableText', '')    
             if SearchableText :
                 query['SearchableText'] = SearchableText
+            
+            print '\n\nTTTTOOOO\n\n%s\n\n' %str(query)
+            
             return query            
             
     def finderBrowsingQuery(self) :
@@ -205,6 +224,7 @@ class Finder(BrowserView):
             r['description'] = b.Description                 
             r['thumb'] = '%s/%s' %(self.portal_url, b.getIcon)
             r['type'] = b.portal_type
+            r['path'] = b.getPath
 
             results.append(r)
         
@@ -224,6 +244,7 @@ class Finder(BrowserView):
             r = {}
             r['uid'] = b.UID
             r['url'] = b.getURL()
+            r['path'] = b.getPath
             r['title'] = b.pretty_title_or_id()
             r['description'] = b.Description
             r['is_folderish'] = b.is_folderish or False

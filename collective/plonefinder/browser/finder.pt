@@ -7,7 +7,7 @@
   <tal:block define="dummy python:request.RESPONSE.setHeader('Last-Modified', 'Sat, 1 Jan 2000 00:00:00 GMT')" />
   <tal:block define="dummy python:request.RESPONSE.setHeader('Cache-control', 'max-age=0,s-maxage=0,must-revalidate')" />
 </tal:headers>
-<metal:block tal:define="typeView view/typeview;
+<metal:block tal:define="typeview view/typeview;
                          fieldName view/fieldname;                         
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
@@ -15,12 +15,13 @@
                          b_start python:0;
                          b_start request/b_start | b_start;                      
                          typecss view/typecss;
-                         scope view/scope;
-                         type string:;
                          browsed_url view/browsed_url;
                          ispopup view/ispopup;
                          portal view/portal;
                          portal_url view/portal_url;
+                         browsedpath view/browsedpath;
+                         portalpath view/portalpath;
+                         parentpath view/parentpath;
                          "
              i18n:domain="collective.plonefinder">
              
@@ -42,19 +43,20 @@
             <div id="searchBrowserBox">
               <form>
               <input name="SearchableText" 
-                     id="searchTerm" 
+                     id="SearchableText" 
                      type="text" 
                      value="" 
                      size="25" 
                      title="Search Site"
                      tabindex="0"
                      tal:attributes="value SearchableText" /> 
-              <select name="scope" id="scope">
-                <option value="portal"
+              <select name="browsedpath" id="browsedpath">
+                <option tal:attributes="value portalpath"
                         i18n:translate="label_all_site">
                   all site
                 </option>          
-                <option value="folder"
+                <option tal:attributes="value browsedpath"
+                        tal:condition="browsedpath"
                         i18n:translate="label_this_folder">
                   this folder
                 </option>
@@ -63,20 +65,24 @@
                      i18n:domain="plone"
                      i18n:attributes="value label_search;"
                      href="javascript: void(0);"
-                     tal:attributes="onclick string:Browser.search('$here_url', '${browsed_url}', '${type}', '${typeView}');; return false;" />
+                     tal:attributes="onclick string:Browser.search();; return false;" />
               </form>       
             </div>
             <div id="menuViews">
+              <input type="hidden"
+                     id="typeview"
+                     name="typeview"
+                     tal:attributes="value typeview" />
               <a href="javascript: void(0);"
                  onclick="Browser.setView('image'); return false;"
                  title="album view"
-                 tal:attributes="class python:typeView=='image' and 'imageView selected' or 'imageView'"
+                 tal:attributes="class python:typeview=='image' and 'imageView selected' or 'imageView'"
                  i18n:attributes="title label_album_view;">
               </a>                  
               <a href="javascript: void(0);"
                  onclick="Browser.setView('file'); return false;"
                  title="file listing view"
-                 tal:attributes="class python:typeView=='file' and 'fileView selected' or 'fileView'"
+                 tal:attributes="class python:typeview=='file' and 'fileView selected' or 'fileView'"
                  i18n:attributes="title label_file_listing_view;">
               </a>
             </div>
@@ -85,11 +91,10 @@
           <div id="browser-crumbs"
                tal:condition="view/browse"
                tal:define="breadcrumbs view/finderBreadCrumbs;">      
-              <a tal:condition="browsed_url"
-                 tal:define="parentPath python:len(breadcrumbs)&gt;1 and breadcrumbs[-2]['absolute_url'] or ''"
+              <a tal:condition="parentpath"
                  class="folderUp"
                  href="javascript: void(0);"
-                 tal:attributes="onclick string:Browser.update('${parentPath}', '','', '${b_start}');; return false;"
+                 tal:attributes="onclick string:Browser.update('${parentpath}', '', '${b_start}');; return false;"
                  title="parent folder"
                  i18n:attributes="title">&nbsp;               
               </a>
@@ -97,7 +102,7 @@
               <span>
                   <a i18n:translate="tabs_home" i18n:domain="plone"
                      href="javascript: void(0);"
-                     tal:attributes="onclick string:javascript:Browser.update('', '','', '${b_start}');; return false;">
+                     tal:attributes="onclick string:javascript:Browser.update('${portalpath}', '', '${b_start}');; return false;">
                        Home
                   </a>
                   <span tal:condition="breadcrumbs" class="breadcrumbSeparator">
@@ -110,7 +115,7 @@
                           <a href="javascript: void(0);"
                              tal:omit-tag="not: crumb/absolute_url"
                              tal:condition="python:not is_last"
-                             tal:attributes="onclick string:Browser.update('${crumb/absolute_url}', '','', '${b_start}');; return false;"
+                             tal:attributes="onclick string:Browser.update('${crumb/path}', '', '${b_start}');; return false;"
                              tal:content="crumb/Title"
                              tal:on-error="crumb">
                               crumb
@@ -136,8 +141,8 @@
             <tal:folders repeat="f folders">
                 <div tal:attributes="class string: ${typecss}Container folder;">
                      <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.update('${f/url}', '','', '${b_start}');; return false;">
-                        <div tal:attributes="class string:${typeView}Folder">
+                        tal:attributes="onclick string:Browser.update('${f/path}', '', '${b_start}');; return false;">
+                        <div tal:attributes="class string:${typeview}Folder">
                           <img width="16"
                                height="16"
                                tal:define="icon f/thumb"
@@ -166,7 +171,7 @@
               <div tal:attributes="class string:${typecss}Container ${r/orientation_class};">
                 <a href="javascript: void(0);"
                    tal:attributes="class   r/container_class;
-                                   title   string:select ${typeView};
+                                   title   string:select ${typeview};
                                    onclick string:Browser.selectItem('${r/uid}');; return false;" >
                   <img src="" tal:attributes="src r/thumb" />
                   <div class="title" tal:content="r/title">sample Portrait 1</div>
@@ -196,7 +201,7 @@
     
   <metal:block define-macro="plone_browser"
                tal:condition="python: not (onlybody or ispopup)">
-    <div id="plone-browser" class="popup">
+    <div id="plone-browser">
       <div class="overlay"></div>
       <div class="window">
         <div class="browserRelativize">
@@ -253,6 +258,10 @@
       <script type="text/javascript"
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/finder.js">
       </script>
+      
+      <script type="text/javascript"
+              tal:attributes="src string:$portal_url/++resource++plonefinder_static/thickbox_plus.js">
+      </script>
 
       <tal:css define="css nocall:here/renderAllTheStylesheets|nothing">
         <!-- for Plone 2.5 launch css machinery -->
@@ -264,6 +273,10 @@
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/finder.css);">
       </style>
+      
+      <style type="text/css" media="all" 
+             tal:content="string:@import url($portal_url/++resource++plonefinder_static/thickbox.css);">
+      </style>
 
 
     
@@ -271,11 +284,10 @@
     
     <body>  
     
-      <input id="ispopup" type="hidden" value="1" />
       
       <div id="plone-browser" class="popup">
         <div class="window">
-          <div class="browserRelativize">
+          <div class="browserStatic">
             <div id="start-refresh"><!-- --></div>
       
             <metal:block use-macro="context/@@findermacros/macros/plone_browser_body" />
