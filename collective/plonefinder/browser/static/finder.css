@@ -460,13 +460,14 @@ a.folderUp {
 }
 #plone-browser-menu .maximize {
   background: transparent url(./maximize.gif) 50% 50% no-repeat;
+  margin-left: 30px;
 }
 
 #menuViews a {
   border: 1px solid #FFFFFF;
   text-decoration:none;
   display: block;
-  float:  left;
+  float:  right;
   height: 18px;
   width:  18px;
   margin: 0 2px;
@@ -561,4 +562,8 @@ a.folderUp {
 .popup .listContainer .fileFolder, 
 .popup .listContainer .imageFolder {
     background: transparent url(./folder_explore.png) no-repeat scroll 2px 5px !important;
+}
+
+.popup .closeWindow {
+  margin-left: 30px !important;
 }

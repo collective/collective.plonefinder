@@ -160,6 +160,25 @@ function getPageSize(){
 	return arrayPageSize;
 }
 
+isInString = function(str1, str2) {
+    var reg=new RegExp(".*"+str1+".*$","i");  
+    if(str2.match(reg))
+       return true;
+    else
+       return false;
+}
+
+compileData = function(dataname, data, formData) {
+  if (formData) {
+    if (! isInString(dataname, formData)) {
+        formData = formData + '&' + dataname + '=' + encodeURI(data);
+    }
+    return formData;  
+  }
+  return dataname + '=' + encodeURI(data);
+}
+
+
 
 function parseQuery ( query ) {
    var Params = new Object ();
@@ -278,13 +297,12 @@ Browser.setView = function(typeview) {
 	jQuery('#menuViews a.' + typeview + 'View').addClass('selected');
 };
 
-Browser.open = function(browsedpath, SearchableText) {
+Browser.open = function(browsedpath) {
   var aUrl = '@@plone_finder';
 	var data = {
         field_name:  Browser.field_name,
         browsedpath: browsedpath,
-        typeview: 	 Browser.typeview,
-        SearchableText:  SearchableText
+        typeview: 	 Browser.typeview
   };
   data.browsedpath = encodeURI(data.browsedpath || '');
   Browser.options = data;
@@ -308,34 +326,42 @@ Browser.open = function(browsedpath, SearchableText) {
   });
 };
 
-Browser.update = function(browsedpath, SearchableText, bstart, ie_hack) {
+Browser.update = function(browsedpath, formData, bstart, ie_hack) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
   var aUrl = '@@plone_finder';
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
+  formData = compileData('typeview', Browser.typeview, formData);
+  if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
+  if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
+  formData = compileData('field_name', Browser.field_name, formData);
+  formData = compileData('onlybody', 'true', formData);
+  alert(formData);
 	var data = {
     field_name:  Browser.field_name,
     typeview: 	 Browser.typeview,
     browsedpath: browsedpath,
-    SearchableText:  SearchableText,
     b_start: bstart,
     onlybody:		 true
   };
-  data.browsedpath = encodeURI(data.browsedpath || '');
-  Browser.options = data;
-	jQuery.post(aUrl, data, function(html) {
-		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu').remove();
-		jQuery('#start-refresh').after(html);
-		/*if (Browser.maximized)
-		    Browser.maximize();
-		  else
-		  	Browser.size(size);*/
-		jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
-	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
-	  TB_unlaunch();
-		TB_launch();
-    Browser.batch();
-  });
+  Browser.options = data;  
+  jQuery.ajax({
+         type: 'POST',
+         url: aUrl,
+         data: formData,
+         success: function(html) { 
+        		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu').remove();
+        		jQuery('#start-refresh').after(html);
+        		/*if (Browser.maximized)
+        		    Browser.maximize();
+        		  else
+        		  	Browser.size(size);*/
+        		// jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
+        	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+        	  TB_unlaunch();
+        		TB_launch();
+            Browser.batch();             
+         } });  
 }
 
 Browser.setResizable = function(e) {
@@ -393,9 +419,11 @@ Browser.drop = function(e) {
 };
 
 Browser.search = function() {
-  var SearchableText = jQuery('#SearchableText').val();
+  // var SearchableText = jQuery('#SearchableText').val();
+  var searchform = jQuery('#finderSearchForm');
+  var formData = jQuery('input:not([@type=submit]), textarea, select', searchform).serialize();
   var browsedpath = jQuery('#browsedpath').val();
-  Browser.update(browsedpath, SearchableText);	
+  Browser.update(browsedpath, formData);	
 };
 
 Browser.selectItem = function (UID) {
@@ -408,8 +436,7 @@ Browser.batch = function() {
     function(){
       var batchUrl = this.href;
       var queryString = batchUrl.replace(/^[^\?]+\??/,'');
-      var params = parseQuery( queryString );
-      Browser.update (params['browsedpath'], params['SearchableText'],params['b_start:int']);
+      Browser.update ('', queryString);
       this.blur();
       return false;
     }
@@ -430,6 +457,8 @@ Browser.Popup_init = function() {
   };
   data.browsedpath = encodeURI(data.browsedpath || '');
   Browser.options = data;
+  jQuery(window).bind('resize', Browser.Popup_init);
+  
 };
 
 Browser.init = function() {
