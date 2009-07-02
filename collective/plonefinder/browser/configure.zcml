@@ -21,7 +21,7 @@
         
   <!-- resource directory for finder static files -->
   <browser:resourceDirectory
-      name="plonefinder_static"
+      name="orderrefwidget_static"
       directory="static"
       />     	        
 
