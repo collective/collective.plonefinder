@@ -1,21 +1,22 @@
 
 
-.popup {
+#plone-browser {
   position: absolute;
   left: 0; top: 0;
-  width: 100%; height: 100%;
-  padding:0 !important;
+  width: 100%; 
+  height: 100%;
+  padding: 0 !important;
   z-index: 1000;
 }
 
-.popup .overlay {
+#plone-browser .overlay {
   background-color: #AAA;
   opacity: 0.5;
   filter: alpha(opacity=50);
   -khtml-opacity: 0.5;  
 }
 
-.popup .window {
+#plone-browser .window {
   position: absolute;
 }
 
@@ -87,7 +88,7 @@
 #plone-browser-menu {
   background-color: #F0EEEE;
   padding: 2px 12px 5px 12px;
-  height: 1%;
+  height: 25px;
   margin:0;
   margin-bottom: 2px;
   overflow-x: hidden;  
@@ -99,6 +100,7 @@
   height: 2em;
   padding: 2px;
   line-height: 2em;
+  overflow: hidden;
 }
 
 #plone-browser-body {
@@ -297,6 +299,8 @@ a.folderSelect:hover {
 
 .listContainer {
   background-color: transparent !important;
+  clear: left;
+  padding: 2px;
 }
 
 /* IE6 fix */
@@ -510,5 +514,51 @@ a.folderUp {
   display:none;
 }
 
+/* specific styles for popup */
+.popup #plone-browser-corner-resize,
+.popup #plone-browser-border-top,
+.popup #plone-browser-corner-left,
+.popup #plone-browser-tab,
+.popup #plone-browser-menu .maximize {
+    display: none;
+}
 
+.popup #plone-browser-menu {
+   padding-top: 1em;
+}
 
+.popup .window {
+   position:static !important;
+   width: auto !important;
+}
+
+.popup #plone-browser-body {
+   background-color: white !important;
+}
+
+.popup .browserStatic {
+   position: static;
+   height: 100%;
+   background-color: #EEE;
+}
+
+.popup .listContainer a {
+   float: none !important;
+   display: block !important;
+   cursor: pointer !important;
+   padding: 
+}
+
+.popup .listContainer a:hover {
+   background-color: #EFEFEF !important;
+}
+
+.popup .listContainer .legend {
+   float: left !important;
+}
+
+.popup .listContainer .linkFolder, 
+.popup .listContainer .fileFolder, 
+.popup .listContainer .imageFolder {
+    background: transparent url(./folder_explore.png) no-repeat scroll 2px 5px !important;
+}
