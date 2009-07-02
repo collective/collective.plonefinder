@@ -41,7 +41,7 @@
                onclick="Browser.maximize(); return false;">
             </a>          
             <div id="searchBrowserBox">
-              <form>
+              <form id="finderSearchForm">
               <input name="SearchableText" 
                      id="SearchableText" 
                      type="text" 
