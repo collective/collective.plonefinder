@@ -5,7 +5,7 @@
    This code is an extraction of plonearticle explorer for referencables contents
    The intention is to make it usable for any content type in different situations :
    
-   - for referencable fields with a special widget (collective.atorderablereferenceswidget which will come soon)
+   - for referencable fields with a special widget (collective.orderrefswidget which will come soon)
    
    - for collective.ploneckeditor (will also come soon) or any possible wysiwyg editor for referencing images or contents inside a rich text field,
      we also make possible in near future upload of files or images with this product (perhaps using collective.uploadify)
