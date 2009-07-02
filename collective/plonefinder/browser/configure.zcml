@@ -1,0 +1,28 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.plonefinder">
+
+
+  <browser:page
+      for="*"
+      name="plone_finder"
+      class=".finder.Finder"
+      permission="zope.Public"
+      template="./finder.pt"
+      />  
+      
+  <!-- macros used by finder  -->      
+  <browser:page
+      for="*"
+      name="findermacros"
+      permission="zope.Public"
+      template="./finder.pt" />      
+        
+  <!-- resource directory for finder static files -->
+  <browser:resourceDirectory
+      name="plonefinder_static"
+      directory="static"
+      />     	        
+
+</configure>

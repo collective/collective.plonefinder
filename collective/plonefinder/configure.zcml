@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.plonefinder">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <!-- Include the sub-packages that use their own configure.zcml files. -->
+  <include package=".browser" />
+  
+  <!-- Register the installation GenericSetup extension profile -->
+  <genericsetup:registerProfile
+      name="default"
+      title="Collective Plone Finder"
+      directory="profiles/default"
+      description="A finder to search/select portal objects for Plone"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  
+  <!-- -*- extra stuff goes here -*- -->
+
+</configure>
