@@ -171,13 +171,17 @@
   padding:0;
   margin:0;
   border:none;
+  max-width: 70px;
+  max-height: 100px;
 }
 
 .floatContainer.landscape img {
   padding:0;
   margin-top:15px;
-  margin-bottom:15px;
+  margin-bottom:0;
   border:none;
+  max-width: 100px;
+  max-height: 70px;
 }
 
 .floatContainer .title {
@@ -185,6 +189,11 @@
   padding-top:5px;
   text-align:center;
   cursor: pointer !important;
+}
+
+.floatContainer .legend {
+  font-size:9px;
+  font-style:italic;
 }
 
 .floatContainer .folder_icon_gif {
@@ -547,11 +556,11 @@ a.folderUp {
    float: none !important;
    display: block !important;
    cursor: pointer !important;
-   padding: 
 }
 
-.popup .listContainer a:hover {
+.popup a:hover {
    background-color: #EFEFEF !important;
+   color: black !important;
 }
 
 .popup .listContainer .legend {

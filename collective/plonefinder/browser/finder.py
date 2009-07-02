@@ -155,11 +155,12 @@ class Finder(BrowserView):
         """    
         
         scope = self.scope
+        request =self.request
         breadcrumbs = utils.createBreadCrumbs(scope, self.request) 
-        portalpath = self.portalpath
+        serverurl = request.get('SERVER_URL', '')
         newcrumbs = []
         for crumb in breadcrumbs :
-            crumb['path'] = crumb['absolute_url'].replace(portalpath, '')
+            crumb['path'] = crumb['absolute_url'].replace(serverurl, '')
             newcrumbs.append(crumb)
         return newcrumbs
         
@@ -181,12 +182,12 @@ class Finder(BrowserView):
             query['path'] = path
             if self.types :
                 query['portal_types'] = self.types
+            
+            
             # TODO : use a dynamic form with different possible searchform fields   
             SearchableText = request.get('SearchableText', '')    
             if SearchableText :
                 query['SearchableText'] = SearchableText
-            
-            print '\n\nTTTTOOOO\n\n%s\n\n' %str(query)
             
             return query            
             

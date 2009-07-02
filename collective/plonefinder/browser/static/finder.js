@@ -207,7 +207,8 @@ var Browser = {
 	width: 450,
 	height: 300,
 	fixedHeight: 0,
-	ispopup: false
+	ispopup: false,
+	formdata: ''
 };
 
 Browser.fixHeight = function() {
@@ -282,30 +283,44 @@ Browser.size = function(top, left, width, height) {
 };
 
 Browser.setView = function(typeview) {
+	
 	Browser.typeview = typeview;
-	if (typeview == 'file')
+	/* too slow for just changing style*/
+  /* Browser.update('', Browser.formData); */
+  
+	if (typeview == 'file') {
 		jQuery('#plone-browser-body .floatContainer')
 			.changeClass('floatContainer','listContainer')
 			.changeClass('portrait','portrait_icon')
-			.changeClass('landscape','landscape_icon');		
-	else
+			.changeClass('landscape','landscape_icon');		  
+		jQuery('#plone-browser-body img').each (function(){
+         src = this.src;
+         this.src = src.replace('/image_thumb', '/image_listing');
+    })	
+  }
+	else {
 		jQuery('#plone-browser-body .listContainer')
 			.changeClass('listContainer','floatContainer')
 			.changeClass('portrait_icon','portrait')
-			.changeClass('landscape_icon','landscape');			
+			.changeClass('landscape_icon','landscape');	  
+		jQuery('#plone-browser-body img').each (function(){
+         src = this.src;
+         this.src = src.replace('/image_listing', '/image_thumb');
+    })				
+  }
+		
 	jQuery('#menuViews a').removeClass('selected');
 	jQuery('#menuViews a.' + typeview + 'View').addClass('selected');
+
 };
 
 Browser.open = function(browsedpath) {
   var aUrl = '@@plone_finder';
 	var data = {
         field_name:  Browser.field_name,
-        browsedpath: browsedpath,
+        browsedpath: encodeURI(browsedpath),
         typeview: 	 Browser.typeview
   };
-  data.browsedpath = encodeURI(data.browsedpath || '');
-  Browser.options = data;
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
 	jQuery.post(aUrl, data, function(html) {
 		Browser.close();
@@ -336,17 +351,8 @@ Browser.update = function(browsedpath, formData, bstart, ie_hack) {
   if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
   formData = compileData('field_name', Browser.field_name, formData);
   formData = compileData('onlybody', 'true', formData);
-  alert(formData);
-	var data = {
-    field_name:  Browser.field_name,
-    typeview: 	 Browser.typeview,
-    browsedpath: browsedpath,
-    b_start: bstart,
-    onlybody:		 true
-  };
-  Browser.options = data;  
   jQuery.ajax({
-         type: 'POST',
+         type: 'GET',
          url: aUrl,
          data: formData,
          success: function(html) { 
@@ -356,7 +362,7 @@ Browser.update = function(browsedpath, formData, bstart, ie_hack) {
         		    Browser.maximize();
         		  else
         		  	Browser.size(size);*/
-        		// jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
+        		jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
         	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
         	  TB_unlaunch();
         		TB_launch();
@@ -449,20 +455,13 @@ Browser.Popup_init = function() {
   arrayPageSize = getPageSize();
   jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
   Browser.batch();
-	var data = {
-        field_name:  Browser.field_name,
-        browsedpath: browsedpath,
-        typeview: 	 Browser.typeview,
-        SearchableText:  SearchableText
-  };
-  data.browsedpath = encodeURI(data.browsedpath || '');
-  Browser.options = data;
   jQuery(window).bind('resize', Browser.Popup_init);
   
 };
 
 Browser.init = function() {
     Browser.typeview = jQuery('#typeview').val();
+    Browser.formData = jQuery('#formData').val();
     if (jQuery('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();
