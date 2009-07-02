@@ -8,7 +8,8 @@
   <tal:block define="dummy python:request.RESPONSE.setHeader('Cache-control', 'max-age=0,s-maxage=0,must-revalidate')" />
 </tal:headers>
 <metal:block tal:define="typeview view/typeview;
-                         fieldName view/fieldname;                         
+                         fieldName view/fieldname; 
+                         formData request/QUERY_STRING | string:;                  
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
                          b_size python:50;
@@ -28,7 +29,10 @@
 
   <tal:block condition="onlybody">             
     <metal:block define-macro="plone_browser_body">
-                      
+          <input id="formData"
+                 name="formData"
+                 type="hidden"
+                 tal:attributes="value formData" />            
           <div id="plone-browser-menu">
             <a class="closeWindow"
                i18n:translate=""
@@ -205,33 +209,32 @@
       <div class="overlay"></div>
       <div class="window">
         <div class="browserRelativize">
-          <div id="start-refresh"><!-- --></div>
-              
-          <metal:block use-macro="context/@@findermacros/macros/plone_browser_body" />
-    
-          <div class="statusBar">
-            <div id="msg-loading">
-              Loading please wait...
-            </div>
-            <div id="msg-done">
-              Done.
-            </div>
-          </div>
-    
-          
-          <div id="plone-browser-border-bottom"></div>
-          <div id="plone-browser-border-top"></div>              
-          <div id="plone-browser-corner-left"></div>      
-          <div id="plone-browser-corner-resize"></div>      
-          <div id="plone-browser-tab">
-            <div id="plone-browser-tab-menu">         
-              <span tal:content="python:here.utranslate('label_browse_server_%s' % fieldName, default='Browse server %s' % fieldName, domain='plonearticle')"
-                    i18n:translate="">
-                Browse server images
-              </span>                            
-            </div>
-         
-          </div>      
+          <metal:block define-macro="plone_browser_main">
+            <div id="start-refresh"><!-- --></div>
+                
+            <metal:block use-macro="context/@@findermacros/macros/plone_browser_body" />      
+            <div class="statusBar">
+              <div id="msg-loading">
+                Loading please wait...
+              </div>
+              <div id="msg-done">
+                Done.
+              </div>
+            </div>                  
+            <div id="plone-browser-border-bottom"></div>
+            <div id="plone-browser-border-top"></div>              
+            <div id="plone-browser-corner-left"></div>      
+            <div id="plone-browser-corner-resize"></div>      
+            <div id="plone-browser-tab">
+              <div id="plone-browser-tab-menu">         
+                <span tal:content="python:here.utranslate('label_browse_server_%s' % fieldName, default='Browse server %s' % fieldName, domain='collective.plonefinder')"
+                      i18n:translate="">
+                  Browse server images
+                </span>                            
+              </div>
+           
+            </div>    
+          </metal:block>  
         </div>
       </div>
     </div>
@@ -282,39 +285,12 @@
     
     </head>
     
-    <body>  
-    
+    <body>      
       
       <div id="plone-browser" class="popup">
         <div class="window">
           <div class="browserStatic">
-            <div id="start-refresh"><!-- --></div>
-      
-            <metal:block use-macro="context/@@findermacros/macros/plone_browser_body" />
-      
-            <div class="statusBar">
-              <div id="msg-loading">
-                Loading please wait...
-              </div>
-              <div id="msg-done">
-                Done.
-              </div>
-            </div>
-      
-            
-            <div id="plone-browser-border-bottom"></div>
-            <div id="plone-browser-border-top"></div>              
-            <div id="plone-browser-corner-left"></div>      
-            <div id="plone-browser-corner-resize"></div>      
-            <div id="plone-browser-tab">
-              <div id="plone-browser-tab-menu">         
-                <span tal:content="python:here.utranslate('label_browse_server_%s' % fieldName, default='Browse server %s' % fieldName, domain='collective.plonefinder')"
-                      i18n:translate="">
-                  Browse server images
-                </span>                            
-              </div>
-           
-            </div>      
+             <metal:block use-macro="context/@@findermacros/macros/plone_browser_main" />    
           </div>
         </div>
       </div>
