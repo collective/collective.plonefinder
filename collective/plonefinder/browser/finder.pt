@@ -12,7 +12,7 @@
                          formData request/QUERY_STRING | string:;                  
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
-                         b_size python:50;
+                         b_size python:20;
                          b_start python:0;
                          b_start request/b_start | b_start;                      
                          typecss view/typecss;
