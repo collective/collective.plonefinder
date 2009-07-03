@@ -63,7 +63,7 @@
                     all site
                   </option>          
                   <option tal:attributes="value browsedpath"
-                          tal:condition="browsedpath"
+                          tal:condition="python:browsedpath!=portalpath"
                           i18n:translate="label_this_folder">
                     this folder
                   </option>
@@ -99,7 +99,7 @@
           </div>               
                  
           <div id="browser-crumbs"
-               tal:condition="view/browse"
+               tal:condition="view/showbreadcrumbs"
                tal:define="breadcrumbs view/finderBreadCrumbs;">      
               <a tal:condition="parentpath"
                  class="folderUp"
