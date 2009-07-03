@@ -114,6 +114,8 @@ class Finder(BrowserView):
         # could be string
         self.fieldtype = 'list'  
         
+        self.showbreadcrumbs=True
+        
         # set self.ispopup = False when calling view in ajax
         if kwargs.has_key('ispopup') : 
             ispopup = kwargs['ispopup']
