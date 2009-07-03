@@ -20,6 +20,7 @@ collective/plonefinder/browser/__init__.py
 collective/plonefinder/browser/configure.zcml
 collective/plonefinder/browser/finder.pt
 collective/plonefinder/browser/finder.py
+collective/plonefinder/browser/test.pt
 collective/plonefinder/browser/static/browser_pres_files.png
 collective/plonefinder/browser/static/browser_pres_images.png
 collective/plonefinder/browser/static/close_icon.gif
@@ -28,6 +29,7 @@ collective/plonefinder/browser/static/finder.js
 collective/plonefinder/browser/static/folder_explore.png
 collective/plonefinder/browser/static/folder_image.png
 collective/plonefinder/browser/static/folder_up.png
+collective/plonefinder/browser/static/jquery.js
 collective/plonefinder/browser/static/link_folder.png
 collective/plonefinder/browser/static/link_folder_hover.png
 collective/plonefinder/browser/static/link_folder_out.png
@@ -36,6 +38,8 @@ collective/plonefinder/browser/static/maximize.gif
 collective/plonefinder/browser/static/menu_browser.png
 collective/plonefinder/browser/static/search_icon.gif
 collective/plonefinder/browser/static/small_loading.gif
+collective/plonefinder/browser/static/thickbox.css
+collective/plonefinder/browser/static/thickbox_plus.js
 collective/plonefinder/browser/static/window_border_top.png
 collective/plonefinder/browser/static/window_corner_left.png
 collective/plonefinder/browser/static/window_resize.png

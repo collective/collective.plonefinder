@@ -8,20 +8,43 @@ Author-email: support@ingeniweb.com
 License: GPL
 Description: .. contents::
         
+        Ajax popup to reference plone contents.
+        
+        This code is an extraction of plonearticle explorer for referencables contents
+        The intention is to make it usable for any content type in different situations :
+        
+        - for referencable fields with a special widget (collective.orderrefswidget which will come soon)
+        
+        - for collective.ploneckeditor (will also come soon) or any possible wysiwyg editor for referencing images or contents inside a rich text field,
+        we also make possible in near future upload of files or images with this product (perhaps using collective.uploadify)
+        
+        - for links fields (as remoteUrl in ATLink) to reference internal links
+        
+        
+        Don't use it in a production site for now (this product is under developpement just for a specific usecase)
+        
+        This work has been started by Christophe Bosse & Jean-mat Grimaldi in 2007.
+        
+        TODO :
+        -----
+        
+        - js refactoring
+        
+        - css refactoring
+        
+        - uploadify integration
+        
+        - extended search form
+        
+        -
+        
+        
         .. Note!
         -----
-        Update the following URLs to point to your:
         
-        - code repository
-        - bug tracker
-        - questions/comments feedback mail
-        (do not set a real mail, to avoid spams)
+        - Code repository: https://svn.plone.org/svn/collective/collective.plonefinder/trunk
         
-        Or remove it if not used.
-        
-        - Code repository: http://svn.somewhere.com/...
-        - Questions and comments to somemailing_list
-        - Report bugs at http://bug.somewhere.com/..
+        - Questions and comments to support@ingeniweb.com
         
         
         Change history
