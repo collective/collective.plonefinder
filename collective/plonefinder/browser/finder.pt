@@ -46,30 +46,36 @@
             </a>          
             <div id="searchBrowserBox">
               <form id="finderSearchForm">
-              <input name="SearchableText" 
-                     id="SearchableText" 
-                     type="text" 
-                     value="" 
-                     size="25" 
-                     title="Search Site"
-                     tabindex="0"
-                     tal:attributes="value SearchableText" /> 
-              <select name="browsedpath" id="browsedpath">
-                <option tal:attributes="value portalpath"
-                        i18n:translate="label_all_site">
-                  all site
-                </option>          
-                <option tal:attributes="value browsedpath"
-                        tal:condition="browsedpath"
-                        i18n:translate="label_this_folder">
-                  this folder
-                </option>
-              </select>
-              <input class="searchBrowserButton" type="submit" value="Search"
-                     i18n:domain="plone"
-                     i18n:attributes="value label_search;"
-                     href="javascript: void(0);"
-                     tal:attributes="onclick string:Browser.search();; return false;" />
+                <input type="hidden"
+                       name="browse:int"
+                       value="0" />
+                <input name="SearchableText" 
+                       id="SearchableText" 
+                       type="text" 
+                       value="" 
+                       size="25" 
+                       title="Search Site"
+                       tabindex="0"
+                       tal:attributes="value SearchableText" /> 
+                <select name="browsedpath" id="browsedpath">
+                  <option tal:attributes="value portalpath"
+                          i18n:translate="label_all_site">
+                    all site
+                  </option>          
+                  <option tal:attributes="value browsedpath"
+                          tal:condition="browsedpath"
+                          i18n:translate="label_this_folder">
+                    this folder
+                  </option>
+                </select>
+                <input class="searchBrowserButton" 
+                       type="submit" 
+                       value="Search"
+                       name="searchsubmit"
+                       i18n:domain="plone"
+                       i18n:attributes="value label_search;"
+                       href="javascript: void(0);"
+                       tal:attributes="onclick string:Browser.search();; return false;" />
               </form>       
             </div>
             <div id="menuViews">
