@@ -19,10 +19,10 @@
       permission="zope.Public"
       template="./finder.pt" />      
         
-  <!-- resource directory for finder static files -->
+  <!-- resource directory for widget static files -->
   <browser:resourceDirectory
-      name="orderrefwidget_static"
+      name="plonefinder_static"
       directory="static"
-      />     	        
+      />  	        
 
 </configure>
