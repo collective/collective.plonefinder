@@ -15,6 +15,8 @@
    
    Don't use it in a production site for now (this product is under developpement just for a specific usecase)
    
+   This work has been started by Christophe Bosse & Jean-mat Grimaldi in 2007.
+   
    TODO :
    -----
    

@@ -10,6 +10,14 @@ from Products.ATContentTypes.interface import IImageContent
 from collective.plonefinder.interfaces import IFinder
 
 
+def _quotestring(s):
+    return '"%s"' % s
+
+def _quote_bad_chars(s):
+    bad_chars = ["(", ")"]
+    for char in bad_chars:
+        s = s.replace(char, _quotestring(char))
+    return s
 
                                                 
 
@@ -187,9 +195,17 @@ class Finder(BrowserView):
             
             
             # TODO : use a dynamic form with different possible searchform fields   
-            SearchableText = request.get('SearchableText', '')    
-            if SearchableText :
-                query['SearchableText'] = SearchableText
+            q = request.get('SearchableText', '')    
+            if q :            
+                for char in '?-+*':
+                    q = q.replace(char, ' ')
+                r=q.split()
+                r = " AND ".join(r)
+                searchterms = _quote_bad_chars(r)+'*'
+                
+                print '\n\nTOTO\n\n%s\n\n' %searchterms
+                
+                query['SearchableText'] = searchterms
             
             return query            
             
