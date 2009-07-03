@@ -252,18 +252,7 @@
                tal:condition="python: ispopup and not onlybody">
     <head>
 
-      <tal:js define="scripts nocall:here/renderAllTheScripts|nothing">
-        <!-- for Plone 2.5 launch js machinery + jquery -->
-        <tal:block condition="nocall:scripts">
-            <metal:block use-macro="scripts/macros/jsrenderer" />
-            <script type="text/javascript"
-                    tal:attributes="src string:$portal_url/++resource++plonefinder_static/jquery.js">
-            </script>            
-        </tal:block>
-        <!-- for plone3 we just need htmlheader viewlet manager -->
-        <tal:block condition="not:nocall:scripts"
-                   replace="structure provider:plone.htmlhead" />             
-      </tal:js>   
+      <tal:block replace="structure provider:plone.htmlhead" />  
       
       <script type="text/javascript"
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/finder.js">
@@ -272,13 +261,6 @@
       <script type="text/javascript"
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/thickbox_plus.js">
       </script>
-
-      <tal:css define="css nocall:here/renderAllTheStylesheets|nothing">
-        <!-- for Plone 2.5 launch css machinery -->
-        <tal:block condition="nocall:css">
-            <metal:block use-macro="css/macros/cssrenderer" />
-        </tal:block>
-      </tal:css>
       
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/finder.css);">
