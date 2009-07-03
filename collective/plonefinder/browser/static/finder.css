@@ -305,6 +305,9 @@ a.folderSelect:hover {
   border:none;
 }
 
+.floatContainer .visualClear {
+  display: none !important;
+}
 
 .listContainer {
   background-color: transparent !important;
@@ -351,6 +354,10 @@ a.folderSelect:hover {
 
 .listContainer * {
   float: left;
+}
+
+.listContainer .visualClear {
+  float: none !important;
 }
 
 .listContainer .legend {
@@ -559,7 +566,6 @@ a.folderUp {
 }
 
 .popup a:hover {
-   background-color: #EFEFEF !important;
    color: black !important;
 }
 

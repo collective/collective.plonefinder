@@ -186,6 +186,7 @@
                   <img src="" tal:attributes="src r/thumb" />
                   <div class="title" tal:content="r/title">sample Portrait 1</div>
                   <div class="legend" tal:content="r/size">54 kB</div>
+                  <div class="visualClear"><!-- --></div>
                 </a>
   
                 <div class="relContainer" tal:condition="r/is_image">
