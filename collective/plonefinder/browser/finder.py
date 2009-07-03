@@ -201,9 +201,7 @@ class Finder(BrowserView):
                     q = q.replace(char, ' ')
                 r=q.split()
                 r = " AND ".join(r)
-                searchterms = _quote_bad_chars(r)+'*'
-                
-                print '\n\nTOTO\n\n%s\n\n' %searchterms
+                searchterms = _quote_bad_chars(r)+'*'                
                 
                 query['SearchableText'] = searchterms
             
