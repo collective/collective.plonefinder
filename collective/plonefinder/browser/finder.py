@@ -111,7 +111,10 @@ class Finder(BrowserView):
         self.imagestypes = ['Image', 'News Item']
         
         # could be 'uid', 'url'
-        self.selectiontype = 'uid'
+        if kwargs.has_key('selectiontype') : 
+            self.selectiontype = kwargs['selectiontype']
+        else :
+            self.selectiontype = 'uid'
         
         # field id which will receive the selection
         self.fieldid = 'demofield' 
@@ -131,7 +134,16 @@ class Finder(BrowserView):
             ispopup = True
         self.ispopup = request.get('ispopup', ispopup)         
                           
-        firstpassresults = self.finderResults()                    
+        firstpassresults = self.finderResults()        
+        resultids = [r['uid'] for r in firstpassresults]   
+        
+        # remove blacklisted uids 
+        results = []
+        if self.selectiontype == 'uid' :
+            for r in firstpassresults :
+                if r['uid'] not in self.blacklist :
+                    results.append(r)
+            firstpassresults = results                   
         
         # if we can browse, we must remove folders from results
         # and we must set these folders as linkables
@@ -139,7 +151,6 @@ class Finder(BrowserView):
             results = []
             firstpassfolders = self.finderBrowsingResults()
             folderids = [f['uid'] for f in firstpassfolders]
-            resultids = [r['uid'] for r in firstpassresults]
             for r in firstpassresults :
                 if r['uid'] not in folderids :
                     results.append(r)
