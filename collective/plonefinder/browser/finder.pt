@@ -180,7 +180,9 @@
             <tal:results repeat="r batch">
               <div tal:attributes="class string:${typecss}Container ${r/orientation_class};">
                 <a href="javascript: void(0);"
-                   tal:attributes="class   r/container_class;
+                   tal:define="blacklisted r/blacklisted;
+                               blclass python:blacklisted and ' blacklisted' or ''"
+                   tal:attributes="class   string: ${r/container_class}${blclass};
                                    title   string:select ${typeview};
                                    onclick string:Browser.selectItem('${r/uid}');; return false;" >
                   <img src="" tal:attributes="src r/thumb" />

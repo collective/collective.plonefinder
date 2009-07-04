@@ -35,7 +35,9 @@ class Finder(BrowserView):
         self.portal_url = portal_url()
         self.portal = portal 
         self.portalpath = '/'.join(portal.getPhysicalPath())        
-        browsedpath = request.get('browsedpath', '')          
+        browsedpath = request.get('browsedpath', '')                
+        
+        session = request.get('SESSION', None)  
         
         # use self.catalog to change catalog
         if kwargs.has_key('catalog') : 
@@ -95,18 +97,42 @@ class Finder(BrowserView):
         else :
             displaywithoutquery = True
         self.displaywithoutquery = request.get('displaywithoutquery', displaywithoutquery)         
+        # use self.blacklist (or blacklist in session or request) to remove some uids from results
+        if kwargs.has_key('blacklist') : 
+            blacklist = kwargs['blacklist']
+        else :
+            blacklist = []
+        rblacklist = request.get('blacklist', blacklist)
+        sblacklist = session.get('blacklist', blacklist)        
+        if sblacklist and not rblacklist :
+            self.blacklist = sblacklist
+        else :    
+            self.blacklist = rblacklist  
+        # add or remove in blacklist
+        if kwargs.has_key('addtoblacklist') : 
+            addtoblacklist = kwargs['addtoblacklist']
+        else :
+            addtoblacklist = []   
+        addtoblacklist = request.get('addtoblacklist', addtoblacklist)  
+        for k in addtoblacklist :
+            if k not in self.blacklist :
+                self.blacklist.append(k)        
+        if kwargs.has_key('removefromblacklist') : 
+            removefromblacklist = kwargs['removefromblacklist']
+        else :
+            removefromblacklist = []              
+        removefromblacklist = request.get('removefromblacklist', removefromblacklist)  
+        for k in removefromblacklist :
+            if k in self.blacklist :
+                self.blacklist.remove(k)      
+        # put new blacklist in session
+        session.set('blacklist', self.blacklist)
         # use self.query (or query in request) to overload entire query
         if kwargs.has_key('query') : 
             query = kwargs['query']
         else :
             query = None
-        self.query = request.get('query', query)   
-        # use self.blacklist (or blacklist in request) to remove some uids from results
-        if kwargs.has_key('blacklist') : 
-            blacklist = kwargs['blacklist']
-        else :
-            blacklist = []
-        self.blacklist = request.get('blacklist', blacklist)          
+        self.query = request.get('query', query)         
         # TODO Images types in portal properties
         self.imagestypes = ['Image', 'News Item']
         
@@ -133,17 +159,26 @@ class Finder(BrowserView):
         else :
             ispopup = True
         self.ispopup = request.get('ispopup', ispopup)         
+        
+        # set self.showblacklisted = True to show blacklist
+        if kwargs.has_key('showblacklisted') : 
+            showblacklisted = kwargs['showblacklisted']
+        else :
+            showblacklisted = False
+        self.showblacklisted = request.get('showblacklisted', showblacklisted)          
                           
         firstpassresults = self.finderResults()        
         resultids = [r['uid'] for r in firstpassresults]   
         
-        # remove blacklisted uids 
-        results = []
+        # remove blacklisted uids or just set it as blacklisted if needed      
+        results = []        
         if self.selectiontype == 'uid' :
             for r in firstpassresults :
-                if r['uid'] not in self.blacklist :
+                if r['uid'] not in self.blacklist or self.showblacklisted :
+                    if self.showblacklisted :
+                        r['blacklisted'] = True
                     results.append(r)
-            firstpassresults = results                   
+            firstpassresults = results                     
         
         # if we can browse, we must remove folders from results
         # and we must set these folders as linkables
@@ -278,6 +313,7 @@ class Finder(BrowserView):
             r['is_folderish'] = b.is_folderish or False
             r['size'] = b.getObjSize
             r['type'] = b.portal_type
+            r['blacklisted'] = False
             if r['type'] in self.imagestypes :
                 o = b.getObject()
                 orientation = self.getOrientationFor(o)
