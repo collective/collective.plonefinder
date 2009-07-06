@@ -103,7 +103,7 @@ class Finder(BrowserView):
         else :
             blacklist = []
         rblacklist = request.get('blacklist', blacklist)
-        sblacklist = session.get('blacklist', blacklist)        
+        sblacklist = session.get('blacklist', rblacklist)        
         if sblacklist and not rblacklist :
             self.blacklist = sblacklist
         else :    
@@ -348,5 +348,21 @@ class Finder(BrowserView):
         if im_height >= im_width:
             return 'portrait'
 
-        return 'landscape'                   
+        return 'landscape'              
+        
+    def cleanRequest(self) :
+        """
+        Remove some bad params in query string
+        and store some of them for next request
+        """        
+        
+        request = self.request
+        dictRequest={}
+        for e in request.form.items():
+            if e[1] and e[0] not in ('blacklist', 'addtoblacklist', 'removefromblacklist') :
+                dictRequest[e[0]]=e[1]  
+                print str((e[0], e[1]))
+        cleanquery = make_query(dictRequest).replace('%20', '+')
+        print cleanquery          
+        return cleanquery                 
         

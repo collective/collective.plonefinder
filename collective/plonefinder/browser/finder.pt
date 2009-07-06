@@ -9,7 +9,7 @@
 </tal:headers>
 <metal:block tal:define="typeview view/typeview;
                          fieldName view/fieldname; 
-                         formData request/QUERY_STRING | string:;                  
+                         formData view/cleanRequest;                  
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
                          b_size python:20;
