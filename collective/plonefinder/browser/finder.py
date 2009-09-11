@@ -1,3 +1,4 @@
+from ZTUtils import make_query
 from zope.interface import implements
 from Products.Five import BrowserView
 from Acquisition import aq_base, aq_inner
