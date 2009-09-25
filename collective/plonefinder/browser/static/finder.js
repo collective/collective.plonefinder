@@ -161,17 +161,75 @@ function getPageSize(){
 }
 
 isInString = function(str1, str2) {
-    var reg=new RegExp(".*"+str1+".*$","i");  
-    if(str2.match(reg))
-       return true;
-    else
-       return false;
+    try {
+      var reg=new RegExp(".*"+str1+".*$","i");  
+      if(str2.match(reg))
+         return true;
+      else
+         return false;    
+    }
+    catch(e) {return false}
+}
+
+function getQueryObject( query ) {
+   var Params = new Object();
+   var listDatas = new Object();
+   var ParamsList = new Array();
+   if ( ! query ) return Params; // return empty object
+   var Pairs = query.split(/[;&]/);
+   for ( var i = 0; i < Pairs.length; i++ ) {
+      var KeyVal = Pairs[i].split('=');
+      if ( ! KeyVal || KeyVal.length != 2 ) continue;
+      var key = KeyVal[0];
+      if (isInString(':list', key)) {
+          if (typeof listDatas[key]!='undefined') {
+              // trop nul le javascript
+              toto = new Array(KeyVal[1]);
+              listDatas[key]=listDatas[key].concat(toto);  
+          }
+          else {
+              listDatas[key]= new Array(KeyVal[1]);     
+          }
+          var val = listDatas[key];          
+      }
+      else {
+          var val = KeyVal[1];      
+      }
+      Params[key] = val;
+      ParamsList[i] = key;
+   }
+   return new Array(Params, ParamsList);
 }
 
 compileData = function(dataname, data, formData) {
+
   if (formData) {
-    if (! isInString(dataname, formData)) {
-        formData = formData + '&' + dataname + '=' + encodeURI(data);
+    if (!isInString(dataname, formData)) {
+        formData = formData + '&' + dataname + '=' + encodeURI(data);        
+    }
+    else {
+        paramsObj = getQueryObject(formData);
+        params = paramsObj[0];
+        params[dataname]= encodeURI(data);
+        paramsList = paramsObj[1];        
+        formData = '';
+        for ( var i = 0; i < paramsList.length; i++ ) {
+            value = params[paramsList[i]];
+            if (typeof value=='string'){
+                if (formData) {
+                    formData = formData + '&';
+                }            
+                formData = formData + paramsList[i] + '=' +  encodeURI(value);
+            }
+            else if (typeof value=='object') {
+                for ( var j = 0; j < value.length; j++ ) {
+                    if (formData) {
+                        formData = formData + '&';
+                    }                 
+                    formData = formData + paramsList[i] + '=' +  encodeURI(value[j]);
+                }
+            }    
+        }
     }
     return formData;  
   }
@@ -180,20 +238,6 @@ compileData = function(dataname, data, formData) {
 
 
 
-function parseQuery ( query ) {
-   var Params = new Object ();
-   if ( ! query ) return Params; // return empty object
-   var Pairs = query.split(/[;&]/);
-   for ( var i = 0; i < Pairs.length; i++ ) {
-      var KeyVal = Pairs[i].split('=');
-      if ( ! KeyVal || KeyVal.length != 2 ) continue;
-      var key = unescape( KeyVal[0] );
-      var val = unescape( KeyVal[1] );
-      val = val.replace(/\+/g, ' ');
-      Params[key] = val;
-   }
-   return Params;
-}
 
 var Browser = {
 	maximized: false,
@@ -341,20 +385,28 @@ Browser.open = function(browsedpath) {
   });
 };
 
-Browser.update = function(browsedpath, formData, bstart, ie_hack) {
+Browser.update = function(browsedpath, formData, bstart, nocompil) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
   var aUrl = '@@plone_finder';
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
-  formData = compileData('typeview', Browser.typeview, formData);
-  if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
-  if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
-  formData = compileData('field_name', Browser.field_name, formData);
-  formData = compileData('onlybody', 'true', formData);
+  Browser.formData = jQuery('#nextQuery').val();
+  if (typeof formData == "undefined") {
+      formData = Browser.formData;
+  }
+  if (!nocompil) {  
+      formData = compileData('typeview', Browser.typeview, formData);
+      if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
+      if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
+      formData = compileData('field_name', Browser.field_name, formData);
+      formData = compileData('onlybody', 'true', formData);
+  }    
   jQuery.ajax({
          type: 'GET',
          url: aUrl,
          data: formData,
+         dataType: 'html',
+         contentType: "text/html; charset=utf-8", 
          success: function(html) { 
         		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu').remove();
         		jQuery('#start-refresh').after(html);
@@ -364,7 +416,8 @@ Browser.update = function(browsedpath, formData, bstart, ie_hack) {
         		  	Browser.size(size);*/
         		jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
         	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
-        	  TB_unlaunch();
+        	  jQuery('#msg-done').fadeOut(5000);
+            TB_unlaunch();
         		TB_launch();
             Browser.batch();             
          } });  
@@ -427,7 +480,7 @@ Browser.drop = function(e) {
 Browser.search = function() {
   // var SearchableText = jQuery('#SearchableText').val();
   var searchform = jQuery('#finderSearchForm');
-  var formData = jQuery('input:not([@type=submit]), textarea, select', searchform).serialize();
+  var formData = jQuery('input:not([type=submit]), textarea, select', searchform).serialize();
   var browsedpath = jQuery('#browsedpath').val();
   Browser.update(browsedpath, formData);	
 };
@@ -461,7 +514,7 @@ Browser.Popup_init = function() {
 
 Browser.init = function() {
     Browser.typeview = jQuery('#typeview').val();
-    Browser.formData = jQuery('#formData').val();
+    Browser.formData = jQuery('#nextQuery').val();
     if (jQuery('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();
