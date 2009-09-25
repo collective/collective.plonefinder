@@ -196,7 +196,14 @@ function getQueryObject( query ) {
           var val = KeyVal[1];      
       }
       Params[key] = val;
-      ParamsList[i] = key;
+      keyznothere = true;
+      jQuery.each(ParamsList, function() {
+         if (this==key) {
+             keyznothere = false;
+             return false;
+         }
+      })
+      if (keyznothere) ParamsList[i] = key;
    }
    return new Array(Params, ParamsList);
 }
@@ -207,7 +214,7 @@ compileData = function(dataname, data, formData) {
     if (!isInString(dataname, formData)) {
         formData = formData + '&' + dataname + '=' + encodeURI(data);        
     }
-    else {
+    else if (data) {
         paramsObj = getQueryObject(formData);
         params = paramsObj[0];
         params[dataname]= encodeURI(data);
@@ -480,7 +487,7 @@ Browser.drop = function(e) {
 Browser.search = function() {
   // var SearchableText = jQuery('#SearchableText').val();
   var searchform = jQuery('#finderSearchForm');
-  var formData = jQuery('input:not([type=submit]), textarea, select', searchform).serialize();
+  var formData = jQuery('input:not([type=submit]), textarea, select', searchform).serialize() + '&' + Browser.formData;
   var browsedpath = jQuery('#browsedpath').val();
   Browser.update(browsedpath, formData);	
 };
