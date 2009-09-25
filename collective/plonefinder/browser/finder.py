@@ -20,7 +20,8 @@ def _quote_bad_chars(s):
         s = s.replace(char, _quotestring(char))
     return s
 
-                                                
+
+FORM_PARAMS = ('SearchableText',)                                                
 
 
 class Finder(BrowserView):
@@ -76,7 +77,7 @@ class Finder(BrowserView):
         else :
             types = []
         self.types = request.get('types', types)    
-        # use self.typeview (or typeview in request) to specify typeview ('standard' or 'image' for now)
+        # use self.typeview (or typeview in request) to specify typeview ('file' or 'image' for now, 'selection' in future)
         if kwargs.has_key('typeview') : 
             typeview = kwargs['typeview']
         else :
@@ -105,10 +106,11 @@ class Finder(BrowserView):
             blacklist = []
         rblacklist = request.get('blacklist', blacklist)
         sblacklist = session.get('blacklist', rblacklist)        
-        if sblacklist and not rblacklist :
+        if sblacklist and not rblacklist and not request.get('newsession', False) :
             self.blacklist = sblacklist
-        else :    
-            self.blacklist = rblacklist  
+        else :
+            self.blacklist = rblacklist
+            
         # add or remove in blacklist
         if kwargs.has_key('addtoblacklist') : 
             addtoblacklist = kwargs['addtoblacklist']
@@ -127,7 +129,11 @@ class Finder(BrowserView):
             if k in self.blacklist :
                 self.blacklist.remove(k)      
         # put new blacklist in session
-        session.set('blacklist', self.blacklist)
+        if request.get('emptyblacklist', False) :
+            session.set('blacklist', [])
+        else :
+            session.set('blacklist', self.blacklist)
+            
         # use self.query (or query in request) to overload entire query
         if kwargs.has_key('query') : 
             query = kwargs['query']
@@ -171,15 +177,17 @@ class Finder(BrowserView):
         firstpassresults = self.finderResults()        
         resultids = [r['uid'] for r in firstpassresults]   
         
-        # remove blacklisted uids or just set it as blacklisted if needed      
-        results = []        
+        # remove blacklisted uids or just set it as blacklisted if needed
+        results = []
+
         if self.selectiontype == 'uid' :
             for r in firstpassresults :
-                if r['uid'] not in self.blacklist or self.showblacklisted :
-                    if self.showblacklisted :
-                        r['blacklisted'] = True
+                if r['uid'] not in self.blacklist or self.typeview=='selection' :
                     results.append(r)
-            firstpassresults = results                     
+                elif  self.showblacklisted :
+                    r['blacklisted'] = True
+                    results.append(r)
+            firstpassresults = results                   
         
         # if we can browse, we must remove folders from results
         # and we must set these folders as linkables
@@ -203,7 +211,7 @@ class Finder(BrowserView):
             self.results = firstpassresults  
             self.folders = [] 
                    
-
+        self.cleanrequest = self.cleanRequest()
       
         
     def finderBreadCrumbs(self) :
@@ -230,6 +238,8 @@ class Finder(BrowserView):
         request = self.request
         if self.query :
             return self.query
+        elif self.typeview == 'selection':
+            return {'uid' : self.blacklist}            
         elif self.displaywithoutquery :
             scope = self.scope
             query = {}        
@@ -238,8 +248,9 @@ class Finder(BrowserView):
             path['query'] =  '/'.join(scope.getPhysicalPath())
             query['path'] = path
             if self.types :
-                query['portal_types'] = self.types
+                query['portal_type'] = self.types
             
+            print '\n\n\n>>> %s \n\n' %str(query)
             
             # TODO : use a dynamic form with different possible searchform fields   
             q = request.get('SearchableText', '')    
@@ -322,6 +333,7 @@ class Finder(BrowserView):
                 icon = '%s/image_listing' %r['url']
                 r['is_image'] = True
                 r['preview_url'] = '%s/image?isImage=1' %r['url']
+                r['url'] = '%s/image' %r['url']
                 r['container_class'] = 'imageContainer'
             else :    
                 orientation = 'small'
@@ -351,19 +363,28 @@ class Finder(BrowserView):
 
         return 'landscape'              
         
-    def cleanRequest(self) :
+    def cleanRequest(self):
         """
-        Remove some bad params in query string
+        Remove some params in request
         and store some of them for next request
-        """        
-        
+        """
+
         request = self.request
-        dictRequest={}
-        for e in request.form.items():
-            if e[1] and e[0] not in ('blacklist', 'addtoblacklist', 'removefromblacklist') :
-                dictRequest[e[0]]=e[1]  
-                print str((e[0], e[1]))
-        cleanquery = make_query(dictRequest).replace('%20', '+')
-        print cleanquery          
-        return cleanquery                 
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmited', 'newsession', 'emptyblacklist')
+        dictRequest = {}
+        for param, value in request.form.items():
+            if (value and
+                (param not in ignored) and
+                (param not in FORM_PARAMS)):
+                dictRequest[param] = value
+        
+        return dictRequest        
+                
+    def cleanQuery(self) :         
+        """
+        make a query_string with clean Request
+        """
+        
+        cleanquery = make_query(self.cleanrequest).replace('%20', '+')
+        return cleanquery               
         

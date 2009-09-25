@@ -9,7 +9,7 @@
 </tal:headers>
 <metal:block tal:define="typeview view/typeview;
                          fieldName view/fieldname; 
-                         formData view/cleanRequest;                  
+                         nextQuery view/cleanQuery;                
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
                          b_size python:20;
@@ -29,10 +29,10 @@
 
   <tal:block condition="onlybody">             
     <metal:block define-macro="plone_browser_body">
-          <input id="formData"
-                 name="formData"
+          <input id="nextQuery"
+                 name="nextQuery"
                  type="hidden"
-                 tal:attributes="value formData" />            
+                 tal:attributes="value nextQuery" />          
           <div id="plone-browser-menu">
             <a class="closeWindow"
                i18n:translate=""
