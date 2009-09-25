@@ -398,7 +398,7 @@ Browser.update = function(browsedpath, formData, bstart, nocompil) {
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
   Browser.formData = jQuery('#nextQuery').val();
-  if (typeof formData == "undefined") {
+  if (typeof formData == "undefined" || !formData) {
       formData = Browser.formData;
   }
   if (!nocompil) {  
