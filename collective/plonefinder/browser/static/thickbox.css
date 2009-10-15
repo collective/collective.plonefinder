@@ -123,4 +123,5 @@ Author : Cody Lindley
 	width: 250px;
 	/*height: 100px;*/
 	visibility: visible;
+	background: transparent url(./circle_animation.gif) no-repeat;
 }

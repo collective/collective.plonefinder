@@ -382,7 +382,7 @@ class Finder(BrowserView):
         """
 
         request = self.request                        
-        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'types')
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist')
         dictRequest = {}
         for param, value in request.form.items():
             if (value and
