@@ -47,7 +47,7 @@ function TB_show(caption, url) { //function called when the user clicks on a thi
 		jQuery("#TB_overlay").css("-moz-opacity","0.5");
 		jQuery("#TB_overlay").click(TB_remove);
 		jQuery(window).resize(TB_position);
-		jQuery("body").append("<div id='TB_load'><div id='TB_loadContent'><img src='circle_animation.gif' /></div></div>");
+		jQuery("body").append("<div id='TB_load'><div id='TB_loadContent'>&nbsp;</div></div>");
 		jQuery("#TB_overlay").show();		
  
 		if (urlIsImage) {//code to show images
