@@ -1,4 +1,5 @@
 from ZTUtils import make_query
+from zope.component import getMultiAdapter
 from zope.interface import implements
 from Products.Five import BrowserView
 from Acquisition import aq_base, aq_inner
@@ -6,6 +7,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
+from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.ATContentTypes.interface import IImageContent
 
 from collective.plonefinder.interfaces import IFinder
@@ -30,104 +32,90 @@ class Finder(BrowserView):
     """
     implements(IFinder)
     
-    def __init__(self, context, request, **kwargs):
-        BrowserView.__init__(self, context, request)
+    def __init__(self, context, request) :
+        super(Finder, self).__init__(context, request)
         portal_url = getToolByName(context, 'portal_url')
         portal = portal_url.getPortalObject()
         self.portal_url = portal_url()
         self.portal = portal 
-        self.portalpath = '/'.join(portal.getPhysicalPath())        
-        browsedpath = request.get('browsedpath', '')                
-        
-        session = request.get('SESSION', None)  
-        
-        # use self.catalog to change catalog
-        if kwargs.has_key('catalog') : 
-            self.catalog = kwargs['catalog']
-        else :
-            self.catalog = getToolByName(portal, 'portal_catalog')       
-        # use self.scope to change scope (by default = first parent folderish)        
-        if kwargs.has_key('scope') : 
-            self.scope = kwargs['scope']    
-        elif browsedpath :
-            self.scope = portal.restrictedTraverse(browsedpath)   
-        else :
-            folder = aq_inner(context)
-            while not (folder is portal) : 
-                if bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
-                    break
-                folder = folder.aq_parent    
-            self.scope = folder
+        self.portalpath = '/'.join(portal.getPhysicalPath())       
+        self.breadcrumbs = []  
+        # all these properties could be overloaded
+        # in a Finder's inherited class
+        self.showbreadcrumbs=True
+        self.catalog = None 
+        self.scope = None
+        self.multiselect = True
         self.browsedpath = ''
         self.parentpath = ''
-        if not (self.scope is portal):
-              self.browsedpath = '/'.join(aq_inner(self.scope).getPhysicalPath())  
-              self.parentpath = '/'.join(aq_inner(self.scope).aq_parent.getPhysicalPath())       
-        self.browsed_url = self.scope.absolute_url()
+        self.types = []
+        self.typeview = 'file'
+        self.typecss = 'list'
+        self.browse = True
+        self.displaywithoutquery = True
+        self.blacklist = []
+        self.addtoblacklist = [] 
+        self.removefromblacklist = []
+        self.query = None
+        self.imagestypes = ['Image', 'News Item']
+        self.selectiontype = 'uid'
+        self.fieldid = 'demofield'
+        self.fieldname = 'demofield'
+        self.fieldtype = 'list'
+        self.ispopup = True
+        self.showblacklisted = False 
+        self.searchsubmit = False               
+        
+    
+    def __call__(self):       
+        
+        context = aq_inner(self.context)
+        request = self.request                                       
+        session = request.get('SESSION', None)  
+        self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
+        self.setScopeInfos(context, request, self.showbreadcrumbs)
+        
+        # use self.catalog in init to change catalog
+        if self.catalog is None : 
+            self.catalog = getToolByName(self.portal, 'portal_catalog')                    
                     
         # use self.multiselect = False (or multiselect = False in request) to close window after selection
-        if kwargs.has_key('multiselect') : 
-            multiselect = kwargs['multiselect']
-        else :
-            multiselect = True
-        self.multiselect = request.get('multiselect', multiselect)           
+        self.multiselect = request.get('multiselect', self.multiselect)            
+                 
         # use self.types (or types in request) to specify portal_types in catalog request
-        if kwargs.has_key('types') : 
-            types = kwargs['types']
-        else :
-            types = []
-        self.types = request.get('types', types)    
+        self.types = request.get('types', self.types)    
+        
         # use self.typeview (or typeview in request) to specify typeview ('file' or 'image' for now, 'selection' in future)
-        if kwargs.has_key('typeview') : 
-            typeview = kwargs['typeview']
-        else :
-            typeview = 'file'
-        self.typeview = request.get('typeview', typeview)    
+        self.typeview = request.get('typeview', self.typeview)    
         if self.typeview == 'image' :
-            self.typecss = 'float'
-        else :
-            self.typecss = 'list'                
+            self.typecss = 'float'      
+              
         # use self.browse=False (or browse=False in request) to disallow browsing
-        if kwargs.has_key('browse') : 
-            browse = kwargs['browse']
-        else :
-            browse = True
-        self.browse = request.get('browse', browse)     
+        self.browse = request.get('browse', self.browse)     
+        
         # use self.displaywithoutquery = False if necessary         
-        if kwargs.has_key('displaywithoutquery') : 
-            displaywithoutquery = kwargs['displaywithoutquery']
-        else :
-            displaywithoutquery = True
-        self.displaywithoutquery = request.get('displaywithoutquery', displaywithoutquery)         
+        self.displaywithoutquery = request.get('displaywithoutquery', self.displaywithoutquery)  
+              
         # use self.blacklist (or blacklist in session or request) to remove some uids from results
-        if kwargs.has_key('blacklist') : 
-            blacklist = kwargs['blacklist']
-        else :
-            blacklist = []
-        rblacklist = request.get('blacklist', blacklist)
+        rblacklist = request.get('blacklist', self.blacklist)
         sblacklist = session.get('blacklist', rblacklist)        
         if sblacklist and not rblacklist and not request.get('newsession', False) :
             self.blacklist = sblacklist
         else :
             self.blacklist = rblacklist
             
-        # add or remove in blacklist
-        if kwargs.has_key('addtoblacklist') : 
-            addtoblacklist = kwargs['addtoblacklist']
-        else :
-            addtoblacklist = []   
-        addtoblacklist = request.get('addtoblacklist', addtoblacklist)  
+        # use self.addtoblacklist (or addtoblacklist in request) to add elements in blacklist 
+        addtoblacklist = request.get('addtoblacklist', self.addtoblacklist)  
         for k in addtoblacklist :
             if k not in self.blacklist :
-                self.blacklist.append(k)        
-        if kwargs.has_key('removefromblacklist') : 
-            removefromblacklist = kwargs['removefromblacklist']
-        else :
-            removefromblacklist = []              
-        removefromblacklist = request.get('removefromblacklist', removefromblacklist)  
+                self.blacklist.append(k)    
+        
+        # use self.removefromblacklist (or removefromblacklist in request) to remove elements from blacklist                       
+        removefromblacklist = request.get('removefromblacklist', self.removefromblacklist)  
         for k in removefromblacklist :
             if k in self.blacklist :
                 self.blacklist.remove(k)      
+        
         # put new blacklist in session
         if request.get('emptyblacklist', False) :
             session.set('blacklist', [])
@@ -135,44 +123,32 @@ class Finder(BrowserView):
             session.set('blacklist', self.blacklist)
             
         # use self.query (or query in request) to overload entire query
-        if kwargs.has_key('query') : 
-            query = kwargs['query']
-        else :
-            query = None
-        self.query = request.get('query', query)         
+        self.query = request.get('query', self.query)         
+        
         # TODO Images types in portal properties
         self.imagestypes = ['Image', 'News Item']
         
-        # could be 'uid', 'url'
-        if kwargs.has_key('selectiontype') : 
-            self.selectiontype = kwargs['selectiontype']
-        else :
-            self.selectiontype = 'uid'
+        # use self.selectiontype or selectiontype in request to overload selectiontype
+        # could be 'uid' or 'url'
+        self.selectiontype = request.get('selectiontype', self.selectiontype) 
         
-        # field id which will receive the selection
+        # TODO field id which will receive the selection
         self.fieldid = 'demofield' 
         
-        # field name which will receive the selection   
+        # TODO field name which will receive the selection   
         self.fieldname = 'demofield'   
         
-        # could be string
-        self.fieldtype = 'list'  
+        # TODO could be string
+        self.fieldtype = request.get('fieldtype', self.fieldtype)        
         
-        self.showbreadcrumbs=True
+        # set self.ispopup = False or ispopup = False in request for calling view in ajax
+        self.ispopup = request.get('ispopup', self.ispopup)         
         
-        # set self.ispopup = False when calling view in ajax
-        if kwargs.has_key('ispopup') : 
-            ispopup = kwargs['ispopup']
-        else :
-            ispopup = True
-        self.ispopup = request.get('ispopup', ispopup)         
+        # set self.showblacklisted = True or showblacklisted in request to show blacklist
+        self.showblacklisted = request.get('showblacklisted', self.showblacklisted)          
         
-        # set self.showblacklisted = True to show blacklist
-        if kwargs.has_key('showblacklisted') : 
-            showblacklisted = kwargs['showblacklisted']
-        else :
-            showblacklisted = False
-        self.showblacklisted = request.get('showblacklisted', showblacklisted)          
+        # use self.self.searchsubmit = True (or searchsubmit = True  in request) to display search results
+        self.searchsubmit = request.get('searchsubmit', self.searchsubmit)          
                           
         firstpassresults = self.finderResults()        
         resultids = [r['uid'] for r in firstpassresults]   
@@ -211,23 +187,56 @@ class Finder(BrowserView):
             self.results = firstpassresults  
             self.folders = [] 
                    
-        self.cleanrequest = self.cleanRequest()
-      
+        self.cleanrequest = self.cleanRequest()                           
         
-    def finderBreadCrumbs(self) :
+        return super(Finder, self).__call__()        
+
+    
+    def setScopeInfos(self, context, request, showbreadcrumbs):
         """
-        return breadcrumbs for plone finder
-        """    
-        
+        set scope and all infos related to scope
+        """
+        browsedpath = request.get('browsedpath', self.browsedpath)
+        # find scope if undefined
+        # by default scope = browsedpath or first parent folderish or context if context is a folder        
         scope = self.scope
-        request =self.request
-        breadcrumbs = utils.createBreadCrumbs(scope, self.request) 
-        serverurl = request.get('SERVER_URL', '')
-        newcrumbs = []
-        for crumb in breadcrumbs :
-            crumb['path'] = crumb['absolute_url'].replace(serverurl, '')
-            newcrumbs.append(crumb)
-        return newcrumbs
+        if scope is None  : 
+            if browsedpath :
+                scope = self.scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
+            else :
+                folder = context
+                while not IPloneSiteRoot.providedBy(folder)  : 
+                    if bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
+                        break
+                    folder = aq_inner(folder.aq_parent)    
+                scope = self.scope = folder                
+        
+        # set browsedpath and browsed_url
+        if not IPloneSiteRoot.providedBy(scope) : 
+            self.browsedpath = '/'.join(scope.getPhysicalPath())        
+            self.browsed_url = scope.absolute_url()
+            parentscope = aq_inner(scope.aq_parent)
+            if not IPloneSiteRoot.providedBy(parentscope) :
+                self.parentpath = '/'.join(parentscope.getPhysicalPath()) 
+            else :
+                self.parentpath =  self.portalpath   
+        else :
+            self.browsedpath = self.portalpath
+            self.browsed_url = self.portal_url     
+        
+        # set breadcrumbs    
+        # TODO : use self.catalog                     
+        if showbreadcrumbs :
+            crumbs = []
+            item = scope
+            while not IPloneSiteRoot.providedBy(item) :
+                 crumb = {}
+                 crumb['path'] = '/'.join(item.getPhysicalPath())
+                 crumb['title'] = item.title_or_id()
+                 crumbs.append(crumb)
+                 item = aq_inner(item.aq_parent)
+            crumbs.reverse()
+            self.breadcrumbs = crumbs                   
         
                           
     def finderQuery(self) :
@@ -240,29 +249,32 @@ class Finder(BrowserView):
             return self.query
         elif self.typeview == 'selection':
             return {'uid' : self.blacklist}            
-        elif self.displaywithoutquery :
-            scope = self.scope
+        elif self.displaywithoutquery or self.searchsubmit :
             query = {}        
             path = {}
-            path['depth'] = 1
-            path['query'] =  '/'.join(scope.getPhysicalPath())
+            if not self.searchsubmit :
+                path['depth'] = 1
+            else :
+                path['depth'] = 100 
+            path['query'] =  self.browsedpath
             query['path'] = path
+            query['sort_on'] = 'getObjPositionInParent'
             if self.types :
-                query['portal_type'] = self.types
+                query['portal_type'] = self.types            
+                                    
+            if self.searchsubmit :
+                # TODO : use a dynamic form with different possible searchform fields   
+                q = request.get('SearchableText', '')    
+                if q :            
+                    for char in '?-+*':
+                        q = q.replace(char, ' ')
+                    r=q.split()
+                    r = " AND ".join(r)
+                    searchterms = _quote_bad_chars(r)+'*'                
+                    
+                    query['SearchableText'] = searchterms
             
-            print '\n\n\n>>> %s \n\n' %str(query)
-            
-            # TODO : use a dynamic form with different possible searchform fields   
-            q = request.get('SearchableText', '')    
-            if q :            
-                for char in '?-+*':
-                    q = q.replace(char, ' ')
-                r=q.split()
-                r = " AND ".join(r)
-                searchterms = _quote_bad_chars(r)+'*'                
-                
-                query['SearchableText'] = searchterms
-            
+            print '\n\n>>>QUERY : %s\n\n' %str(query)
             return query            
             
     def finderBrowsingQuery(self) :
@@ -272,13 +284,13 @@ class Finder(BrowserView):
         
 
         if self.browse :
-            scope = self.scope
             query = {}        
             path = {}
             path['depth'] = 1
-            path['query'] =  '/'.join(scope.getPhysicalPath())
+            path['query'] =  self.browsedpath
             query['path'] = path
             query['is_folderish'] = True
+            query['sort_on'] = 'getObjPositionInParent'
             return query
             
                        
@@ -310,7 +322,7 @@ class Finder(BrowserView):
         """
         return results to select
         """           
-        context = aq_inner(self.context)
+        context = aq_inner(self.context)                         
         cat = self.catalog
         query = self.finderQuery()        
         brains = cat(**query)    
@@ -369,8 +381,8 @@ class Finder(BrowserView):
         and store some of them for next request
         """
 
-        request = self.request
-        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmited', 'newsession', 'emptyblacklist', 'types')
+        request = self.request                        
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'types')
         dictRequest = {}
         for param, value in request.form.items():
             if (value and

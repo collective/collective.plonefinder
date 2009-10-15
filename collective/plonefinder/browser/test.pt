@@ -2,6 +2,7 @@
 
 <body>
   <h1>Tests</h1>
+  <div tal:content="structure view/finderResults" />
 </body>
 
 </html>
