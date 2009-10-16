@@ -9,16 +9,14 @@
       name="plone_finder"
       class=".finder.Finder"
   	  permission="zope2.View"
-      template="./finder.pt"
-      />  
+      />     
       
-  <browser:page
+  <!--browser:page
       for="*"
       name="plone_finder_test"
-      class=".finder.Finder"
+      class=".findertest.Finder"
   	  permission="zope2.View"
-      template="test.pt"
-      />        
+      /-->          
       
   <!-- macros used by finder  -->      
   <browser:page
