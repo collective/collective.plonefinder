@@ -32,6 +32,8 @@ class Finder(BrowserView):
     """
     implements(IFinder)
     
+    template = ViewPageTemplateFile('finder.pt')
+    
     def __init__(self, context, request) :
         super(Finder, self).__init__(context, request)
         portal_url = getToolByName(context, 'portal_url')
@@ -42,8 +44,8 @@ class Finder(BrowserView):
         self.breadcrumbs = []  
         # all these properties could be overloaded
         # in a Finder's inherited class
-        self.showbreadcrumbs=True
-        self.catalog = None 
+        self.catalog =  getToolByName(self.portal, 'portal_catalog')
+        self.showbreadcrumbs=True 
         self.scope = None
         self.multiselect = True
         self.browsedpath = ''
@@ -70,14 +72,10 @@ class Finder(BrowserView):
     def __call__(self):       
         
         context = aq_inner(self.context)
-        request = self.request                                       
+        request = aq_inner(self.request)                                       
         session = request.get('SESSION', None)  
         self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
-        self.setScopeInfos(context, request, self.showbreadcrumbs)
-        
-        # use self.catalog in init to change catalog
-        if self.catalog is None : 
-            self.catalog = getToolByName(self.portal, 'portal_catalog')                    
+        self.setScopeInfos(context, request, self.showbreadcrumbs)                            
                     
         # use self.multiselect = False (or multiselect = False in request) to close window after selection
         self.multiselect = request.get('multiselect', self.multiselect)            
@@ -189,7 +187,7 @@ class Finder(BrowserView):
                    
         self.cleanrequest = self.cleanRequest()                           
         
-        return super(Finder, self).__call__()        
+        return self.template()             
 
     
     def setScopeInfos(self, context, request, showbreadcrumbs):
@@ -254,8 +252,6 @@ class Finder(BrowserView):
             path = {}
             if not self.searchsubmit :
                 path['depth'] = 1
-            else :
-                path['depth'] = 100 
             path['query'] =  self.browsedpath
             query['path'] = path
             query['sort_on'] = 'getObjPositionInParent'
@@ -274,7 +270,7 @@ class Finder(BrowserView):
                     
                     query['SearchableText'] = searchterms
             
-            print '\n\n>>>QUERY : %s\n\n' %str(query)
+            #query = {'path': {'query': '/cktest', 'depth': 2}, 'sort_on': 'getObjPositionInParent'}
             return query            
             
     def finderBrowsingQuery(self) :
@@ -312,6 +308,7 @@ class Finder(BrowserView):
             r['thumb'] = '%s/%s' %(self.portal_url, b.getIcon)
             r['type'] = b.portal_type
             r['path'] = b.getPath
+            r['state_class'] = 'state-%s' %b.review_state 
 
             results.append(r)
         
@@ -334,6 +331,7 @@ class Finder(BrowserView):
             r['path'] = b.getPath
             r['title'] = b.pretty_title_or_id()
             r['description'] = b.Description
+            r['state_class'] = 'state-%s' %b.review_state 
             r['is_folderish'] = b.is_folderish or False
             r['size'] = b.getObjSize
             r['type'] = b.portal_type
@@ -382,7 +380,7 @@ class Finder(BrowserView):
         """
 
         request = self.request                        
-        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist')
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start')
         dictRequest = {}
         for param, value in request.form.items():
             if (value and
