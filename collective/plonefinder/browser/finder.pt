@@ -177,8 +177,6 @@
                      </div>
                 </div> 
             </tal:folders>
-
-            <div metal:use-macro="here/batch_macros/macros/navigation" />            
     
             <tal:results repeat="r batch">
               <div tal:attributes="class string:${typecss}Container ${r/orientation_class};">
@@ -203,6 +201,9 @@
                 </div>
               </div>
             </tal:results>            
+
+            <div metal:use-macro="here/batch_macros/macros/navigation" />                        
+
             <tal:noresults condition="python: SearchableText and not results"
                            i18n:domain="plone">
                 <div i18n:translate="description_no_results_found">No results were found.</div>
