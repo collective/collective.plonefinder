@@ -184,7 +184,7 @@
                    tal:define="blacklisted r/blacklisted;
                                blclass python:blacklisted and ' blacklisted' or ''"
                    tal:attributes="class   string: ${r/container_class}${blclass};
-                                   title   string:select ${typeview};
+                                   title   string:select ${r/type};
                                    onclick string:Browser.selectItem('${r/uid}');; return false;" >
                   <img src="" tal:attributes="src r/thumb" />
                   <div tal:content="r/title"
