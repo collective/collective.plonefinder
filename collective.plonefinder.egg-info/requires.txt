@@ -1,4 +1,5 @@
 setuptools
+collective.uploadify
 
 [tests]
 zope.testing

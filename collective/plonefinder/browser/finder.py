@@ -66,7 +66,8 @@ class Finder(BrowserView):
         self.fieldtype = 'list'
         self.ispopup = True
         self.showblacklisted = False 
-        self.searchsubmit = False               
+        self.searchsubmit = False  
+        self.allowupload = False             
         
     
     def __call__(self):       

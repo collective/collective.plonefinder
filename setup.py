@@ -55,6 +55,7 @@ setup(name='collective.plonefinder',
       include_package_data=True,
       zip_safe=False,
       install_requires=['setuptools',
+                        'collective.uploadify',
                         # -*- Extra requirements: -*-
                         ],
       tests_require=tests_require,
