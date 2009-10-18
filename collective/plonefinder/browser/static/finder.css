@@ -408,15 +408,6 @@ a.folderSelect:hover {
   display: none !important;
 }
 
-a.fileView {
-  background: transparent url(./browser_pres_files.png) top left no-repeat;
-
-}
-
-a.imageView {
-  background: transparent url(./browser_pres_images.png) top left no-repeat;
-}
-
 #plone-browser input {
   border-color: #BABABA;
   font-size: 10px;
@@ -440,7 +431,6 @@ a.imageView {
   height: 15px;
 }
 
-
 a.folderUp {
   line-height: 18px;
   font-size:13px;
@@ -448,7 +438,6 @@ a.folderUp {
   background: transparent url(./folder_up.png) top left no-repeat;
   text-decoration: none;
 }
-
 
 #plone-browser-body .floatContainer {
   border: none;
@@ -461,8 +450,6 @@ a.folderUp {
   background:none;
   background-color:transparent;
 }
-
-
 
 #plone-browser-menu .closeWindow, 
 #plone-browser-menu .maximize {
@@ -479,7 +466,8 @@ a.folderUp {
   margin-left: 30px;
 }
 
-#menuViews a {
+#menuViews a,
+#menuActions a {
   border: 1px solid #FFFFFF;
   text-decoration:none;
   display: block;
@@ -488,12 +476,26 @@ a.folderUp {
   width:  18px;
   margin: 0 2px;
 }
-
-#menuViews a.selected {
+#menuViews a.selected,
+#menuActions a.selected {
   border: 1px solid black;
 }
-#menuViews a:hover {
+#menuViews a:hover,
+#menuActions a:hover {
   border: 1px solid #8cacbb;
+}
+
+a.fileView {
+  background: transparent url(./browser_pres_files.png) top left no-repeat;
+  margin-left :20px !important;
+}
+
+a.imageView {
+  background: transparent url(./browser_pres_images.png) top left no-repeat;
+}
+
+a.uploadView {
+  background: transparent url(./browser_upload.png) top left no-repeat;
 }
 
 #plone-browser-menu,

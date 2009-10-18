@@ -430,6 +430,21 @@ Browser.update = function(browsedpath, formData, bstart, nocompil) {
          } });  
 }
 
+Browser.upload = function(browsedurl) {
+  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+  var aUrl = jQuery('#upload-location').val() + '/@@upload';
+  jQuery.ajax({
+         type: 'GET',
+         url: aUrl,
+         dataType: 'html',
+         contentType: "text/html; charset=utf-8", 
+         success: function(html) { 
+        		jQuery('#plone-browser-body').html(html);
+        	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+        	  jQuery('#msg-done').fadeOut(5000);
+         } }); 
+}
+
 Browser.setResizable = function(e) {
 		Browser.maximized = false;
 		Browser.size();

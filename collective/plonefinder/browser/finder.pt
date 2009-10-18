@@ -80,7 +80,7 @@
                        href="javascript: void(0);"
                        tal:attributes="onclick string:Browser.search();; return false;" />
               </form>       
-            </div>
+            </div>          
             <div id="menuViews">
               <input type="hidden"
                      id="typeview"
@@ -99,6 +99,20 @@
                  i18n:attributes="title label_file_listing_view;">
               </a>
             </div>
+            <div id="menuActions">
+              <input type="hidden"
+                     id="upload-location"
+                     tal:condition="view/allowupload"
+                     name="upload-location"
+                     tal:attributes="value browsed_url" />    
+              <a href="javascript: void(0);"
+                 onclick="Browser.upload(); return false;"
+                 tal:condition="view/allowupload"
+                 title="upload"
+                 tal:attributes="class python:typeview=='upload' and 'uploadView selected' or 'uploadView'"
+                 i18n:attributes="title label_upload;">
+              </a>            
+            </div>  
           </div>               
                  
           <div id="browser-crumbs"
