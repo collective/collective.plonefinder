@@ -13,6 +13,7 @@
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
                          b_size python:20;
+                         b_size request/b_size | b_size;
                          b_start python:0;
                          b_start request/b_start | b_start;                      
                          typecss view/typecss;

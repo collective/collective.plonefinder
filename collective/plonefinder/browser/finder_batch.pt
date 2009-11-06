@@ -16,6 +16,24 @@
                  currentpage batch/pagenumber;"
      tal:condition="python: batch.next or  batch.previous">
 
+    <div id="choose-size">
+        <span id="b_size_label"
+              i18n:domain="plonefinder"
+              i18n:translate="label_choose_batch_size">
+          Choose page batch size :
+        </span>  
+        <input type="text"
+               size="4"
+               name="b_size"
+               id="b_size"
+               tal:attributes="value b_size" />
+        <input type="button"
+               size="2"
+               onclick="Browser.batchresize()"
+               name="b_size_submit"
+               id="b_size_submit"
+               value="OK" />                              
+    </div>
     <div class="next"
       tal:define="n batch/next | nothing"
       tal:attributes="class python: n and 'next' or 'next next-off'">

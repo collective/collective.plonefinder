@@ -632,3 +632,9 @@ a.uploadView {
     padding:0;
     width:13px;
 }
+
+#choose-size {
+    float:left;
+    font-size:10px;
+    margin-right:40px;
+}
