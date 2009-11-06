@@ -9,14 +9,7 @@
       name="plone_finder"
       class=".finder.Finder"
   	  permission="zope2.View"
-      />     
-      
-  <!--browser:page
-      for="*"
-      name="plone_finder_test"
-      class=".findertest.Finder"
-  	  permission="zope2.View"
-      /-->          
+      />                  
       
   <!-- macros used by finder  -->      
   <browser:page
@@ -24,11 +17,31 @@
       name="findermacros"
       permission="zope.Public"
       template="./finder.pt" />      
+      
+  <browser:page
+      for="*"
+      name="finderbatchmacros"
+      permission="zope.Public"
+      template="./finder_batch.pt" />   
         
   <!-- resource directory for widget static files -->
   <browser:resourceDirectory
       name="plonefinder_static"
       directory="static"
       />  	        
+
+  <!-- Finder Upload View -->
+  <browser:page
+      for="collective.uploadify.browser.interfaces.IUploadingCapable"
+      name="finder_upload"
+      class=".finder.FinderUploadView"
+      permission="cmf.ModifyPortalContent"/>
+    
+  <!-- Finder Upload javascript Init -->
+  <browser:page
+      for="*"
+      name="finder_upload_init"
+      class=".finder.FinderUploadInit"
+      permission="cmf.ModifyPortalContent"/>      
 
 </configure>

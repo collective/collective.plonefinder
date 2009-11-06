@@ -259,7 +259,8 @@ var Browser = {
 	height: 300,
 	fixedHeight: 0,
 	ispopup: false,
-	formdata: ''
+	formdata: '',
+	finderUrl: '@@plone_finder'
 };
 
 Browser.fixHeight = function() {
@@ -366,7 +367,7 @@ Browser.setView = function(typeview) {
 };
 
 Browser.open = function(browsedpath) {
-  var aUrl = '@@plone_finder';
+  var aUrl = Browser.finderUrl;
 	var data = {
         field_name:  Browser.field_name,
         browsedpath: encodeURI(browsedpath),
@@ -392,9 +393,10 @@ Browser.open = function(browsedpath) {
   });
 };
 
-Browser.update = function(browsedpath, formData, bstart, nocompil) {
+Browser.update = function(browsedpath, formData, b_start, nocompil) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
-  var aUrl = '@@plone_finder';
+  Browser.url = jQuery('#browsed_url').val();
+  var aUrl = Browser.finderUrl;
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
   Browser.formData = jQuery('#nextQuery').val();
@@ -403,7 +405,7 @@ Browser.update = function(browsedpath, formData, bstart, nocompil) {
   }
   if (!nocompil) {  
       formData = compileData('typeview', Browser.typeview, formData);
-      if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
+      if (typeof browsedpath != "undefined"  || !browsedpath) formData = compileData('browsedpath', browsedpath, formData);
       if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
@@ -430,19 +432,37 @@ Browser.update = function(browsedpath, formData, bstart, nocompil) {
          } });  
 }
 
-Browser.upload = function(browsedurl) {
-  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
-  var aUrl = jQuery('#upload-location').val() + '/@@upload';
-  jQuery.ajax({
-         type: 'GET',
-         url: aUrl,
-         dataType: 'html',
-         contentType: "text/html; charset=utf-8", 
-         success: function(html) { 
-        		jQuery('#plone-browser-body').html(html);
-        	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
-        	  jQuery('#msg-done').fadeOut(5000);
-         } }); 
+Browser.openUploader = function() {
+    var uploadButton = jQuery('#menuActions .uploadView');
+    var uploadContainer = jQuery('#right-panel');
+    if (! uploadButton.hasClass('selected')) {
+        var uploadUrl = Browser.url + '/@@finder_upload';
+        uploadContainer.show();
+        uploadContainer.height(jQuery('#plone-browser-body').height()-10 + 'px');
+        uploadButton.addClass('selected');
+        jQuery.ajax({
+               type: 'GET',
+               url: uploadUrl,
+               data: '',
+               dataType: 'html',
+               contentType: "text/html; charset=utf-8", 
+               success: function(html) { 
+                  uploadContainer.html(html);             
+               } });      
+    }      
+    else   {
+        uploadContainer.hide();
+        uploadContainer.empty();
+        uploadButton.removeClass('selected');
+    }
+}
+
+Browser.onUploadComplete = function() {
+    // remove upload form
+    jQuery('#right-panel').empty();
+    // update to the last batched page
+    var b_start = jQuery('#start_after_upload').val();
+    Browser.update('','',b_start);
 }
 
 Browser.setResizable = function(e) {
@@ -537,6 +557,8 @@ Browser.Popup_init = function() {
 Browser.init = function() {
     Browser.typeview = jQuery('#typeview').val();
     Browser.formData = jQuery('#nextQuery').val();
+    Browser.url = jQuery('#browsed_url').val();
+    Browser.finderUrl = '@@' + jQuery('#finderName').val();
     if (jQuery('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();

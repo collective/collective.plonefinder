@@ -1,0 +1,26 @@
+<div id="finder-uploader">
+    <fieldset id="uploadify">
+      <legend>Upload</legend>    
+      <!-- uploadify comes here -->
+      <div id="uploader"></div>    
+      <hr />    
+      <!-- upload button -->
+      <a id="uploadify-upload"
+         class="context"
+         href="javascript:jq('#uploader').fileUploadStart();">Upload Files</a>
+      <!-- clear button -->
+      <a id="uploadify-clear"
+         class="context"
+         href="javascript:jq('#uploader').fileUploadClearQueue();">Clear all</a>
+      <!-- cancel button -->
+      <a id="uploadify-cancel"
+         class="context"
+         href="javascript:jq('#uploader').fileUploadCancel();">Cancel</a>         
+    </fieldset>        
+    <!-- uploadify javascript -->
+    <script type="text/javascript"
+            tal:content="structure context/@@finder_upload_init">
+    </script>
+</div>
+
+

@@ -44,6 +44,7 @@ class Finder(BrowserView):
         self.breadcrumbs = []  
         # all these properties could be overloaded
         # in a Finder's inherited class
+        self.findername = 'plone_finder'
         self.catalog =  getToolByName(self.portal, 'portal_catalog')
         self.showbreadcrumbs=True 
         self.scope = None
@@ -186,7 +187,14 @@ class Finder(BrowserView):
             self.results = firstpassresults  
             self.folders = [] 
                    
-        self.cleanrequest = self.cleanRequest()                           
+        self.cleanrequest = self.cleanRequest()          
+        
+        # upload disallowed if user do not have permission to 
+        # modify portal content on context        
+        if self.allowupload :
+            tool = getToolByName(context, "portal_membership")
+            if not(tool.checkPermission('Modify portal content', context)) :
+                self.allowupload = False                
         
         return self.template()             
 
@@ -399,3 +407,75 @@ class Finder(BrowserView):
         cleanquery = make_query(self.cleanrequest).replace('%20', '+')
         return cleanquery               
         
+class FinderUploadView(BrowserView):
+    """ The Finder Upload View
+    """
+
+    template = ViewPageTemplateFile("finder_upload.pt")
+
+    def __call__(self):
+        return self.template()
+
+FINDER_UPLOAD_JS = """
+    function all_complete(event, data) {
+        //alert(data.filesUploaded + " Files Uploaded!");
+        //alert(data.errors + " Errors");
+        //alert(data.speed + " Avg. Speed");
+        location.reload();
+    };
+    jq(document).ready(function() {
+        jq('#uploader').fileUpload({
+            'uploader'      : '%(portal_url)s/++resource++uploader.swf',
+            'script'        : '%(context_url)s/@@upload_file',
+            'cancelImg'     : '++resource++cancel.png',
+            'folder'        : '%(physical_path)s',
+            'scriptData'    : {'__ac': '%(__ac_cookie)s'},
+            'onAllComplete' : Browser.onUploadComplete,
+            'auto'          : %(ul_auto_upload)s,
+            'multi'         : %(ul_allow_multi)s,
+            'simUploadLimit': '%(ul_sim_upload_limit)s',
+            'sizeLimit'     : '%(ul_size_limit)s',
+            'fileDesc'      : '%(ul_file_description)s',
+            'fileExt'       : '%(ul_file_extensions)s',
+            'buttonText'    : '%(ul_button_text)s',
+            'buttonImg'     : '%(ul_button_image)s',
+            'scriptAccess'  : '%(ul_script_access)s',
+            'hideButton'    : %(ul_hide_button)s
+        });
+    });
+"""
+
+        
+class FinderUploadInit(BrowserView):
+    """ Initialize uploadify js
+    """
+
+    def __init__(self, context, request):
+        super(FinderUploadInit, self).__init__(context, request)
+        self.context = aq_inner(context)
+
+    def upload_settings(self):
+        sp = getToolByName(self.context, "portal_properties").site_properties
+        portal_url = getToolByName(self.context, 'portal_url')
+
+        settings = dict(
+            __ac_cookie         = self.request.cookies.get('__ac', ''),
+            portal_url          = portal_url(),
+            context_url         = self.context.absolute_url(),
+            physical_path       = "/".join(self.context.getPhysicalPath()),
+            ul_auto_upload      = sp.getProperty('ul_auto_upload', 'true'),
+            ul_allow_multi      = sp.getProperty('ul_allow_multi', 'true'),
+            ul_sim_upload_limit = sp.getProperty('ul_sim_upload_limit', 4),
+            ul_size_limit       = sp.getProperty('ul_size_limit', ''),
+            ul_file_description = sp.getProperty('ul_file_description', ''),
+            ul_file_extensions  = sp.getProperty('ul_file_extensions', '*.*;'),
+            ul_button_text      = sp.getProperty('ul_button_text', 'BROWSE'),
+            ul_button_image     = sp.getProperty('ul_button_image', ''),
+            ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
+            ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
+        )
+        return settings
+
+    def __call__(self):
+        settings = self.upload_settings()
+        return FINDER_UPLOAD_JS % settings        

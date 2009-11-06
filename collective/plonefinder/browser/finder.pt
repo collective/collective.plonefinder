@@ -23,16 +23,29 @@
                          browsedpath view/browsedpath;
                          portalpath view/portalpath;
                          parentpath view/parentpath;
+                         findername view/findername;
                          "
              i18n:domain="collective.plonefinder">
              
 
   <tal:block condition="onlybody">             
-    <metal:block define-macro="plone_browser_body">
+    <metal:block define-macro="plone_browser_body">    
+          <input id="browsed_url"
+                 name="browsed_url"
+                 type="hidden"
+                 tal:attributes="value browsed_url" />   
+          <input id="finderName"
+                 name="finderName"
+                 type="hidden"
+                 tal:attributes="value findername" />   
+          <input id="start_after_upload"
+                 name="start_after_upload"
+                 type="hidden"
+                 tal:attributes="value b_start" />  
           <input id="nextQuery"
                  name="nextQuery"
                  type="hidden"
-                 tal:attributes="value nextQuery" />          
+                 tal:attributes="value nextQuery" />      
           <div id="plone-browser-menu">
             <a class="closeWindow"
                i18n:translate=""
@@ -99,17 +112,11 @@
                  i18n:attributes="title label_file_listing_view;">
               </a>
             </div>
-            <div id="menuActions">
-              <input type="hidden"
-                     id="upload-location"
-                     tal:condition="view/allowupload"
-                     name="upload-location"
-                     tal:attributes="value browsed_url" />    
-              <a href="javascript: void(0);"
-                 onclick="Browser.upload(); return false;"
+            <div id="menuActions">   
+              <a class="uploadView"
                  tal:condition="view/allowupload"
                  title="upload"
-                 tal:attributes="class python:typeview=='upload' and 'uploadView selected' or 'uploadView'"
+                 href="javascript:Browser.openUploader()"
                  i18n:attributes="title label_upload;">
               </a>            
             </div>  
@@ -121,7 +128,7 @@
                   <a tal:condition="parentpath"
                      class="folderUp"
                      href="javascript: void(0);"
-                     tal:attributes="onclick string:Browser.update('${parentpath}', '', '${b_start}');; return false;"
+                     tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
                      title="parent folder"
                      i18n:attributes="title">&nbsp;               
                   </a>
@@ -129,7 +136,7 @@
                   <span>
                       <a i18n:translate="tabs_home" i18n:domain="plone"
                          href="javascript: void(0);"
-                         tal:attributes="onclick string:javascript:Browser.update('${portalpath}', '', '${b_start}');; return false;">
+                         tal:attributes="onclick string:javascript:Browser.update('${portalpath}', '');; return false;">
                            Home
                       </a>
                       <span tal:condition="breadcrumbs" class="breadcrumbSeparator">
@@ -141,7 +148,7 @@
                           <tal:last tal:define="is_last repeat/crumb/end">
                               <a href="javascript: void(0);"
                                  tal:omit-tag="not: crumb/path"
-                                 tal:attributes="onclick string:Browser.update('${crumb/path}', '', '${b_start}');; return false;"
+                                 tal:attributes="onclick string:Browser.update('${crumb/path}', '');; return false;"
                                  tal:content="crumb/title"
                                  tal:on-error="crumb">
                                   crumb
@@ -162,10 +169,15 @@
                            Batch python:modules['Products.CMFPlone'].Batch;
                            batch python:Batch(results, b_size, int(b_start), orphan=1);">
     
+            <div metal:use-macro="context/@@finderbatchmacros/macros/navigation" />     
+            <div class="visualClear"><!-- --></div>
+            <div id="right-panel">                
+            </div>
+            
             <tal:folders repeat="f folders">
                 <div tal:attributes="class string: ${typecss}Container folder;">
                      <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.update('${f/path}', '', '${b_start}');; return false;">
+                        tal:attributes="onclick string:Browser.update('${f/path}', '');; return false;">
                         <div tal:attributes="class string:${typeview}Folder">
                           <img width="16"
                                height="16"
@@ -214,9 +226,7 @@
                      i18n:attributes="title">&nbsp;</a>                      
                 </div>
               </div>
-            </tal:results>            
-
-            <div metal:use-macro="here/batch_macros/macros/navigation" />                        
+            </tal:results>                               
 
             <tal:noresults condition="python: SearchableText and not results"
                            i18n:domain="plone">
@@ -283,6 +293,11 @@
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/thickbox_plus.js">
       </script>
       
+      <script type="text/javascript"
+              tal:condition="view/allowupload"
+              tal:attributes="src string:$portal_url/++resource++jquery.uploadify.js">
+      </script>      
+      
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/finder.css);">
       </style>
@@ -290,8 +305,11 @@
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/thickbox.css);">
       </style>
-
-
+      
+      <style type="text/css" media="all" 
+             tal:condition="view/allowupload"
+             tal:content="string:@import url($portal_url/++resource++uploadify.css);">
+      </style>      
     
     </head>
     
