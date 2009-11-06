@@ -544,6 +544,11 @@ Browser.batch = function() {
   );
 }
 
+Browser.batchresize = function() {
+  var b_size = jQuery('#b_size').val();
+  formData = jQuery('#nextQuery').val() + '&b_size:int=' + b_size;
+  Browser.update('', formData);
+}
 
 Browser.Popup_init = function() {
   Browser.window = jQuery('#plone-browser > .window');
