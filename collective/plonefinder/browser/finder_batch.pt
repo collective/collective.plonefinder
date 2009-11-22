@@ -13,20 +13,24 @@
                  template_id template_id|template/getId;
                  mq python:modules['ZTUtils'].make_query;
                  url batch_base_url | string:${context/absolute_url}/${template_id};
-                 currentpage batch/pagenumber;"
-     tal:condition="python: batch.next or  batch.previous">
+                 currentpage batch/pagenumber;">
 
-    <div id="choose-size">
+    <div id="choose-size"
+         i18n:domain="collective.plonefinder">
         <span id="b_size_label"
               i18n:domain="plonefinder"
-              i18n:translate="label_choose_batch_size">
-          Choose page batch size :
+              i18n:translate="label_choose_results_number">
+          Choose results number :
         </span>  
         <input type="text"
                size="4"
                name="b_size"
                id="b_size"
                tal:attributes="value b_size" />
+        <input type="hidden"
+               name="b_size_query"
+               id="b_size_query"
+               tal:attributes="value python:mq( request.form, {batch.b_start_str:0} )" />
         <input type="button"
                size="2"
                onclick="Browser.batchresize()"
@@ -34,102 +38,104 @@
                id="b_size_submit"
                value="OK" />                              
     </div>
-    <div class="next"
-      tal:define="n batch/next | nothing"
-      tal:attributes="class python: n and 'next' or 'next next-off'">
-        <a href=""
-           title="next page"
-           tal:condition="n"
-           tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:n.first} ))">
-           &nbsp;
-        </a>
-    </div>
-
-    <div class="previous"
-      tal:define="p batch/previous | nothing"
-      tal:attributes="class python: p and 'previous' or 'previous previous-off'">
-        <a href=""
-           title="previous page"
-           tal:condition="p"
-           tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:p.first} ))">
-           &nbsp;
-        </a>
-    </div> 
-
-    <!-- Link to first -->
-    <span tal:condition="python: 1 not in batch.navlist">
-        <a href=""
-           tal:attributes="href python: '%s?%s' % (url, batch.pageurl(request.form,1));">1</a>
-        <span tal:condition="python: 2 not in (batch.prevlist or batch.leapback)"
-              tal:omit-tag="">
-           &hellip;
-        </span>
-    </span>
-
-    <!-- Pagelist with quantum leap links to previous pages for quick navigation -->
-    <span tal:repeat="linklist python:batch.navurls(request.form, batch.leapback)"
-          tal:condition="batch/leapback"
-          tal:omit-tag="" >
-        <a href=""
-           tal:define="page python:linklist[0];
-                       query python:linklist[1];"
-           tal:content="page"
-           tal:attributes="href python: '%s?%s' % (url,query)" >
-        </a>
-        &hellip;
-    </span>
-
-    <!-- Pagelist with links to previous pages for quick navigation -->
-    <span tal:repeat="linklist python:batch.prevurls(request.form)"
-          tal:condition="batch/prevlist"
-          tal:omit-tag="" >
-        <a href=""
-           tal:define="page python:linklist[0];
-                       query python:linklist[1];"
-           tal:content="page"
-           tal:attributes="href python: '%s?%s' % (url,query)" >
-        </a>
-    </span>
-
-    <!-- Current page -->
-    <span tal:condition="batch/navlist" class="current"
-           tal:content="batch/pagenumber">Current page number</span>
-
-    <!-- Pagelist with links to next pages for quick navigation -->
-    <span tal:repeat="linklist python:batch.nexturls(request.form)"
-          tal:condition="batch/nextlist"
-          tal:omit-tag="" >
-        <a href=""
-           tal:define="page python:linklist[0];
-                       query python:linklist[1];"
-           tal:content="page"
-           tal:attributes="href python: '%s?%s' % (url,query)" >
-        </a>
-    </span>
-
-    <!-- Pagelist with quantum leap links to next pages for quick navigation -->
-    <span tal:repeat="linklist python:batch.navurls(request.form, batch.leapforward)"
-          tal:condition="batch/leapforward"
-          tal:omit-tag="" >
-        &hellip;
-        <a href=""
-           tal:define="page python:linklist[0];
-                       query python:linklist[1];"
-           tal:content="page"
-           tal:attributes="href python: '%s?%s' % (url,query)" >
-        </a>
-    </span>
-
-    <!-- Link to last -->
-    <span tal:condition="python:batch.numpages not in batch.navlist">
-        <span tal:condition="python: batch.numpages - 1 not in (batch.nextlist or batch.leapforward)"
-              tal:omit-tag="">
-        &hellip;
-        </span>
-        <a href=""
-           tal:attributes="href python: '%s?%s' % (url,batch.pageurl(request.form,batch.numpages));"
-           tal:content="batch/numpages">3457</a>
-    </span>
+    <tal:block condition="python: batch.next or  batch.previous">
+      <div class="next"
+        tal:define="n batch/next | nothing"
+        tal:attributes="class python: n and 'next' or 'next next-off'">
+          <a href=""
+             title="next page"
+             tal:condition="n"
+             tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:n.first} ))">
+             &nbsp;
+          </a>
+      </div>
+  
+      <div class="previous"
+        tal:define="p batch/previous | nothing"
+        tal:attributes="class python: p and 'previous' or 'previous previous-off'">
+          <a href=""
+             title="previous page"
+             tal:condition="p"
+             tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:p.first} ))">
+             &nbsp;
+          </a>
+      </div> 
+  
+      <!-- Link to first -->
+      <span tal:condition="python: 1 not in batch.navlist">
+          <a href=""
+             tal:attributes="href python: '%s?%s' % (url, batch.pageurl(request.form,1));">1</a>
+          <span tal:condition="python: 2 not in (batch.prevlist or batch.leapback)"
+                tal:omit-tag="">
+             &hellip;
+          </span>
+      </span>
+  
+      <!-- Pagelist with quantum leap links to previous pages for quick navigation -->
+      <span tal:repeat="linklist python:batch.navurls(request.form, batch.leapback)"
+            tal:condition="batch/leapback"
+            tal:omit-tag="" >
+          <a href=""
+             tal:define="page python:linklist[0];
+                         query python:linklist[1];"
+             tal:content="page"
+             tal:attributes="href python: '%s?%s' % (url,query)" >
+          </a>
+          &hellip;
+      </span>
+  
+      <!-- Pagelist with links to previous pages for quick navigation -->
+      <span tal:repeat="linklist python:batch.prevurls(request.form)"
+            tal:condition="batch/prevlist"
+            tal:omit-tag="" >
+          <a href=""
+             tal:define="page python:linklist[0];
+                         query python:linklist[1];"
+             tal:content="page"
+             tal:attributes="href python: '%s?%s' % (url,query)" >
+          </a>
+      </span>
+  
+      <!-- Current page -->
+      <span tal:condition="batch/navlist" class="current"
+             tal:content="batch/pagenumber">Current page number</span>
+  
+      <!-- Pagelist with links to next pages for quick navigation -->
+      <span tal:repeat="linklist python:batch.nexturls(request.form)"
+            tal:condition="batch/nextlist"
+            tal:omit-tag="" >
+          <a href=""
+             tal:define="page python:linklist[0];
+                         query python:linklist[1];"
+             tal:content="page"
+             tal:attributes="href python: '%s?%s' % (url,query)" >
+          </a>
+      </span>
+  
+      <!-- Pagelist with quantum leap links to next pages for quick navigation -->
+      <span tal:repeat="linklist python:batch.navurls(request.form, batch.leapforward)"
+            tal:condition="batch/leapforward"
+            tal:omit-tag="" >
+          &hellip;
+          <a href=""
+             tal:define="page python:linklist[0];
+                         query python:linklist[1];"
+             tal:content="page"
+             tal:attributes="href python: '%s?%s' % (url,query)" >
+          </a>
+      </span>
+  
+      <!-- Link to last -->
+      <span tal:condition="python:batch.numpages not in batch.navlist">
+          <span tal:condition="python: batch.numpages - 1 not in (batch.nextlist or batch.leapforward)"
+                tal:omit-tag="">
+          &hellip;
+          </span>
+          <a href=""
+             tal:attributes="href python: '%s?%s' % (url,batch.pageurl(request.form,batch.numpages));"
+             tal:content="batch/numpages">3457</a>
+      </span>
+    </tal:block>
 
 </div>
 

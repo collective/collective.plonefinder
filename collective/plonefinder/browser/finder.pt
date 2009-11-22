@@ -213,7 +213,7 @@
                    tal:attributes="class   string: ${r/container_class}${blclass};
                                    title   string:select ${r/type};
                                    onclick string:Browser.selectItem('${r/uid}');; return false;" >
-                  <img src="" tal:attributes="src r/thumb" />
+                  <img src="" tal:attributes="src r/thumb; style r/style" />
                   <div tal:content="r/title"
                        tal:attributes="class string:title ${r/state_class}">sample Portrait 1</div>
                   <div class="legend" tal:content="r/size">54 kB</div>
@@ -297,7 +297,12 @@
       <script type="text/javascript"
               tal:condition="view/allowupload"
               tal:attributes="src string:$portal_url/++resource++jquery.uploadify.js">
-      </script>      
+      </script>  
+      
+      <script type="text/javascript"
+              tal:condition="view/allowupload"
+              tal:attributes="src string:$portal_url/++resource++swfobject.js">
+      </script>     
       
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/finder.css);">

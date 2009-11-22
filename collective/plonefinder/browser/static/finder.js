@@ -181,19 +181,20 @@ function getQueryObject( query ) {
       var KeyVal = Pairs[i].split('=');
       if ( ! KeyVal || KeyVal.length != 2 ) continue;
       var key = KeyVal[0];
+      var kvalue = unescape(KeyVal[1]);
       if (isInString(':list', key)) {
           if (typeof listDatas[key]!='undefined') {
               // trop nul le javascript
-              toto = new Array(KeyVal[1]);
+              toto = new Array(kvalue);
               listDatas[key]=listDatas[key].concat(toto);  
           }
           else {
-              listDatas[key]= new Array(KeyVal[1]);     
+              listDatas[key]= new Array(kvalue);     
           }
           var val = listDatas[key];          
       }
       else {
-          var val = KeyVal[1];      
+          var val = kvalue;      
       }
       Params[key] = val;
       keyznothere = true;
@@ -406,7 +407,7 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
   if (!nocompil) {  
       formData = compileData('typeview', Browser.typeview, formData);
       if (typeof browsedpath != "undefined"  || !browsedpath) formData = compileData('browsedpath', browsedpath, formData);
-      if (typeof b_start != "undefined") formData = compileData('b_start', b_start, formData);
+      if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
   }    
@@ -423,7 +424,8 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
         		    Browser.maximize();
         		  else
         		  	Browser.size(size);*/
-        		jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
+        		if (! jQuery.browser.msie) jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
+        		else jQuery('#plone-browser-body').height(bodyHeight - 2 + 'px');
         	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
         	  jQuery('#msg-done').fadeOut(5000);
             TB_unlaunch();
@@ -522,6 +524,7 @@ Browser.drop = function(e) {
 Browser.search = function() {
   // var SearchableText = jQuery('#SearchableText').val();
   var searchform = jQuery('#finderSearchForm');
+  Browser.formData = jQuery('#nextQuery').val();
   var formData = jQuery('input:not([type=submit]), textarea, select', searchform).serialize() + '&' + Browser.formData;
   var browsedpath = jQuery('#browsedpath').val();
   Browser.update(browsedpath, formData);	
@@ -546,14 +549,15 @@ Browser.batch = function() {
 
 Browser.batchresize = function() {
   var b_size = jQuery('#b_size').val();
-  formData = jQuery('#nextQuery').val() + '&b_size:int=' + b_size;
+  formData = compileData('b_size:int', b_size, jQuery('#b_size_query').val());
   Browser.update('', formData);
 }
 
 Browser.Popup_init = function() {
   Browser.window = jQuery('#plone-browser > .window');
   arrayPageSize = getPageSize();
-  jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
+  if (! jQuery.browser.msie) jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
+  else jQuery('.popup #plone-browser-body').height(arrayPageSize [3] - 100);
   Browser.batch();
   jQuery(window).bind('resize', Browser.Popup_init);
   
