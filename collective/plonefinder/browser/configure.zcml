@@ -35,13 +35,13 @@
       for="collective.uploadify.browser.interfaces.IUploadingCapable"
       name="finder_upload"
       class=".finder.FinderUploadView"
-      permission="cmf.ModifyPortalContent"/>
+      permission="cmf.AddPortalContent"/>
     
   <!-- Finder Upload javascript Init -->
   <browser:page
       for="*"
       name="finder_upload_init"
       class=".finder.FinderUploadInit"
-      permission="cmf.ModifyPortalContent"/>      
+      permission="cmf.AddPortalContent"/>      
 
 </configure>

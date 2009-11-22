@@ -82,13 +82,14 @@ function TB_show(caption, url) { //function called when the user clicks on a thi
 			jQuery("#TB_window").append("<a href='#' id='TB_closeWindow'><span id='TB_closeWindowButton'>X</span></a>"
                  + "<img id='TB_Image' src='"+url+"' width='"+imgPreloader.width+"' height='"+imgPreloader.height+"' alt='"+caption+"'/>"
 			           + "<div id='TB_caption'>"+caption+"</div>"); 
+			if (jQuery.browser.msie) jQuery('#TB_caption').width(TB_WIDTH);           
 			jQuery("#TB_closeWindow").click(TB_remove);
 			jQuery("#TB_Image").click(TB_remove);
-			jQuery("#TB_Image").bind('mouseover', function(){
+			jQuery("#TB_Image").bind('mouseenter', function(){
           jQuery('#TB_caption').slideDown('fast');
           });
-			jQuery("#TB_Image").bind('mouseout', function(){
-          jQuery('#TB_caption').slideUp('slow');
+			jQuery("#TB_Image").bind('mouseleave', function(){
+          jQuery('#TB_caption').slideUp(3000);
           });          
 			TB_position();
 			jQuery("#TB_load").remove();

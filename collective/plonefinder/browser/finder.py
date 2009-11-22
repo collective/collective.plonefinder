@@ -23,6 +23,12 @@ def _quote_bad_chars(s):
     return s
 
 
+def encode(s):
+    """ encode string
+    """
+
+    return "d".join(map(str, map(ord, s)))
+
 FORM_PARAMS = ('SearchableText',)                                                
 
 
@@ -347,18 +353,41 @@ class Finder(BrowserView):
             r['blacklisted'] = False
             if r['type'] in self.imagestypes :
                 o = b.getObject()
-                orientation = self.getOrientationFor(o)
+                imageInfos = self.getImageInfos(o)
+                orientation = imageInfos[0]
+                width = imageInfos[1]
+                height = imageInfos[2]
+                min, max = 70, 100
+                if orientation == 'portrait' :
+                    ratio = float(width)/float(height)
+                    if height > max :
+                        width = int(ratio *max)
+                        height = max
+                    if width > min :
+                        width = min
+                        height = int(min/ratio)
+                else :
+                    ratio = float(height)/float(width)
+                    if width > max :
+                        height = int(ratio *max)
+                        width = max
+                    if height > min :
+                        height = min
+                        width = int(min/ratio)                                                    
+                            
                 thumb = '%s/image_thumb' %r['url']
                 icon = '%s/image_listing' %r['url']
                 r['is_image'] = True
                 r['preview_url'] = '%s/image?isImage=1' %r['url']
                 r['url'] = '%s/image' %r['url']
                 r['container_class'] = 'imageContainer'
+                r['style'] = 'width: %ipx; height: %ipx' %(width, height)
             else :    
                 orientation = 'small'
                 thumb = icon = b.getIcon
                 r['is_image'] = False
                 r['container_class'] = 'fileContainer'
+                r['style'] = ''
             if self.typeview == 'image' :
                 r['orientation_class'] =  orientation
                 r['thumb'] = thumb
@@ -368,19 +397,20 @@ class Finder(BrowserView):
 
             results.append(r)
         
-        return results    
-                                 
+        return results            
+        
 
-
-    def getOrientationFor(self, image_obj):        
-
+    def getImageInfos(self, image_obj):        
+        """
+        return orientation width and height
+        """
         field = image_obj.getField('image')
         im_width, im_height = field.getSize(image_obj)
-
-        if im_height >= im_width:
-            return 'portrait'
-
-        return 'landscape'              
+        if im_height >= im_width :
+            orientation = 'portrait'
+        else :
+            orientation = 'landscape'
+        return orientation, im_width, im_height         
         
     def cleanRequest(self):
         """
@@ -404,8 +434,8 @@ class Finder(BrowserView):
         make a query_string with clean Request
         """
         
-        cleanquery = make_query(self.cleanrequest).replace('%20', '+')
-        return cleanquery               
+        #cleanquery = make_query(self.cleanrequest).replace('%20', '+')        
+        return make_query(self.cleanrequest)             
         
 class FinderUploadView(BrowserView):
     """ The Finder Upload View
@@ -417,19 +447,13 @@ class FinderUploadView(BrowserView):
         return self.template()
 
 FINDER_UPLOAD_JS = """
-    function all_complete(event, data) {
-        //alert(data.filesUploaded + " Files Uploaded!");
-        //alert(data.errors + " Errors");
-        //alert(data.speed + " Avg. Speed");
-        location.reload();
-    };
-    jq(document).ready(function() {
-        jq('#uploader').fileUpload({
+    jQuery(document).ready(function() {
+        jQuery('#uploader').uploadify({
             'uploader'      : '%(portal_url)s/++resource++uploader.swf',
             'script'        : '%(context_url)s/@@upload_file',
             'cancelImg'     : '++resource++cancel.png',
             'folder'        : '%(physical_path)s',
-            'scriptData'    : {'__ac': '%(__ac_cookie)s'},
+            'scriptData'    : {'cookie': '%(cookie)s'},
             'onAllComplete' : Browser.onUploadComplete,
             'auto'          : %(ul_auto_upload)s,
             'multi'         : %(ul_allow_multi)s,
@@ -459,7 +483,7 @@ class FinderUploadInit(BrowserView):
         portal_url = getToolByName(self.context, 'portal_url')
 
         settings = dict(
-            __ac_cookie         = self.request.cookies.get('__ac', ''),
+            cookie              = self.request.cookies.get('__ac', ''),
             portal_url          = portal_url(),
             context_url         = self.context.absolute_url(),
             physical_path       = "/".join(self.context.getPhysicalPath()),
@@ -474,6 +498,9 @@ class FinderUploadInit(BrowserView):
             ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
         )
+        
+        settings["cookie"] = encode(settings["cookie"])
+        
         return settings
 
     def __call__(self):
