@@ -1,3 +1,14 @@
+
+<metal:block use-macro="context/global_defines/macros/defines" />
+<tal:headers define="request context/REQUEST">
+  <tal:block define="charset site_properties/default_charset|string:utf-8;
+                     dummy python:request.RESPONSE.setHeader('Content-Type', 'text/html;;charset=%s' % charset)" />
+  <tal:block define="dummy python:request.RESPONSE.setHeader('Expires', 'Sat, 1 Jan 2000 00:00:00 GMT')" />
+  <tal:block define="dummy python:request.RESPONSE.setHeader('Last-Modified', 'Sat, 1 Jan 2000 00:00:00 GMT')" />
+  <tal:block define="dummy python:request.RESPONSE.setHeader('Cache-control', 'max-age=0,s-maxage=0,must-revalidate')" />
+</tal:headers>
+
+
 <div id="finder-uploader"
      i18n:domain="collective.plonefinder">
     <div id="uploadify">

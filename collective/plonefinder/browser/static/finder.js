@@ -396,7 +396,6 @@ Browser.open = function(browsedpath) {
 
 Browser.update = function(browsedpath, formData, b_start, nocompil) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
-  Browser.url = jQuery('#browsed_url').val();
   var aUrl = Browser.finderUrl;
   var size = Browser.size();
   var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
@@ -430,6 +429,7 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
         	  jQuery('#msg-done').fadeOut(5000);
             TB_unlaunch();
         		TB_launch();
+            Browser.url = jQuery('#browsed_url').val();
             Browser.batch();             
          } });  
 }
