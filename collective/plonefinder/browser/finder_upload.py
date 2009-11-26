@@ -165,8 +165,9 @@ class FinderUploadFile(BrowserView):
         user = find_user(context, username)
         SecurityManagement.newSecurityManager(self.request, user)
         logger.debug('Switched to user "%s"' % username)
-
-        ticketmod.invalidateTicket(url,ticket)        
+        
+        # we must do it only when multiupload is finished
+        # ticketmod.invalidateTicket(url,ticket)        
         
         file_name = request.form.get("Filename", "")
         file_data = request.form.get("Filedata", None)
