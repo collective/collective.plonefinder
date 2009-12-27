@@ -91,6 +91,7 @@
   height: 25px;
   margin:0;
   margin-bottom: 2px;
+  clear: both;
 }
 
 #browser-crumbs {
@@ -98,6 +99,7 @@
   height: 2em;
   padding: 2px;
   line-height: 22px;
+  float: left;
 }
 
 #plone-browser-body {
@@ -106,6 +108,7 @@
   padding:5px;
   overflow:auto;
   border: 1px solid #000000;
+  clear: right;
 }
 
 #box-edit-browser-menu {
@@ -346,13 +349,6 @@ a.folderSelect:hover {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  background: url(./folder_explore.png) 5px 5px no-repeat;
-  padding-left: 18px;
-}
-
-.listContainer .fileContainer,
-.listContainer .imageContainer {
-  padding-left: 18px;
 }
 
 .listContainer img {
@@ -363,12 +359,23 @@ a.folderSelect:hover {
 }
 
 .listContainer .title {
-  line-height: 20px;
+  line-height: 1.5em;
   cursor: pointer;
+  width: 250px;
+  padding-left: 5px;
+}
+
+#plone-browser-navigation .listContainer .title {
+  width: auto !important;
+  padding-left: 0;
 }
 
 .listContainer * {
   float: left;
+}
+
+.listContainer a {
+  text-decoration: none;
 }
 
 .listContainer .visualClear {
@@ -376,13 +383,26 @@ a.folderSelect:hover {
 }
 
 .listContainer .legend {
-  float: right;
+  float: left;
   line-height: 20px;
   padding-left: 20px;
 }
 
+.listContainer .lsize {
+  width: 50px;
+}
+
+.listContainer .lcreated {
+  width: 200px;
+}
+
+.floatContainer .lcreated {
+  display: none;
+}
+
 .listContainer a:hover {
   background-color: #FFFFFF;
+  text-decoration: underline;
 }
 
 .listContainer .relContainer {
@@ -392,7 +412,7 @@ a.folderSelect:hover {
   background-color: transparent !important;
   z-index:20;
   margin-top: -18px !important;
-  margin-left: 14px !important;
+  margin-left: -3px !important;
   opacity: 1;
   -moz-opacity: 1;
   -khtml-opacity: 1;
@@ -526,12 +546,6 @@ a.uploadView {
   background: transparent url(./browser_upload.png) top left no-repeat;
 }
 
-#plone-browser-menu,
-#browser-crumbs,
-#plone-browser-body {
-  clear: both;
-}
-
 #searchBrowserBox {
   float: left;
   padding-right: 15px;
@@ -599,16 +613,6 @@ a.uploadView {
    color: black !important;
 }
 
-.popup .listContainer .legend {
-   float: left !important;
-}
-
-.popup .listContainer .linkFolder, 
-.popup .listContainer .fileFolder, 
-.popup .listContainer .imageFolder {
-    background: transparent url(./folder_explore.png) no-repeat scroll 2px 5px !important;
-}
-
 .popup .closeWindow {
   margin-left: 30px !important;
 }
@@ -620,42 +624,42 @@ a.uploadView {
   padding: 0 10px;
 }
 
-#plone-browser-body .listingBar {
-  clear: none;
+#plone-browser .listingBar {
+  clear: both;
   float: right;
   background-color: transparent;
   border: none;
-  padding: 0 10px 10px; 
+  padding: 0 5px; 
 }
 
-#plone-browser-body .listingBar .previous {
+#plone-browser .listingBar .previous {
   float: right;
   padding: 0;
   margin: 0 0 0 15px;
   background: transparent url(./prev-bg.gif) top left no-repeat;
 }
 
-#plone-browser-body .listingBar .previous-off {
+#plone-browser .listingBar .previous-off {
   background: transparent url(./prev-off-bg.gif) top left no-repeat;
   height:13px;
   width:13px;
 }
 
-#plone-browser-body .listingBar .next {
+#plone-browser .listingBar .next {
   float: right;
   padding: 0;
-  margin: 0 0 0 2px;
+  margin: 0 10px 0 2px;
   background: transparent url(./next-bg.gif) top left no-repeat;
 }
 
-#plone-browser-body .listingBar .next-off {
+#plone-browser .listingBar .next-off {
   background: transparent url(./next-off-bg.gif) top left no-repeat;
   height:13px;
   width:13px;
 }
 
-#plone-browser-body .listingBar .next a, 
-#plone-browser-body  .listingBar .previous a {
+#plone-browser .listingBar .next a, 
+#plone-browser .listingBar .previous a {
     display:block;
     height:13px;
     padding:0;
@@ -665,7 +669,7 @@ a.uploadView {
 #choose-size {
     float:left;
     font-size:10px;
-    margin-right:40px;
+    margin-right:54px;
 }
 
 /* uploadify.css overload */
@@ -677,4 +681,19 @@ a.uploadView {
 
 #uploaderUploader {
   margin: 10px 0 0 10px !important;
+}
+
+#plone-browser-navigation {
+  float: left;
+  border: 1px solid black;
+  background-color: white;
+  margin: 0 10px 0 12px;
+  clear: both;
+  padding: 5px;
+  width: 150px;
+  overflow: auto;
+}
+
+.retrait {
+  margin-left: 15px;
 }

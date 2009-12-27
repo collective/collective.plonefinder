@@ -52,6 +52,8 @@ class Finder(BrowserView):
         self.catalog =  getToolByName(self.portal, 'portal_catalog')
         self.showbreadcrumbs=True 
         self.scope = None
+        self.scopeicon = ''
+        self.scopetitle = ''
         self.multiselect = True
         self.browsedpath = ''
         self.parentpath = ''
@@ -219,14 +221,17 @@ class Finder(BrowserView):
         scope = self.scope
         if scope is None  : 
             if browsedpath :
-                scope = self.scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
+                self.scope = scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
             else :
-                folder = context
+                folder = aq_inner(context)
                 while not IPloneSiteRoot.providedBy(folder)  : 
                     if bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
                         break
                     folder = aq_inner(folder.aq_parent)    
-                scope = self.scope = folder                
+                self.scope = scope = folder 
+                
+        self.scopetitle = scope.Title()              
+        self.scopeicon = scope.getIcon()         
         
         # set browsedpath and browsed_url
         if not IPloneSiteRoot.providedBy(scope) : 
@@ -355,6 +360,7 @@ class Finder(BrowserView):
             r['size'] = b.getObjSize
             r['type'] = b.portal_type
             r['blacklisted'] = False
+            r['created'] = b.created
             if r['type'] in self.imagestypes :
                 o = b.getObject()
                 imageInfos = self.getImageInfos(o)

@@ -417,14 +417,20 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
          dataType: 'html',
          contentType: "text/html; charset=utf-8", 
          success: function(html) { 
-        		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu').remove();
+        		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu, #plone-browser-navigation, .listingBar').remove();
         		jQuery('#start-refresh').after(html);
         		/*if (Browser.maximized)
         		    Browser.maximize();
         		  else
         		  	Browser.size(size);*/
-        		if (! jQuery.browser.msie) jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
-        		else jQuery('#plone-browser-body').height(bodyHeight - 2 + 'px');
+        		if (! jQuery.browser.msie) {
+                jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
+                jQuery('#plone-browser-navigation').height(bodyHeight - 12 + 'px');
+            }
+        		else {
+                jQuery('#plone-browser-body').height(bodyHeight - 2 + 'px');
+                jQuery('#plone-browser-navigation').height(bodyHeight - 2 + 'px');
+            }
         	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
         	  jQuery('#msg-done').fadeOut(5000);
             TB_unlaunch();
@@ -440,7 +446,7 @@ Browser.openUploader = function() {
     if (! uploadButton.hasClass('selected')) {
         var uploadUrl = Browser.url + '/@@finder_upload';
         uploadContainer.show();
-        uploadContainer.height(jQuery('#plone-browser-body').height()-10 + 'px');
+        uploadContainer.height(jQuery('#plone-browser-body')[0].scrollHeight-20 + 'px');
         uploadButton.addClass('selected');
         jQuery.ajax({
                type: 'GET',
@@ -536,7 +542,7 @@ Browser.selectItem = function (UID) {
 
 
 Browser.batch = function() {
-  jQuery('#plone-browser-body .listingBar a').click (
+  jQuery('#plone-browser .listingBar a').click (
     function(){
       var batchUrl = this.href;
       var queryString = batchUrl.replace(/^[^\?]+\??/,'');
@@ -556,8 +562,14 @@ Browser.batchresize = function() {
 Browser.Popup_init = function() {
   Browser.window = jQuery('#plone-browser > .window');
   arrayPageSize = getPageSize();
-  if (! jQuery.browser.msie) jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
-  else jQuery('.popup #plone-browser-body').height(arrayPageSize [3] - 100);
+  if (! jQuery.browser.msie) {
+      jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
+      jQuery('.popup #plone-browser-navigation').height(arrayPageSize [3] -130);
+  }
+  else {
+      jQuery('.popup #plone-browser-body').height(arrayPageSize [3] - 100);
+      jQuery('.popup #plone-browser-navigation').height(arrayPageSize [3] - 100);
+  }    
   Browser.batch();
   jQuery(window).bind('resize', Browser.Popup_init);
   

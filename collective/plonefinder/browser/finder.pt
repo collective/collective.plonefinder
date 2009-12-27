@@ -25,6 +25,10 @@
                          portalpath view/portalpath;
                          parentpath view/parentpath;
                          findername view/findername;
+                         folders view/folders;
+                         results view/results;                         
+                         Batch python:modules['Products.CMFPlone'].Batch;
+                         batch python:Batch(results, b_size, int(b_start), orphan=1);
                          "
              i18n:domain="collective.plonefinder">
              
@@ -122,6 +126,8 @@
               </a>            
             </div>  
           </div>               
+          
+          <div metal:use-macro="context/@@finderbatchmacros/macros/navigation" />     
                  
           <div id="browser-crumbs"
                tal:condition="view/showbreadcrumbs">
@@ -164,14 +170,45 @@
               </tal:block>
           </div>
           
-          <div id="plone-browser-body"
-               tal:define="folders view/folders;
-                           results view/results;                         
-                           Batch python:modules['Products.CMFPlone'].Batch;
-                           batch python:Batch(results, b_size, int(b_start), orphan=1);">
-    
-            <div metal:use-macro="context/@@finderbatchmacros/macros/navigation" />     
-            <div class="visualClear"><!-- --></div>
+          <div id="plone-browser-navigation">
+            <div class="listContainer folder"
+                 tal:define="path view/browsedpath;
+                             icon string:$portal_url/${view/scopeicon};
+                             title view/scopetitle">
+               <a href="javascript: void(0);"
+                  tal:attributes="onclick string:Browser.update('${path}', '');; return false;">
+                  <div tal:attributes="class string:${typeview}Folder">
+                    <img width="16"
+                         height="16"
+                         tal:attributes="class python:icon.split('/')[-1].replace('.','_');
+                                         src icon" />
+                  </div>
+                  <div class="title"
+                       tal:content="title">sample Folder 1</div>
+               </a>                
+            </div>
+            <div class="retrait">
+              <tal:folders repeat="f folders">
+                  <div class="listContainer folder">
+                       <a href="javascript: void(0);"
+                          tal:attributes="onclick string:Browser.update('${f/path}', '');; return false;">
+                          <div tal:attributes="class string:${typeview}Folder">
+                            <img width="16"
+                                 height="16"
+                                 tal:define="icon f/thumb"
+                                 tal:attributes="class python:icon.split('/')[-1].replace('.','_');
+                                                 src icon" />
+                          </div>
+                          <div class="title"
+                               tal:content="f/title"
+                               tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
+                       </a>                     
+                  </div> 
+              </tal:folders>   
+            </div>       
+          </div>
+          <div id="plone-browser-body">
+                      
             <div id="right-panel">                
             </div>
             
@@ -188,7 +225,7 @@
                         </div>
                         <div class="title"
                              tal:content="f/title"
-                             tal:attributes="class f/state_class">sample Folder 1</div>
+                             tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
                         <div class="legend"></div>
                      </a>
                      
@@ -216,7 +253,8 @@
                   <img src="" tal:attributes="src r/thumb; style r/style" />
                   <div tal:content="r/title"
                        tal:attributes="class string:title ${r/state_class}">sample Portrait 1</div>
-                  <div class="legend" tal:content="r/size">54 kB</div>
+                  <div class="legend lsize" tal:content="r/size">54 kB</div>
+                  <div class="legend lcreated" tal:content="r/created">2010/01/01</div>
                   <div class="visualClear"><!-- --></div>
                 </a>
   
