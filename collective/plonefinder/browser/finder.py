@@ -72,7 +72,13 @@ class Finder(BrowserView):
         self.ispopup = True
         self.showblacklisted = False 
         self.searchsubmit = False  
-        self.allowupload = False             
+        self.allowupload = False
+        # change this property 
+        # to define your own methods (overload selectItem as example)
+        self.jsaddons = ''  
+        # change this property 
+        # to define your own css
+        self.cssaddons = ''           
         
     
     def __call__(self):       
