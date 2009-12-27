@@ -304,6 +304,11 @@
               tal:attributes="src string:$portal_url/++resource++swfobject.js">
       </script>     
       
+      <script type="text/javascript"
+              tal:condition="view/jsaddons"
+              tal:content="structure string:${view/jsaddons}">
+      </script>     
+      
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/finder.css);">
       </style>
@@ -315,7 +320,13 @@
       <style type="text/css" media="all" 
              tal:condition="view/allowupload"
              tal:content="string:@import url($portal_url/++resource++uploadify.css);">
-      </style>      
+      </style>   
+      
+      <style type="text/css" media="all" 
+             tal:condition="view/cssaddons"
+             tal:content="structure string:${view/cssaddons}">
+      </style>     
+      
     
     </head>
     
