@@ -4,6 +4,20 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="collective.plonefinder">
 
+  <adapter factory=".uploadcapable.FinderUploadCapableFileFactory" />
+  <adapter factory=".uploadcapable.FinderCreateFolderCapableFactory" />
+
+  <class class="Products.ATContentTypes.content.folder.ATFolder">
+    <implements interface=".interfaces.IFinderUploadCapable" />
+  </class>
+
+  <class class="Products.ATContentTypes.content.folder.ATBTreeFolder">
+    <implements interface=".interfaces.IFinderUploadCapable" />
+  </class>
+
+  <class class="Products.CMFPlone.Portal.PloneSite">
+    <implements interface=".interfaces.IFinderUploadCapable" />
+  </class>
 
   <browser:page
       for="*"
@@ -33,7 +47,7 @@
 
   <!-- Finder Upload View -->
   <browser:page
-      for="collective.uploadify.browser.interfaces.IUploadingCapable"
+      for=".interfaces.IFinderUploadCapable"
       name="finder_upload"
       class=".finder_upload.FinderUploadView"
       permission="cmf.AddPortalContent"/>     
@@ -58,10 +72,17 @@
 
   <!-- ticket view which generate a ticket for each user/folder absolute url -->
   <browser:page
-      for="collective.uploadify.browser.interfaces.IUploadingCapable"
+      for=".interfaces.IFinderUploadCapable"
       name="ticket"
       class=".ticket.TicketView"
       permission="cmf.AddPortalContent"
       />
+
+  <!-- Finder Upload View -->
+  <browser:page
+      for=".interfaces.IFinderUploadCapable"
+      name="finder_add_folder"
+      class=".finder_newfolder.FinderNewFolderView"
+      permission="cmf.AddPortalContent"/>    
 
 </configure>

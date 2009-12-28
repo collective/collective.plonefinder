@@ -72,9 +72,9 @@ class FinderUploadView(BrowserView):
 FINDER_UPLOAD_JS = """
     jQuery(document).ready(function() {
         jQuery('#uploader').uploadify({
-            'uploader'      : '%(portal_url)s/++resource++uploader.swf',
+            'uploader'      : '%(portal_url)s/++resource++plonefinder_static/uploader.swf',
             'script'        : '%(context_url)s/@@finder_upload_file',
-            'cancelImg'     : '++resource++cancel.png',
+            'cancelImg'     : '%(portal_url)s/++resource++plonefinder_static/cancel.png',
             'folder'        : '%(physical_path)s',
             'scriptData'    : {'ticket': '%(ticket)s'},
             'onAllComplete' : Browser.onUploadComplete,
@@ -133,13 +133,12 @@ class FinderUploadInit(BrowserView):
 class FinderUploadFile(BrowserView):
     """ Upload a file
     """
-
-                        
-    
+                            
     def finder_upload_file(self) :
         
         context = aq_inner(self.context)
         request = self.request
+        session = request.get('SESSION', None)
         
         ticket = self.request.form.get('ticket',None)
         if ticket is None:
@@ -172,12 +171,18 @@ class FinderUploadFile(BrowserView):
         file_name = request.form.get("Filename", "")
         file_data = request.form.get("Filedata", None)
         content_type = mimetypes.guess_type(file_name)[0]
+        portal_type = session.get('typeupload', request.get('typeupload', ''))
+        
+        if not portal_type :
+            ctr = getToolByName(context, 'content_type_registry')
+            portal_type = ctr.findTypeName(file_name.lower(), '', '') or 'File'
+        
         if file_data:
             factory = IFileFactory(context)
-            logger.info("uploading file: filename=%s, content_type=%s" % \
-                    (file_name, content_type))                             
+            logger.info("uploading file: filename=%s, content_type=%s, portal_type=%s" % \
+                    (file_name, content_type, portal_type))                             
             
-            f = factory(file_name, content_type, file_data)
+            f = factory(file_name, content_type, file_data, portal_type)
             logger.info("file url: %s" % f.absolute_url())
         
             SecurityManagement.setSecurityManager(old_sm)   
