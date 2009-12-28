@@ -15,6 +15,7 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.ATContentTypes.interface import IImageContent
 
 from collective.plonefinder.interfaces import IFinder
+from interfaces import IFinderUploadCapable
 
 
 def _quotestring(s):
@@ -75,6 +76,9 @@ class Finder(BrowserView):
         self.showblacklisted = False 
         self.searchsubmit = False  
         self.allowupload = False
+        self.allowaddfolder = False
+        self.typeupload = ''
+        self.typefolder = ''
         # change this property 
         # to define your own methods (overload selectItem as example)
         self.jsaddons = ''  
@@ -95,7 +99,13 @@ class Finder(BrowserView):
         self.multiselect = request.get('multiselect', self.multiselect)            
                  
         # use self.types (or types in request) to specify portal_types in catalog request
-        self.types = request.get('types', self.types)    
+        self.types = request.get('types', self.types)          
+                 
+        # use self.typeupload (or typeupload in request) to specify portal_type for upload
+        self.typeupload = request.get('typeupload', self.typeupload)     
+                 
+        # use self.typefolder (or typefolder in request) to specify portal_type used to create folder
+        self.typefolder = request.get('typefolder', self.typefolder) 
         
         # use self.typeview (or typeview in request) to specify typeview ('file' or 'image' for now, 'selection' in future)
         self.typeview = request.get('typeview', self.typeview)    
@@ -202,11 +212,23 @@ class Finder(BrowserView):
         self.cleanrequest = self.cleanRequest()          
         
         # upload disallowed if user do not have permission to 
-        # modify portal content on context        
+        # Add portal content on context        
         if self.allowupload :
             tool = getToolByName(context, "portal_membership")
-            if not(tool.checkPermission('Modify portal content', context)) :
-                self.allowupload = False                
+            if not(tool.checkPermission('Add portal content', self.scope)) :
+                self.allowupload = False         
+            if not IFinderUploadCapable.providedBy(self.scope) :
+                self.allowupload = False           
+        
+        # allowaddfolder disallowed if user do not have permission to 
+        # add portal content on context        
+        # disallowed also when context is not IFinderUploadCapable
+        if self.allowaddfolder :
+            tool = getToolByName(context, "portal_membership")
+            if not(tool.checkPermission('Add portal content', self.scope)) :
+                self.allowaddfolder = False 
+            if not IFinderUploadCapable.providedBy(self.scope) :
+                self.allowaddfolder = False              
         
         return self.template()             
 

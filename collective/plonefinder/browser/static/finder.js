@@ -465,10 +465,35 @@ Browser.openUploader = function() {
     }
 }
 
+Browser.openAddFolderForm = function() {
+    var addFolderButton = jQuery('#menuActions .addFolderView');
+    var addFolderContainer = jQuery('#right-panel');
+    if (! addFolderButton.hasClass('selected')) {
+        var addFolderUrl = Browser.url + '/@@finder_add_folder';
+        addFolderContainer.show();
+        addFolderContainer.height(jQuery('#plone-browser-body')[0].scrollHeight-20 + 'px');
+        addFolderButton.addClass('selected');
+        jQuery.ajax({
+               type: 'GET',
+               url: addFolderUrl,
+               data: '',
+               dataType: 'html',
+               contentType: "text/html; charset=utf-8", 
+               success: function(html) { 
+                  addFolderContainer.html(html);             
+               } });      
+    }      
+    else   {
+        addFolderContainer.hide();
+        addFolderContainer.empty();
+        addFolderButton.removeClass('selected');
+    }
+}
+
 Browser.onUploadComplete = function() {
     // remove upload form
     jQuery('#right-panel').empty();
-    // update to the last batched page
+    // update to the last batched page (TODO > update with the last page)
     var b_start = jQuery('#start_after_upload').val();
     Browser.update('','',b_start);
 }
