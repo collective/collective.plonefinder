@@ -60,9 +60,10 @@
       permission="cmf.AddPortalContent"/>      
       
   <!-- Finder Upload File 
-       Authentification is lost by flash upload
-       So we use our own system to retrieve user
-  -->  
+       the permission Zope.Public is important
+       because flash uploadify loose the authentification
+       we use our own security implementation with a ticket -->  
+       
   <browser:page
       for="*"
       name="finder_upload_file"
@@ -78,11 +79,18 @@
       permission="cmf.AddPortalContent"
       />
 
-  <!-- Finder Upload View -->
+  <!-- Finder New Folder Form View -->
   <browser:page
       for=".interfaces.IFinderUploadCapable"
       name="finder_add_folder"
       class=".finder_newfolder.FinderNewFolderView"
       permission="cmf.AddPortalContent"/>    
+
+  <!-- Finder Create New Folder -->  
+  <browser:page
+      for="*"
+      name="finder_create_folder"
+      class=".finder_newfolder.FinderNewFolder"
+      permission="cmf.AddPortalContent"/> 
 
 </configure>

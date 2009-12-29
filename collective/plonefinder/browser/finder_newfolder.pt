@@ -30,7 +30,7 @@
         <div class="formControls">
           <input type="button"
                  value="submit" 
-                 onclick="Browser.createFolder" />    
+                 onclick="Browser.createFolder()" />    
         </div>                      
       </form>           
     </div>        

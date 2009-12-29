@@ -405,7 +405,7 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
   }
   if (!nocompil) {  
       formData = compileData('typeview', Browser.typeview, formData);
-      if (typeof browsedpath != "undefined"  || !browsedpath) formData = compileData('browsedpath', browsedpath, formData);
+      if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
       if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
@@ -461,8 +461,16 @@ Browser.openUploader = function() {
     else   {
         uploadContainer.hide();
         uploadContainer.empty();
-        uploadButton.removeClass('selected');
+        jQuery('#menuActions a').removeClass('selected');
     }
+}
+
+Browser.onUploadComplete = function() {
+    // remove upload form
+    jQuery('#right-panel').empty();
+    // update to the last batched page (TODO > update with the last page)
+    var b_start = jQuery('#start_after_upload').val();
+    Browser.update('','',b_start);
 }
 
 Browser.openAddFolderForm = function() {
@@ -486,16 +494,24 @@ Browser.openAddFolderForm = function() {
     else   {
         addFolderContainer.hide();
         addFolderContainer.empty();
-        addFolderButton.removeClass('selected');
+        jQuery('#menuActions a').removeClass('selected');
     }
 }
 
-Browser.onUploadComplete = function() {
-    // remove upload form
-    jQuery('#right-panel').empty();
-    // update to the last batched page (TODO > update with the last page)
-    var b_start = jQuery('#start_after_upload').val();
-    Browser.update('','',b_start);
+Browser.createFolder = function() {
+	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+    createFolderUrl = Browser.url + '/@@finder_create_folder';
+    var folderForm = jQuery('#create-new-folder');
+    var formData = jQuery('input:not([type=button]), textarea', folderForm).serialize();
+    jQuery.ajax({
+           type: 'GET',
+           url: createFolderUrl,
+           data: formData,
+           dataType: formData,
+           contentType: "text/html; charset=utf-8", 
+           success: function(html) { 
+              Browser.update();             
+           } });      
 }
 
 Browser.setResizable = function(e) {
