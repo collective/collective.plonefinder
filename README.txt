@@ -8,33 +8,41 @@
    - for referencable fields with a special widget (collective.orderrefswidget which will come later)
    
    - for collective.ckeditor (in developpement) or any possible wysiwyg editor for referencing images or contents inside a rich text field,
-     it's also possible to upload of files or images with this product (big part of code taken from collective.uploadify)
+     it's also possible to upload files / images and create folders with this product (big part of code taken from collective.uploadify)
    
    - for links fields (as remoteUrl in ATLink) to reference internal links   
       
    
-   Don't use it in a production site for now (this product is under developpement just for a specific usecase)
+   Don't use it in a production site for now (this product is under developpement)
    
-   This work has been started by Christophe Bosse & Jean-mat Grimaldi in 2007.
+   This work has been started by Christophe Bosse & Jean-mat Grimaldi in 2007 for PloneArticle product. 
    
    TODO :
    -----
    
-   - some js refactoring
+   - use jquery-ui.js to improve the interface (css/js/template evolutions)
    
-   - some css refactoring
+   - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
    
-   - any kind of refactoring
+   - add GS profile for some options  
    
-   - extended search form
+   - add doctests and jquery tests
    
-   - 
+   - add thumb size selection for images
+   
+   - add new features for each browsed item (rename, change State, delete, copy/cut/paste)
+   
+   - add reorder by title/date/size
+   
+   Fix bugs :
+   
+   - fix bug on objects' size
    
    HOW TO USE IT  :
    ---------------
    
    See the collective.ckeditor product as example.
-   You can also easily use it with TinyMCE.
+   You can also easily use it with another editor.
    
 
 .. Note!
