@@ -686,12 +686,13 @@ a.addFolderView {
   margin: 0 10px 0 12px;
   clear: both;
   padding: 5px;
-  width: 150px;
+  width: auto;
+  max-width: 250px;
   overflow: auto;
 }
 
 .retrait {
-  margin-left: 15px;
+  margin-left: 7px;
 }
 
 /* create folder form */

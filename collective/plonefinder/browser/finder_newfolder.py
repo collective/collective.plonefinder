@@ -12,7 +12,7 @@ from zope.filerepresentation.interfaces import IDirectoryFactory
 
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile 
-
+from collective.plonefinder import logger
     
 
 class FinderNewFolderView(BrowserView):
@@ -43,7 +43,8 @@ class FinderNewFolder(BrowserView):
         request = self.request
         session = request.get('SESSION', None)
         
-        portal_type = session.get('typefolder', request.get('typefolder', ''))     
+        portal_type = session.get('typefolder', request.get('typefolder', 'Folder'))     
+       
         title = request.get('folder-title', '')
         description = request.get('folder-description', '')
 

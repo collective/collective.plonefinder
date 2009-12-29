@@ -48,8 +48,9 @@ class FinderUploadCapableFileFactory(object):
 
     def __call__(self, name, content_type, data, portal_type):
 
-        # XXX: quick fix for german umlauts
-        name = name.decode("utf8")
+        context = aq_inner(self.context)
+        charset = context.getCharset()
+        name = name.decode(charset)
 
         normalizer = component.getUtility(IIDNormalizer)
         chooser = INameChooser(self.context)
@@ -77,10 +78,10 @@ class FinderCreateFolderCapableFactory(object):
         self.context = aq_inner(context)
 
     def __call__(self, title, description, portal_type):
-
-        # XXX: quick fix for german umlauts
-        name = name.decode("utf8")
-
+        context = aq_inner(self.context)
+        charset = context.getCharset()
+        title= title.decode(charset)
+        description = description.decode("utf8")
         normalizer = component.getUtility(IIDNormalizer)
         chooser = INameChooser(self.context)
         newid = chooser.chooseName(normalizer.normalize(title), self.context.aq_parent)
@@ -93,6 +94,7 @@ class FinderCreateFolderCapableFactory(object):
             obj = ploneutils._createObjectByType(portal_type, self.context, newid)
             obj.setTitle(title)
             obj.setDescription(description)
+            obj.reindexObject()
             transaction.commit()
         finally:
             upload_lock.release()

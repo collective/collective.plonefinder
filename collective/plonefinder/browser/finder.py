@@ -55,6 +55,7 @@ class Finder(BrowserView):
         self.scope = None
         self.scopeicon = ''
         self.scopetitle = ''
+        self.scopetype = ''
         self.multiselect = True
         self.browsedpath = ''
         self.parentpath = ''
@@ -253,7 +254,8 @@ class Finder(BrowserView):
                 self.scope = scope = folder 
                 
         self.scopetitle = scope.Title()              
-        self.scopeicon = scope.getIcon()         
+        self.scopeicon = scope.getIcon()        
+        self.scopetype = scope.portal_type 
         
         # set browsedpath and browsed_url
         if not IPloneSiteRoot.providedBy(scope) : 
