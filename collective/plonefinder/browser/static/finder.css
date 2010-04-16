@@ -7,6 +7,7 @@
   height: 100%;
   padding: 0 !important;
   z-index: 1000;
+  font-size: 12px;
 }
 
 #plone-browser .overlay {
@@ -152,10 +153,22 @@
   overflow: hidden;
 }
 
-.floatContainer .fileContainer img,
-.floatContainer .linkContainer img {
+.divicon {
+  width: 23px;
+  padding: 0 !important;
+  height: 23px;
+  overflow: hidden;
+}
+
+.floatContainer .fileContainer .divicon,
+.floatContainer .linkContainer .divicon {
   margin-top:30px;
   margin-bottom:20px;
+}
+
+.floatContainer .imageFolder .divicon {
+  margin-top:25px;
+  margin-left:25px;
 }
 
 .floatContainer a:hover .title{
@@ -276,15 +289,6 @@ a.folderSelect:hover {
   overflow: hidden;
 }
 
-.floatContainer .linkFolder img,
-.floatContainer .fileFolder img,
-.floatContainer .imageFolder img {
-  padding-top: 40px;
-  padding-left: 30px;
-  width: 16px;
-  height: 16px;
-}
-
 .floatContainer a.imageContainer{
   display: block;
   border: 1px solid #F1F1E3;
@@ -367,11 +371,20 @@ a.folderSelect:hover {
 
 #plone-browser-navigation .listContainer .title {
   width: auto !important;
-  padding-left: 0;
+  padding-left: 3px;
 }
 
 .listContainer * {
   float: left;
+}
+
+.listContainer .divicon {
+  position: relative;
+  top: -4px;
+}
+
+#plone-browser-body .listContainer .divicon {
+  position: absolute;
 }
 
 .listContainer a {
@@ -448,11 +461,17 @@ a.folderSelect:hover {
   font-size: 10px;
 }
 
+#plone-browser #SearchableText {
+  height: 19px;
+}
+
 #plone-browser input.searchBrowserButton {
   background: transparent url(./search_icon.gif) 2px 1px no-repeat;
   cursor: pointer;
-  height: 17px;
+  height: 19px;
   padding: 1px 2px 1px 15px;
+  position: relative;
+  top: -2px;
 }
 
 #plone-browser select {
@@ -472,6 +491,7 @@ a.folderUp {
   padding-left: 8px;
   background: transparent url(./folder_up.png) top left no-repeat;
   text-decoration: none;
+  margin-right: 3px;
 }
 
 #plone-browser-body .floatContainer {
@@ -686,7 +706,7 @@ a.addFolderView {
   margin: 0 10px 0 12px;
   clear: both;
   padding: 5px;
-  width: auto;
+  width: 13%;
   max-width: 250px;
   overflow: auto;
 }
