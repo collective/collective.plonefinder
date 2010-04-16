@@ -104,6 +104,8 @@
 }
 
 #plone-browser-body {
+  /* shown in js to avoid bad effects */
+  visibility : hidden;
   background-color: #F1F1E3;
   margin: 0 12px;
   padding:5px;
@@ -383,10 +385,6 @@ a.folderSelect:hover {
   top: -4px;
 }
 
-#plone-browser-body .listContainer .divicon {
-  position: absolute;
-}
-
 .listContainer a {
   text-decoration: none;
 }
@@ -415,7 +413,7 @@ a.folderSelect:hover {
 
 .listContainer a:hover {
   background-color: #FFFFFF;
-  text-decoration: underline;
+  border-bottom: 1px solid black;
 }
 
 .listContainer .relContainer {
@@ -424,8 +422,9 @@ a.folderSelect:hover {
   border: none !important;
   background-color: transparent !important;
   z-index:20;
-  margin-top: -18px !important;
+  margin-top: -20px !important;
   margin-left: -3px !important;
+  position: relative;
   opacity: 1;
   -moz-opacity: 1;
   -khtml-opacity: 1;
@@ -700,6 +699,8 @@ a.addFolderView {
 
 
 #plone-browser-navigation {
+  /* shown in js to avoid bad resize effects */
+  visibility : hidden;
   float: left;
   border: 1px solid black;
   background-color: white;
