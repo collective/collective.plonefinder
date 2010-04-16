@@ -342,6 +342,7 @@ Browser.setView = function(typeview) {
   /* Browser.update('', Browser.formData); */
   
 	if (typeview == 'file') {
+		jQuery('#plone-browser-body #sortheaders').css('display','block');
 		jQuery('#plone-browser-body .floatContainer')
 			.changeClass('floatContainer','listContainer')
 			.changeClass('portrait','portrait_icon')
@@ -352,6 +353,7 @@ Browser.setView = function(typeview) {
     })	
   }
 	else {
+		jQuery('#plone-browser-body #sortheaders').css('display','none');
 		jQuery('#plone-browser-body .listContainer')
 			.changeClass('listContainer','floatContainer')
 			.changeClass('portrait_icon','portrait')
@@ -394,7 +396,7 @@ Browser.open = function(browsedpath) {
   });
 };
 
-Browser.update = function(browsedpath, formData, b_start, nocompil) {
+Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, nocompil) {
   jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
   var aUrl = Browser.finderUrl;
   var size = Browser.size();
@@ -407,6 +409,8 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
       formData = compileData('typeview', Browser.typeview, formData);
       if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
       if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
+      if (typeof sort_on != "undefined") formData = compileData('sort_on', sort_on, formData);
+      if (typeof sort_order != "undefined") formData = compileData('sort_order', sort_order, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
   }    
@@ -431,6 +435,8 @@ Browser.update = function(browsedpath, formData, b_start, nocompil) {
                 jQuery('#plone-browser-body').height(bodyHeight - 2 + 'px');
                 jQuery('#plone-browser-navigation').height(bodyHeight - 2 + 'px');
             }
+            jQuery('#plone-browser-body').css('visibility','visible');
+            jQuery('#plone-browser-navigation').css('visibility', 'visible');            
         	  jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
         	  jQuery('#msg-done').fadeOut(5000);
             TB_unlaunch();
@@ -576,6 +582,10 @@ Browser.search = function() {
   var browsedpath = jQuery('#browsedpath').val();
   Browser.update(browsedpath, formData);	
 };
+
+Browser.sorton = function(sort_on, sort_order) {
+  Browser.update('', '', 0, sort_on, sort_order);	
+}
 
 Browser.selectItem = function (UID) {
 	alert("Selected: " + UID);
