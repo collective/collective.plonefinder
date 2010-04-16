@@ -611,6 +611,8 @@ Browser.Popup_init = function() {
       jQuery('.popup #plone-browser-body').height(arrayPageSize [3] - 100);
       jQuery('.popup #plone-browser-navigation').height(arrayPageSize [3] - 100);
   }    
+  jQuery('.popup #plone-browser-body').css('visibility','visible');
+  jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');
   Browser.batch();
   jQuery(window).bind('resize', Browser.Popup_init);
   
