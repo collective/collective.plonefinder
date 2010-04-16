@@ -175,7 +175,8 @@
               </tal:block>
           </div>
           
-          <div id="plone-browser-navigation">
+          <div id="plone-browser-navigation"
+               tal:condition="view/browse">
             <div class="listContainer folder"
                  tal:define="path view/browsedpath;
                              title view/scopetitle">
@@ -184,7 +185,7 @@
                   <div tal:attributes="class string:${typeview}Folder">
                     <div tal:attributes="class view/scopeiconclass">&nbsp;</div>
                   </div>
-                  <div class="title"
+                  <div class="title scopetitle"
                        tal:content="title">sample Folder 1</div>
                </a>                
             </div>
@@ -209,31 +210,78 @@
             <div id="right-panel">                
             </div>
             
-            <tal:folders repeat="f folders">
-                <div tal:attributes="class string: ${typecss}Container folder;">
+            <tal:block condition="python: typeview!='image'">
+                <div class="listContainer" id="sortheaders">
+                  <div class="sorton sortontype">
                      <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.update('${f/path}', '');; return false;">
-                        <div tal:attributes="class string:${typeview}Folder">
-                          <div tal:attributes="class f/iconclass">&nbsp;</div>
-                        </div>
-                        <div class="title"
-                             tal:content="f/title"
-                             tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
-                        <div class="legend"></div>
-                     </a>
-                     
-                     <div class="relContainer" 
-                          tal:condition="f/islinkable">
-                       <a href="javascript: void(0);"
-                          class="folderSelect"
-                          i18n:attributes="title"
-                          tal:attributes="onclick string:Browser.selectItem('${f/uid}');; return false;
-                                          title   string:Select ${f/type};">
-                          &nbsp;
-                       </a>                   
-                     </div>
-                </div> 
-            </tal:folders>
+                        tal:attributes="onclick string:Browser.sorton('portal_type', 'ascending');; return false;">
+                        &lt;
+                     </a> 
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('portal_type', 'reverse');; return false;">
+                        &gt;
+                     </a>                  
+                  </div>
+                  <div class="sorton sortontitle">
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('sortable_title', 'ascending');; return false;">
+                        &lt;
+                     </a> 
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('sortable_title', 'reverse');; return false;">
+                        &gt;
+                     </a>                  
+                  </div>
+                  <div class="sorton sortonsize">
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('getObjSize', 'ascending');; return false;">
+                        &lt;
+                     </a> 
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('getObjSize', 'reverse');; return false;">
+                        &gt;
+                     </a>                  
+                  </div>
+                  <div class="sorton sortoncreated">
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('created', 'ascending');; return false;">
+                        &lt;
+                     </a> 
+                     <a href="javascript: void(0);"
+                        tal:attributes="onclick string:Browser.sorton('created', 'reverse');; return false;">
+                        &gt;
+                     </a>                  
+                  </div>
+                </div>            
+            </tal:block>
+            
+            <tal:block condition="not:view/sort_request">
+                <tal:folders repeat="f folders">
+                    <div tal:attributes="class string: ${typecss}Container folder;">
+                         <a href="javascript: void(0);"
+                            tal:attributes="onclick string:Browser.update('${f/path}', '');; return false;">
+                            <div tal:attributes="class string:${typeview}Folder">
+                              <div tal:attributes="class f/iconclass">&nbsp;</div>
+                            </div>
+                            <div class="title"
+                                 tal:content="f/title"
+                                 tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
+                            <div class="legend"></div>
+                         </a>
+                         
+                         <div class="relContainer" 
+                              tal:condition="f/islinkable">
+                           <a href="javascript: void(0);"
+                              class="folderSelect"
+                              i18n:attributes="title"
+                              tal:attributes="onclick string:Browser.selectItem('${f/uid}');; return false;
+                                              title   string:Select ${f/type};">
+                              &nbsp;
+                           </a>                   
+                         </div>
+                    </div> 
+                </tal:folders>
+            </tal:block>
     
             <tal:results repeat="r batch">
               <div tal:attributes="class string:${typecss}Container ${r/orientation_class};">

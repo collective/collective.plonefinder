@@ -63,6 +63,9 @@ class Finder(BrowserView):
         self.typeview = 'file'
         self.typecss = 'list'
         self.browse = True
+        self.sort_on = 'getObjPositionInParent'
+        self.sort_order = ''
+        self.sort_request = False
         self.displaywithoutquery = True
         self.blacklist = []
         self.addtoblacklist = [] 
@@ -114,7 +117,13 @@ class Finder(BrowserView):
             self.typecss = 'float'      
               
         # use self.browse=False (or browse=False in request) to disallow browsing
-        self.browse = request.get('browse', self.browse)     
+        self.browse = request.get('browse', self.browse)
+              
+        # use self.browse=False (or browse=False in request) to disallow browsing
+        if request.get('sort_on') :
+            self.sort_on = request.get('sort_on')
+            self.sort_order = request.get('sort_order', self.sort_order)
+            self.sort_request = True  
         
         # use self.displaywithoutquery = False if necessary         
         self.displaywithoutquery = request.get('displaywithoutquery', self.displaywithoutquery)  
@@ -189,15 +198,21 @@ class Finder(BrowserView):
             firstpassresults = results                   
         
         # if we can browse, we must remove folders from results
-        # and we must set these folders as linkables
+        # we must set these folders as linkables
+        # and put these folders at top of results
+        # excepted when self.sort_on is changed
         if self.browse :
             results = []
             firstpassfolders = self.finderBrowsingResults()
-            folderids = [f['uid'] for f in firstpassfolders]
-            for r in firstpassresults :
-                if r['uid'] not in folderids :
-                    results.append(r)
-            self.results = results    
+            if self.sort_request :
+                self.results = firstpassresults
+            else :
+                folderids = [f['uid'] for f in firstpassfolders]
+                for r in firstpassresults :
+                    if r['uid'] not in folderids :
+                        results.append(r)
+                self.results = results
+              
             folders = []
             for f in firstpassfolders :
                 if f['uid'] in resultids :    
@@ -302,7 +317,8 @@ class Finder(BrowserView):
                 path['depth'] = 1
             path['query'] =  self.browsedpath
             query['path'] = path
-            query['sort_on'] = 'getObjPositionInParent'
+            query['sort_on'] = self.sort_on
+            query['sort_order'] = self.sort_order
             if self.types :
                 query['portal_type'] = self.types            
                                     
@@ -353,7 +369,7 @@ class Finder(BrowserView):
             r['url'] = b.getURL()
             r['title'] = b.pretty_title_or_id()
             r['description'] = b.Description                         
-            r['iconclass'] = 'contenttype-%s divicon' % b.portal_type
+            r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
             r['type'] = b.portal_type
             r['path'] = b.getPath
             r['state_class'] = 'state-%s' %b.review_state 
@@ -387,6 +403,8 @@ class Finder(BrowserView):
             r['created'] = b.created
             if r['type'] in self.imagestypes :
                 o = b.getObject()
+                # size is bugged in catalog
+                r['size'] = o.getObjSize()
                 imageInfos = self.getImageInfos(o)
                 orientation = imageInfos[0]
                 width = imageInfos[1]
@@ -419,7 +437,7 @@ class Finder(BrowserView):
             else :    
                 orientation = 'small'
                 thumb = icon = None
-                r['iconclass'] = 'contenttype-%s divicon' % b.portal_type
+                r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
                 r['is_image'] = False
                 r['container_class'] = 'fileContainer'
                 r['style'] = ''
@@ -454,7 +472,7 @@ class Finder(BrowserView):
         """
 
         request = self.request                        
-        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start')
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start', 'sort_on', 'sort_order')
         dictRequest = {}
         for param, value in request.form.items():
             if (value and
