@@ -53,9 +53,9 @@ class Finder(BrowserView):
         self.catalog =  getToolByName(self.portal, 'portal_catalog')
         self.showbreadcrumbs=True 
         self.scope = None
-        self.scopeicon = ''
         self.scopetitle = ''
         self.scopetype = ''
+        self.scopeiconclass = 'divicon'
         self.multiselect = True
         self.browsedpath = ''
         self.parentpath = ''
@@ -253,9 +253,9 @@ class Finder(BrowserView):
                     folder = aq_inner(folder.aq_parent)    
                 self.scope = scope = folder 
                 
-        self.scopetitle = scope.Title()              
-        self.scopeicon = scope.getIcon()        
-        self.scopetype = scope.portal_type 
+        self.scopetitle = scope.pretty_title_or_id()          
+        self.scopetype = scopetype = scope.portal_type      
+        self.scopeiconclass = 'contenttype-%s divicon' % scopetype.lower().replace(' ','-')
         
         # set browsedpath and browsed_url
         if not IPloneSiteRoot.providedBy(scope) : 
@@ -352,8 +352,8 @@ class Finder(BrowserView):
             r['uid'] = b.UID
             r['url'] = b.getURL()
             r['title'] = b.pretty_title_or_id()
-            r['description'] = b.Description                 
-            r['thumb'] = '%s/%s' %(self.portal_url, b.getIcon)
+            r['description'] = b.Description                         
+            r['iconclass'] = 'contenttype-%s divicon' % b.portal_type
             r['type'] = b.portal_type
             r['path'] = b.getPath
             r['state_class'] = 'state-%s' %b.review_state 
@@ -418,7 +418,8 @@ class Finder(BrowserView):
                 r['style'] = 'width: %ipx; height: %ipx' %(width, height)
             else :    
                 orientation = 'small'
-                thumb = icon = b.getIcon
+                thumb = icon = None
+                r['iconclass'] = 'contenttype-%s divicon' % b.portal_type
                 r['is_image'] = False
                 r['container_class'] = 'fileContainer'
                 r['style'] = ''
