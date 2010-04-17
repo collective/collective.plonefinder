@@ -32,6 +32,7 @@
                          results view/results;                         
                          Batch python:modules['Products.CMFPlone'].Batch;
                          batch python:Batch(results, b_size, int(b_start), orphan=1);
+                         toLocalizedTime nocall: context/@@plone/toLocalizedTime;
                          "
              i18n:domain="collective.plonefinder">
              
@@ -217,7 +218,7 @@
             <div id="right-panel">                
             </div>
             
-            <div tal:condition="batch"
+            <div tal:condition="python: batch"
                  class="listContainer" id="sortheaders"
                  tal:attributes="style python: typeview=='image' and 'display:none' or nothing;
                                  class python: sort_order=='reverse' and 'listContainer reverseheaders' or 'listContainer'">
@@ -233,8 +234,8 @@
               </div>
               <div class="sorton sortonsize">
                  <a href="javascript: void(0);"
-                    tal:attributes="onclick string:Browser.sorton('getObjSize', '$sort_inverse');; return false;
-                                    class python: sort_on=='getObjSize' and 'selected' or nothing"></a>                     
+                    tal:attributes="onclick string:Browser.sorton('real_size', '$sort_inverse');; return false;
+                                    class python: sort_on=='real_size' and 'selected' or nothing"></a>                     
               </div>
               <div class="sorton sortoncreated">
                  <a href="javascript: void(0);"
@@ -286,7 +287,9 @@
                   <div tal:content="r/title"
                        tal:attributes="class string:title ${r/state_class}">sample Portrait 1</div>
                   <div class="legend lsize" tal:content="r/size">54 kB</div>
-                  <div class="legend lcreated" tal:content="r/created">2010/01/01</div>
+                  <div class="legend lcreated" 
+                       tal:define="created r/created"
+                       tal:content="python:toLocalizedTime(created,long_format=1)">2010/01/01</div>
                   <div class="visualClear"><!-- --></div>
                 </a>
   
