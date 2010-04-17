@@ -67,6 +67,7 @@ class Finder(BrowserView):
         self.sort_order = ''
         self.sort_inverse = 'ascending'
         self.sort_request = False
+        self.sort_withcatalog = True
         self.displaywithoutquery = True
         self.blacklist = []
         self.addtoblacklist = [] 
@@ -119,10 +120,9 @@ class Finder(BrowserView):
               
         # use self.browse=False (or browse=False in request) to disallow browsing
         self.browse = request.get('browse', self.browse)
-              
-        # use self.browse=False (or browse=False in request) to disallow browsing
-        if request.get('sort_on') :
-            self.sort_on = request.get('sort_on')
+
+        if request.get('finder_sort_on') :
+            self.sort_on = request.get('finder_sort_on')
             self.sort_order = request.get('sort_order', self.sort_order)
             # sort_order could be empty or reverse, or ascending
             if self.sort_order=='reverse' :
@@ -130,6 +130,9 @@ class Finder(BrowserView):
             elif self.sort_order=='ascending' :
                 self.sort_inverse = 'reverse'
             self.sort_request = True  
+            if self.sort_on not in self.catalog.indexes() :
+                self.sort_withcatalog = False
+                print ">>>> sort without catalog"
         
         # use self.displaywithoutquery = False if necessary         
         self.displaywithoutquery = request.get('displaywithoutquery', self.displaywithoutquery)  
@@ -211,22 +214,26 @@ class Finder(BrowserView):
             results = []
             firstpassfolders = self.finderBrowsingResults()
             if self.sort_request :
+                if not self.sort_withcatalog :                    
+                    firstpassresults.sort(key=lambda k: k[self.sort_on])
+                    if self.sort_order == 'reverse' :
+                        firstpassresults.reverse()
                 self.results = firstpassresults
+                self.folders = firstpassfolders
             else :
                 folderids = [f['uid'] for f in firstpassfolders]
                 for r in firstpassresults :
                     if r['uid'] not in folderids :
                         results.append(r)
-                self.results = results
-              
-            folders = []
-            for f in firstpassfolders :
-                if f['uid'] in resultids :    
-                    f['islinkable'] = True
-                else :     
-                    f['islinkable'] = False
-                folders.append(f)
-            self.folders = folders        
+                self.results = results       
+                folders = []
+                for f in firstpassfolders :
+                    if f['uid'] in resultids :    
+                        f['islinkable'] = True
+                    else :     
+                        f['islinkable'] = False
+                    folders.append(f)
+                self.folders = folders        
         else :
             self.results = firstpassresults  
             self.folders = [] 
@@ -324,8 +331,9 @@ class Finder(BrowserView):
             path['query'] =  self.browsedpath
             query['path'] = path
             sort_index = self.sort_on
-            query['sort_on'] = sort_index
-            query['sort_order'] = self.sort_order
+            if self.sort_withcatalog :
+                query['sort_on'] = sort_index
+                query['sort_order'] = self.sort_order
             if self.types :
                 query['portal_type'] = self.types            
                                     
@@ -454,7 +462,12 @@ class Finder(BrowserView):
             else :
                 r['orientation_class'] =  '%s_icon' %orientation       
                 r['thumb'] = icon
-
+            
+            if r['size'] :
+                r['real_size'] = float(r['size'].split(' ')[0])
+            else :
+                r['real_size'] = 0
+            
             results.append(r)
         
         return results            

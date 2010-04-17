@@ -409,7 +409,7 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
       formData = compileData('typeview', Browser.typeview, formData);
       if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
       if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
-      if (typeof sort_on != "undefined") formData = compileData('sort_on', sort_on, formData);
+      if (typeof sort_on != "undefined") formData = compileData('finder_sort_on', sort_on, formData);
       if (typeof sort_order != "undefined") formData = compileData('sort_order', sort_order, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
