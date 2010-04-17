@@ -65,6 +65,7 @@ class Finder(BrowserView):
         self.browse = True
         self.sort_on = 'getObjPositionInParent'
         self.sort_order = ''
+        self.sort_inverse = 'ascending'
         self.sort_request = False
         self.displaywithoutquery = True
         self.blacklist = []
@@ -123,6 +124,11 @@ class Finder(BrowserView):
         if request.get('sort_on') :
             self.sort_on = request.get('sort_on')
             self.sort_order = request.get('sort_order', self.sort_order)
+            # sort_order could be empty or reverse, or ascending
+            if self.sort_order=='reverse' :
+                self.sort_inverse = 'ascending'
+            elif self.sort_order=='ascending' :
+                self.sort_inverse = 'reverse'
             self.sort_request = True  
         
         # use self.displaywithoutquery = False if necessary         
@@ -317,7 +323,8 @@ class Finder(BrowserView):
                 path['depth'] = 1
             path['query'] =  self.browsedpath
             query['path'] = path
-            query['sort_on'] = self.sort_on
+            sort_index = self.sort_on
+            query['sort_on'] = sort_index
             query['sort_order'] = self.sort_order
             if self.types :
                 query['portal_type'] = self.types            

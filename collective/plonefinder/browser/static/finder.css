@@ -167,16 +167,16 @@
   margin-top:30px;
   margin-bottom:20px;
   margin-left: 42px;
-  opacity: 0.8;
-  -moz-opacity: 0.8;
-  -khtml-opacity: 0.8;
-  filter:alpha(opacity=80);  
 }
 
 .floatContainer .fileFolder .divicon,
 .floatContainer .imageFolder .divicon {
   margin-top:25px;
   margin-left:25px;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  -khtml-opacity: 0.8;
+  filter:alpha(opacity=80);  
 }
 
 .floatContainer a:hover .title{
@@ -190,7 +190,7 @@
 
 .floatContainer.portrait img {
   padding:0;
-  margin:0;
+  margin: 7px 0;
   border:none;
 }
 
@@ -356,6 +356,53 @@ a.folderSelect:hover {
   overflow: visible !important;
 }
 
+#sortheaders {
+  background-color: #EEE !important;
+  height: 12px;
+  overflow: hidden;
+}
+
+#sortheaders .sorton {
+  border-right: 3px solid white;
+}
+
+#sortheaders .sorton a {
+  cursor: pointer;
+  width : 7px;
+  height: 10px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-image: url('./sort0.png');
+  display: block;
+  margin: 1px 0 0 5px;
+}
+
+#sortheaders .sorton a.selected {
+  background-image: url('./sort1.png');
+}
+
+.reverseheaders .sorton a.selected {
+  background-image: url('./sort2.png') !important;
+}
+
+#sortheaders .sortontype {
+  width: 20px;
+}
+
+#sortheaders .sortontitle {
+  width: 267px;
+}
+
+#sortheaders .sortonsize {
+  width: 67px;
+}
+
+#sortheaders .sortoncreated {
+  width: 217px;
+}
+
+
 .listContainer .linkFolder,
 .listContainer .fileFolder,
 .listContainer .imageFolder {
@@ -380,7 +427,6 @@ a.folderSelect:hover {
 
 .listContainer .scopetitle {
   font-weight: bold;
-  padding-top: 2px;
 }
 
 #plone-browser-navigation .listContainer .title {
@@ -503,7 +549,7 @@ a.folderSelect:hover {
 a.folderUp {
   line-height: 18px;
   font-size:13px;
-  padding-left: 8px;
+  padding-left: 11px;
   background: transparent url(./folder_up.png) top left no-repeat;
   text-decoration: none;
   margin-right: 3px;
@@ -643,7 +689,6 @@ a.addFolderView {
 }
 
 .popup .listContainer a {
-   float: none !important;
    display: block !important;
    cursor: pointer !important;
 }
@@ -673,38 +718,52 @@ a.addFolderView {
   top: -8px;
 }
 
+#plone-browser .listingBar a:hover {
+  background-color: #555;
+  color: white !important;
+  border-color: #555;
+}
+
 #plone-browser .listingBar .previous {
   float: right;
-  padding: 0;
-  margin: 0 0 0 15px;
+  padding: 0 !important;
+  margin: 3px 0 0 15px;
   background: transparent url(./prev-bg.gif) top left no-repeat;
 }
 
 #plone-browser .listingBar .previous-off {
-  background: transparent url(./prev-off-bg.gif) top left no-repeat;
+  background: transparent url(./prev-off-bg.gif) top left no-repeat !important;
   height:13px;
   width:13px;
 }
 
 #plone-browser .listingBar .next {
   float: right;
-  padding: 0;
-  margin: 0 10px 0 2px;
-  background: transparent url(./next-bg.gif) top left no-repeat;
+  padding: 0 !important;
+  margin: 3px 10px 0 2px;
+  background: transparent url(./next-bg.gif) top left no-repeat !important;
 }
 
 #plone-browser .listingBar .next-off {
-  background: transparent url(./next-off-bg.gif) top left no-repeat;
+  background: transparent url(./next-off-bg.gif) top left no-repeat !important;
   height:13px;
   width:13px;
 }
 
 #plone-browser .listingBar .next a, 
 #plone-browser .listingBar .previous a {
-    display:block;
-    height:13px;
-    padding:0;
-    width:13px;
+  display:block;
+  height:13px;
+  padding:0;
+  width:13px;
+  border: none !important;
+}
+
+#plone-browser .listingBar .next a:hover,
+#plone-browser .listingBar .previous a:hover {
+  padding: 0 !important;
+  background-color: transparent !important;
+  border: none !important;
 }
 
 #choose-size {

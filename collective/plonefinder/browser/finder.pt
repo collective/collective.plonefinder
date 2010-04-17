@@ -9,6 +9,9 @@
 </tal:headers>
 <metal:block tal:define="typeview view/typeview;
                          fieldName view/fieldname; 
+                         sort_on view/sort_on;
+                         sort_order view/sort_order;
+                         sort_inverse view/sort_inverse;
                          nextQuery view/cleanQuery;                
                          SearchableText request/SearchableText | string:;
                          onlybody request/form/onlybody       | python:False;
@@ -139,13 +142,6 @@
           <div id="browser-crumbs"
                tal:condition="view/showbreadcrumbs">
               <tal:block define="breadcrumbs view/breadcrumbs;">      
-                  <a tal:condition="parentpath"
-                     class="folderUp"
-                     href="javascript: void(0);"
-                     tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
-                     title="parent folder"
-                     i18n:attributes="title">&nbsp;               
-                  </a>
                   <span i18n:translate="you_are_here" i18n:domain="plone">You are here:</span>
                   <span>
                       <a i18n:translate="tabs_home" i18n:domain="plone"
@@ -180,7 +176,18 @@
             <div class="listContainer folder"
                  tal:define="path view/browsedpath;
                              title view/scopetitle">
+               <a tal:condition="parentpath"
+                  class="folderUp"
+                  href="javascript: void(0);"
+                  tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
+                  title="parent folder"
+                  i18n:attributes="title">&nbsp;               
+               </a>                 
+               <div class="title scopetitle"
+                    tal:condition="parentpath"
+                    tal:content="title">sample Folder 1</div>                           
                <a href="javascript: void(0);"
+                  tal:condition="not:parentpath"
                   tal:attributes="onclick string:Browser.update('${path}', '');; return false;">
                   <div tal:attributes="class string:${typeview}Folder">
                     <div tal:attributes="class view/scopeiconclass">&nbsp;</div>
@@ -210,50 +217,31 @@
             <div id="right-panel">                
             </div>
             
-            <tal:block condition="python: typeview!='image'">
-                <div class="listContainer" id="sortheaders">
-                  <div class="sorton sortontype">
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('portal_type', 'ascending');; return false;">
-                        &lt;
-                     </a> 
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('portal_type', 'reverse');; return false;">
-                        &gt;
-                     </a>                  
-                  </div>
-                  <div class="sorton sortontitle">
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('sortable_title', 'ascending');; return false;">
-                        &lt;
-                     </a> 
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('sortable_title', 'reverse');; return false;">
-                        &gt;
-                     </a>                  
-                  </div>
-                  <div class="sorton sortonsize">
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('getObjSize', 'ascending');; return false;">
-                        &lt;
-                     </a> 
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('getObjSize', 'reverse');; return false;">
-                        &gt;
-                     </a>                  
-                  </div>
-                  <div class="sorton sortoncreated">
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('created', 'ascending');; return false;">
-                        &lt;
-                     </a> 
-                     <a href="javascript: void(0);"
-                        tal:attributes="onclick string:Browser.sorton('created', 'reverse');; return false;">
-                        &gt;
-                     </a>                  
-                  </div>
-                </div>            
-            </tal:block>
+            <div tal:condition="batch"
+                 class="listContainer" id="sortheaders"
+                 tal:attributes="style python: typeview=='image' and 'display:none' or nothing;
+                                 class python: sort_order=='reverse' and 'listContainer reverseheaders' or 'listContainer'">
+              <div class="sorton sortontype">
+                 <a href="javascript: void(0);"
+                    tal:attributes="onclick string:Browser.sorton('portal_type', '$sort_inverse');; return false;
+                                    class python: sort_on=='portal_type' and 'selected' or nothing"></a>            
+              </div>
+              <div class="sorton sortontitle">
+                 <a href="javascript: void(0);"
+                    tal:attributes="onclick string:Browser.sorton('sortable_title', '$sort_inverse');; return false;
+                                    class python: sort_on=='sortable_title' and 'selected' or nothing"></a>                        
+              </div>
+              <div class="sorton sortonsize">
+                 <a href="javascript: void(0);"
+                    tal:attributes="onclick string:Browser.sorton('getObjSize', '$sort_inverse');; return false;
+                                    class python: sort_on=='getObjSize' and 'selected' or nothing"></a>                     
+              </div>
+              <div class="sorton sortoncreated">
+                 <a href="javascript: void(0);"
+                    tal:attributes="onclick string:Browser.sorton('created', '$sort_inverse');; return false;
+                                    class python: sort_on=='created' and 'selected' or nothing"></a>                 
+              </div>
+            </div>        
             
             <tal:block condition="not:view/sort_request">
                 <tal:folders repeat="f folders">
