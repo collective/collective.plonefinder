@@ -65,6 +65,7 @@ class FinderUploadCapableFileFactory(object):
             mutator = obj.getPrimaryField().getMutator(obj)
             mutator(data, content_type=content_type)
             obj.setTitle(name)
+            obj.reindexObject()
             transaction.commit()
         finally:
             upload_lock.release()

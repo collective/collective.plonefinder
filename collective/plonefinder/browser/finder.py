@@ -132,7 +132,6 @@ class Finder(BrowserView):
             self.sort_request = True  
             if self.sort_on not in self.catalog.indexes() :
                 self.sort_withcatalog = False
-                print ">>>> sort without catalog"
         
         # use self.displaywithoutquery = False if necessary         
         self.displaywithoutquery = request.get('displaywithoutquery', self.displaywithoutquery)  
@@ -492,7 +491,7 @@ class Finder(BrowserView):
         """
 
         request = self.request                        
-        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start', 'sort_on', 'sort_order')
+        ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start', 'finder_sort_on', 'sort_order')
         dictRequest = {}
         for param, value in request.form.items():
             if (value and
