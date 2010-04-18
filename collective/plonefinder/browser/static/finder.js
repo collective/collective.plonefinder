@@ -409,7 +409,13 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
       formData = compileData('typeview', Browser.typeview, formData);
       if (typeof browsedpath != "undefined") formData = compileData('browsedpath', browsedpath, formData);
       if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
-      if (typeof sort_on != "undefined") formData = compileData('finder_sort_on', sort_on, formData);
+      if (typeof sort_on != "undefined") {
+          formData = compileData('finder_sort_on', sort_on, formData);
+          if (jQuery('#previousSearch').length) {
+              formData = compileData('SearchableText', jQuery('#previousSearch').val(), formData);
+              formData = compileData('searchsubmit:int', '1', formData);
+              }
+          }
       if (typeof sort_order != "undefined") formData = compileData('sort_order', sort_order, formData);
       formData = compileData('field_name', Browser.field_name, formData);
       formData = compileData('onlybody', 'true', formData);
@@ -421,19 +427,17 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
          dataType: 'html',
          contentType: "text/html; charset=utf-8", 
          success: function(html) { 
-        		jQuery('#browser-crumbs, #plone-browser-body, #plone-browser-menu, #plone-browser-navigation, .listingBar').remove();
+        		jQuery('#browser-crumbs, #browser-columns, #plone-browser-menu, #plone-browser-navigation, .listingBar').remove();
         		jQuery('#start-refresh').after(html);
         		/*if (Browser.maximized)
         		    Browser.maximize();
         		  else
         		  	Browser.size(size);*/
         		if (! jQuery.browser.msie) {
-                jQuery('#plone-browser-body').height(bodyHeight - 12 + 'px');
-                jQuery('#plone-browser-navigation').height(bodyHeight - 12 + 'px');
+                jQuery('.finder_panel').height(bodyHeight - 12 + 'px');
             }
         		else {
-                jQuery('#plone-browser-body').height(bodyHeight - 2 + 'px');
-                jQuery('#plone-browser-navigation').height(bodyHeight - 2 + 'px');
+                jQuery('.finder_panel').height(bodyHeight - 2 + 'px');
             }
             jQuery('#plone-browser-body').css('visibility','visible');
             jQuery('#plone-browser-navigation').css('visibility', 'visible');            
@@ -446,13 +450,30 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
          } });  
 }
 
+Browser.openRightPanel = function() {
+    rightpanel = jQuery('#right-panel');
+    rightpanel.empty();
+    jQuery(rightpanel.parent()).show();
+}
+
+Browser.closeRightPanel = function() {
+    rightpanel = jQuery('#right-panel');
+    rightpanel.empty();
+    jQuery(rightpanel.parent()).hide();
+    Browser.unselectActions ();
+}
+
+Browser.unselectActions = function() {
+    jQuery('#menuActions a').removeClass('selected');
+}
+
 Browser.openUploader = function() {
     var uploadButton = jQuery('#menuActions .uploadView');
     var uploadContainer = jQuery('#right-panel');
     if (! uploadButton.hasClass('selected')) {
+        Browser.unselectActions ();
         var uploadUrl = Browser.url + '/@@finder_upload';
-        uploadContainer.show();
-        uploadContainer.height(jQuery('#plone-browser-body')[0].scrollHeight-20 + 'px');
+        Browser.openRightPanel();
         uploadButton.addClass('selected');
         jQuery.ajax({
                type: 'GET',
@@ -465,15 +486,15 @@ Browser.openUploader = function() {
                } });      
     }      
     else   {
-        uploadContainer.hide();
+        Browser.closeRightPanel();
         uploadContainer.empty();
-        jQuery('#menuActions a').removeClass('selected');
+        Browser.unselectActions ();
     }
 }
 
 Browser.onUploadComplete = function() {
     // remove upload form
-    jQuery('#right-panel').empty();
+    Browser.closeRightPanel();
     // update to the last batched page (TODO > update with the last page)
     var b_start = jQuery('#start_after_upload').val();
     Browser.update('','',b_start);
@@ -483,9 +504,9 @@ Browser.openAddFolderForm = function() {
     var addFolderButton = jQuery('#menuActions .addFolderView');
     var addFolderContainer = jQuery('#right-panel');
     if (! addFolderButton.hasClass('selected')) {
+        Browser.unselectActions ();
         var addFolderUrl = Browser.url + '/@@finder_add_folder';
-        addFolderContainer.show();
-        addFolderContainer.height(jQuery('#plone-browser-body')[0].scrollHeight-20 + 'px');
+        Browser.openRightPanel();
         addFolderButton.addClass('selected');
         jQuery.ajax({
                type: 'GET',
@@ -498,9 +519,9 @@ Browser.openAddFolderForm = function() {
                } });      
     }      
     else   {
-        addFolderContainer.hide();
+        Browser.closeRightPanel();
         addFolderContainer.empty();
-        jQuery('#menuActions a').removeClass('selected');
+        Browser.unselectActions ();
     }
 }
 
@@ -614,12 +635,10 @@ Browser.Popup_init = function() {
   Browser.window = jQuery('#plone-browser > .window');
   arrayPageSize = getPageSize();
   if (! jQuery.browser.msie) {
-      jQuery('.popup #plone-browser-body').height(arrayPageSize [3] -130);
-      jQuery('.popup #plone-browser-navigation').height(arrayPageSize [3] -130);
+      jQuery('.popup .finder_panel').height(arrayPageSize [3] -130);
   }
   else {
-      jQuery('.popup #plone-browser-body').height(arrayPageSize [3] - 100);
-      jQuery('.popup #plone-browser-navigation').height(arrayPageSize [3] - 100);
+      jQuery('.popup .finder_panel').height(arrayPageSize [3] - 100);
   }    
   jQuery('.popup #plone-browser-body').css('visibility','visible');
   jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');
