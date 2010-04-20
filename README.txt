@@ -16,27 +16,7 @@
    Don't use it in a production site for now (this product is under developpement)
    
    This work has been started by Christophe Bosse & Jean-mat Grimaldi in 2007 for PloneArticle product. 
-   
-   TODO :
-   -----
-   
-   - use jquery-ui.js to improve the interface (css/js/template evolutions)
-   
-   - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
-   
-   - add GS profile for some options  
-   
-   - add doctests and jquery tests
-   
-   - add thumb size selection for images
-   
-   - add new features for each browsed item (rename, change State, delete, copy/cut/paste)
-   
-   - add reorder by title/date/size
-   
-   Fix bugs :
-   
-   - fix bug on objects' size
+
    
    HOW TO USE IT  :
    ---------------
