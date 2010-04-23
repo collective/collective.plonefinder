@@ -202,6 +202,11 @@
   filter:alpha(opacity=80);  
 }
 
+.floatContainer .fileFolder .contenttype-folder,
+.floatContainer .imageFolder .contenttype-folder {
+  display: none !important;
+}
+
 .floatContainer a:hover .title{
   text-decoration: underline;
 }

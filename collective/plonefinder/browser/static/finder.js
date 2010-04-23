@@ -643,7 +643,6 @@ Browser.Popup_init = function() {
   jQuery('.popup #plone-browser-body').css('visibility','visible');
   jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');
   Browser.batch();
-  jQuery(window).bind('resize', Browser.Popup_init);
   
 };
 
@@ -655,6 +654,7 @@ Browser.init = function() {
     if (jQuery('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();
+        jQuery(window).bind('resize', Browser.Popup_init);
     }    
 }
 
