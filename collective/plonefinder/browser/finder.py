@@ -417,37 +417,42 @@ class Finder(BrowserView):
             r['created'] = b.created
             if r['type'] in self.imagestypes :
                 o = b.getObject()
-                # size is bugged in catalog
-                r['size'] = o.getObjSize()
                 imageInfos = self.getImageInfos(o)
                 orientation = imageInfos[0]
                 width = imageInfos[1]
                 height = imageInfos[2]
-                min, max = 70, 100
-                if orientation == 'portrait' :
-                    ratio = float(width)/float(height)
-                    if height > max :
-                        width = int(ratio *max)
-                        height = max
-                    if width > min :
-                        width = min
-                        height = int(min/ratio)
+                if width and height :
+                    min, max = 70, 100
+                    if orientation == 'portrait' :
+                        ratio = float(width)/float(height)
+                        if height > max :
+                            width = int(ratio *max)
+                            height = max
+                        if width > min :
+                            width = min
+                            height = int(min/ratio)
+                    else :
+                        ratio = float(height)/float(width)
+                        if width > max :
+                            height = int(ratio *max)
+                            width = max
+                        if height > min :
+                            height = min
+                            width = int(min/ratio)                                                                              
+                    thumb = '%s/image_thumb' %r['url']
+                    icon = '%s/image_listing' %r['url']
+                    r['is_image'] = True
+                    r['preview_url'] = '%s/image?isImage=1' %r['url']
+                    r['url'] = '%s/image' %r['url']
+                    r['container_class'] = 'imageContainer'
+                    r['style'] = 'width: %ipx; height: %ipx' %(width, height)
                 else :
-                    ratio = float(height)/float(width)
-                    if width > max :
-                        height = int(ratio *max)
-                        width = max
-                    if height > min :
-                        height = min
-                        width = int(min/ratio)                                                    
-                            
-                thumb = '%s/image_thumb' %r['url']
-                icon = '%s/image_listing' %r['url']
-                r['is_image'] = True
-                r['preview_url'] = '%s/image?isImage=1' %r['url']
-                r['url'] = '%s/image' %r['url']
-                r['container_class'] = 'imageContainer'
-                r['style'] = 'width: %ipx; height: %ipx' %(width, height)
+                    orientation = 'small'
+                    thumb = icon = None
+                    r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
+                    r['is_image'] = False
+                    r['container_class'] = 'fileContainer'
+                    r['style'] = ''                    
             else :    
                 orientation = 'small'
                 thumb = icon = None
