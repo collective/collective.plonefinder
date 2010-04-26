@@ -21,7 +21,7 @@ collective.plonefinder
 
    
    HOW TO USE IT  :
-   ---------------
+   ----------------
    
    See the collective.ckeditor product as example.
    You can also easily use it with another editor.
