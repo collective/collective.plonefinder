@@ -1,4 +1,6 @@
-.. contents::
+collective.plonefinder
+======================
+
 
    Ajax popup to reference plone contents.
    
