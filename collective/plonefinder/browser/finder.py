@@ -16,6 +16,7 @@ from Products.ATContentTypes.interface import IImageContent
 
 from collective.plonefinder.interfaces import IFinder
 from interfaces import IFinderUploadCapable
+from collective.plonefinder import siteMessageFactory as _
 
 
 def _quotestring(s):
@@ -415,6 +416,7 @@ class Finder(BrowserView):
             r['type'] = b.portal_type
             r['blacklisted'] = False
             r['created'] = b.created
+            r['actions_menu'] = {}
             if r['type'] in self.imagestypes :
                 o = b.getObject()
                 imageInfos = self.getImageInfos(o)
@@ -439,10 +441,28 @@ class Finder(BrowserView):
                         if height > min :
                             height = min
                             width = int(min/ratio)                                                                              
-                    thumb = '%s/image_thumb' %r['url']
-                    icon = '%s/image_listing' %r['url']
+                    imaging_properties = getToolByName(context, 'portal_properties').imaging_properties
+                    thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
+                    thumb_sizes = self.getThumbSizes()
+                    # images sizes actions menu
+                    r['actions_menu']['choose_image_size'] = {'label' : _(u'Choose image size'), 'actions' : thumb_sizes}
+                    # define thumb icon and preview urls for display
+                    thumb = icon = '%s/image' %r['url']
+                    preview = '%s/image?isImage=1' %r['url']
+                    for ts in thumb_sizes :
+                        if ts[1] >= width and ts[2] >= height :
+                            thumb = '%s/image_%s' %(r['url'], ts[0])
+                            break
+                    for ts in thumb_sizes :
+                        if ts[1] >= 16 and ts[2] >= 16 :
+                            icon = '%s/image_%s' %(r['url'], ts[0])
+                            break
+                    for ts in thumb_sizes :
+                        if ts[1] >= 400 and ts[2] >= 400 :
+                            preview = '%s/image_%s?isImage=1' %(r['url'], ts[0])
+                            break
                     r['is_image'] = True
-                    r['preview_url'] = '%s/image?isImage=1' %r['url']
+                    r['preview_url'] = preview
                     r['url'] = '%s/image' %r['url']
                     r['container_class'] = 'imageContainer'
                     r['style'] = 'width: %ipx; height: %ipx' %(width, height)
@@ -476,6 +496,24 @@ class Finder(BrowserView):
         
         return results            
         
+    def getThumbSizes(self) :
+        """
+        return an ordered list of thumb sizes
+        taken from portal properties imaging properties
+        return a list of tuples [(label, width,height)]
+        """
+        context = aq_inner(self.context)
+        imaging_properties = getToolByName(context, 'portal_properties').imaging_properties
+        thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
+        thumb_sizes = []
+        for prop in thumb_sizes_props :
+            propInfo = prop.split(' ')
+            thumb_name = propInfo[0]
+            thumb_width = int(propInfo[1].split(':')[0])
+            thumb_height = int(propInfo[1].split(':')[1])
+            thumb_sizes.append((thumb_name,thumb_width,thumb_height))
+        thumb_sizes.sort(key=lambda ts: ts[1])
+        return thumb_sizes
 
     def getImageInfos(self, image_obj):        
         """
