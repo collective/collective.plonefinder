@@ -349,7 +349,11 @@ Browser.setView = function(typeview) {
 			.changeClass('landscape','landscape_icon');		  
 		jQuery('#plone-browser-body img').each (function(){
          src = this.src;
-         this.src = src.replace('/image_thumb', '/image_listing');
+         this.src = src.replace(/\/image_thumb/gi, '/image_listing');
+         if (jQuery.browser.msie) {
+           oldstyle = jQuery(this).attr('style');
+           jQuery(this).attr('style', oldstyle.replace(/px !important/gi, 'px'));
+         }
     })	
   }
 	else {
@@ -360,7 +364,11 @@ Browser.setView = function(typeview) {
 			.changeClass('landscape_icon','landscape');	  
 		jQuery('#plone-browser-body img').each (function(){
          src = this.src;
-         this.src = src.replace('/image_listing', '/image_thumb');
+         this.src = src.replace(/\/image_listing/gi, '/image_thumb');
+         if (jQuery.browser.msie) {
+           oldstyle = jQuery(this).attr('style');
+           jQuery(this).attr('style', oldstyle.replace(/px/gi, 'px !important'));
+         }
     })				
   }
 		
@@ -437,7 +445,7 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
                 jQuery('.finder_panel').height(bodyHeight - 12 + 'px');
             }
         		else {
-                jQuery('.finder_panel').height(bodyHeight - 2 + 'px');
+                jQuery('.finder_panel').height(bodyHeight + 'px');
             }
             jQuery('#plone-browser-body').css('visibility','visible');
             jQuery('#plone-browser-navigation').css('visibility', 'visible');            
@@ -632,13 +640,14 @@ Browser.batchresize = function() {
 }
 
 Browser.Popup_init = function() {
+  jQuery('body').css('overflow', 'hidden');
   Browser.window = jQuery('#plone-browser > .window');
   arrayPageSize = getPageSize();
   if (! jQuery.browser.msie) {
       jQuery('.popup .finder_panel').height(arrayPageSize [3] -130);
   }
   else {
-      jQuery('.popup .finder_panel').height(arrayPageSize [3] - 100);
+      jQuery('.popup .finder_panel').height(arrayPageSize [3] - 115);
   }    
   jQuery('.popup #plone-browser-body').css('visibility','visible');
   jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');

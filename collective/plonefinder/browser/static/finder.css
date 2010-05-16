@@ -183,6 +183,7 @@
   padding: 0 !important;
   height: 23px;
   overflow: hidden;
+  display: block !important;
 }
 
 .floatContainer .fileContainer .divicon,
@@ -248,7 +249,8 @@
 .relContainer {
   clear:both;
   margin-top: -138px;
-  margin-left: 50px;
+  left: 50px;
+  position: relative;
   border: 1px solid #AAAAAA;
   background: #FFFFFF url(./loupe.png) top left no-repeat;
   opacity: 0.8;
@@ -261,25 +263,8 @@
   z-index:1500;
 }
 
-*+html .relContainer {
-  margin-top: -125px;
-}
-
-*html .relContainer {
-  margin-top: -125px;
-}
-
 .landscape .relContainer{
   margin-top: -125px;
-  margin-left: 50px;  
-}
-
-*+html .portrait  .relContainer {
-  margin-left: 0;  
-}
-
-*html .portrait .relContainer {
-  margin-left: 0;  
 }
 
 .folder .relContainer {
@@ -458,7 +443,7 @@ a.folderSelect:hover {
 }
 
 #plone-browser-navigation .listContainer .title {
-  width: 160px !important;
+  width: 157px !important;
   overflow: hidden;
   padding-left: 3px;
 }
@@ -483,11 +468,10 @@ a.folderSelect:hover {
 .listContainer .legend {
   float: left;
   line-height: 20px;
-  padding-left: 20px;
 }
 
 .listContainer .lsize {
-  width: 50px;
+  width: 70px;
 }
 
 .listContainer .lcreated {
@@ -531,6 +515,8 @@ a.folderSelect:hover {
 .listContainer .relContainer a { 
   background: transparent url(./link_folder_out.png) top left no-repeat !important;
   width: 22px;
+  position: absolute;
+  left: 0;
 }
 
 .listContainer .relContainer a:hover { 
@@ -737,6 +723,7 @@ a.addFolderView {
   padding: 0 5px; 
   position: relative;
   top: -8px;
+  width: 40%;
 }
 
 #plone-browser .listingBar a:hover {
