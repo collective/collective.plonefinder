@@ -454,7 +454,7 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
             TB_unlaunch();
         		TB_launch();
             Browser.url = jQuery('#browsed_url').val();
-            Browser.batch();             
+            Browser.batch();           
          } });  
 }
 
@@ -616,8 +616,10 @@ Browser.sorton = function(sort_on, sort_order) {
   Browser.update('', '', 0, sort_on, sort_order);	
 }
 
-Browser.selectItem = function (UID) {
-	alert("Selected: " + UID);
+/* redefine this method in your own widget */
+Browser.selectItem = function (UID, image_preview) {
+	if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID);
+	else alert("Selected a middle size image with this UID: " + UID);
 };
 
 
@@ -631,6 +633,20 @@ Browser.batch = function() {
       return false;
     }
   );
+}
+
+Browser.displayactionmenus = function() {
+  jQuery('a.actionMenusButton').click( function(){
+      jQuery(this).addClass('selected');
+      rel = jQuery(this).parent();
+      menu = jQuery('.finderActionMenuContainer', rel);
+      menu.show();
+      menu.mouseleave(function(){ 
+          rel = jQuery(this).parent();
+          jQuery('a.actionMenusButton', rel).removeClass('selected');
+          jQuery(this).hide();
+      });
+  });
 }
 
 Browser.batchresize = function() {
@@ -651,6 +667,7 @@ Browser.Popup_init = function() {
   }    
   jQuery('.popup #plone-browser-body').css('visibility','visible');
   jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');
+  Browser.displayactionmenus();  
   Browser.batch();
   
 };

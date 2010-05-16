@@ -353,7 +353,6 @@ a.folderSelect:hover {
   background-color: transparent !important;
   clear: left;
   padding: 2px;
-  overflow: hidden;
   position: relative;
 }
 
@@ -554,6 +553,7 @@ a.folderSelect:hover {
   border-color: #BABABA;
   line-height: 11px;
   font-size: 10px;
+  min-width: 85px;
 }
 
 *html #plone-browser select {
@@ -855,4 +855,97 @@ a.addFolderView {
 #finder-newfolder .formControls input {
   cursor: pointer;
   text-align: center;
+}
+
+/* action menus */
+.floatContainer .actionsMenusRelContainer {
+    position: relative;
+    left: 102px;
+    top: 105px;
+    width: 11px;
+    height: 8px;
+    overflow: visible;
+}
+
+.landscape .actionsMenusRelContainer {
+    top: 92px;
+}
+
+.listContainer .actionsMenusRelContainer {
+    position: relative;
+    float: left;
+    width: 11px;
+    height: 8px;
+    overflow: visible;
+    top: 6px;
+    left:0;
+}
+
+.listContainer .actionsMenusRelContainer * {
+    float:none !important;
+}
+
+a.actionMenusButton {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent url('./action_menu_button_bg.png') top left no-repeat;
+    width: 11px;
+    height: 10px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    margin:0;
+    padding: 0;
+}
+
+.actionsMenusRelContainer a.selected {
+    background: transparent url('./action_menu_button_selected_bg.png') top left no-repeat;
+}
+
+.finderActionMenuContainer {
+    display: none;
+    position: absolute;
+    z-index: 2000;
+    bottom: -17px;
+    left: -10px;
+}
+
+.listContainer .finderActionMenuContainer {
+    bottom:auto;
+    top: -30px;
+}
+
+.finderActionMenu {
+    margin: 0 0 0 27px;
+    padding: 0;
+    list-style: none outside none;
+    width: 120px;
+    padding: 2px;
+    background-color: white;
+    border-width: 1px ;
+    border-style: solid;
+    border-color: #888 #CCC #CCC #888;
+    font-size: 11px;
+}
+
+.finderActionMenuHeader {
+    background-color: #888;
+    color: white;
+    padding: 2px;
+}
+
+.finderActionMenu li {
+    display: block;
+}
+
+.finderActionMenu .finderActionMenuItem a {
+    width: auto;
+    height: auto;
+    border: none;
+    text-decoration: none;
+    margin:0;
+    padding: 2px;
+    text-align: left;
 }
