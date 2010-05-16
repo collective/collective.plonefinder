@@ -281,13 +281,15 @@
                     <div tal:attributes="class string:${typecss}Container ${r/orientation_class};">
                       <a href="javascript: void(0);"
                          tal:define="blacklisted r/blacklisted;
-                                     blclass python:blacklisted and ' blacklisted' or ''"
+                                     blclass python:blacklisted and ' blacklisted' or '';
+                                     is_image r/is_image;
+                                     selectPreviewImageString python:is_image and 'true' or 'false';"
                          tal:attributes="class   string: ${r/container_class}${blclass};
                                          title   string:select ${r/type};
-                                         onclick string:Browser.selectItem('${r/uid}');; return false;" >
-                        <img tal:condition="r/is_image"
+                                         onclick string:Browser.selectItem('${r/uid}', $selectPreviewImageString);; return false;" >
+                        <img tal:condition="is_image"
                              tal:attributes="src r/thumb; style r/style" />
-                        <div tal:condition="not: r/is_image"
+                        <div tal:condition="not: is_image"
                              tal:attributes="class r/iconclass">&nbsp;</div>
                         <div tal:content="r/title"
                              tal:attributes="class string:title ${r/state_class}">sample Portrait 1</div>
@@ -303,6 +305,29 @@
                            tal:attributes="href r/preview_url;
                                            title string:${r/title} (preview);"
                            i18n:attributes="title">&nbsp;</a>                      
+                      </div>
+                      <div tal:define="actions_menu r/actions_menu"
+                           class="actionsMenusRelContainer" tal:condition="actions_menu/items">
+                        <a class="actionMenusButton"
+                           href="#">&nbsp;</a>
+                        <div class="finderActionMenuContainer"
+                             tal:condition="actions_menu/choose_image_size|nothing">
+                          <ul class="finderActionMenu imageSizeActionMenu">
+                            <li class="finderActionMenuHeader"
+                                tal:content="actions_menu/choose_image_size/label">
+                                Choose image size
+                            </li>
+                            <li class="finderActionMenuItem imageSizeActionMenuItem"
+                                tal:repeat="action actions_menu/choose_image_size/actions">
+                                <a tal:content="python:action[3]"
+                                   href="#"
+                                   tal:define="thumb_size python:action[0]"
+                                   tal:attributes="onclick string:Browser.selectItem('${r/uid}/image_$thumb_size');; return false;">
+                                   Thumb : 128px*128px
+                                </a>
+                            </li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </tal:results>                               

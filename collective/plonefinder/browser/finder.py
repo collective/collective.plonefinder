@@ -511,7 +511,8 @@ class Finder(BrowserView):
             thumb_name = propInfo[0]
             thumb_width = int(propInfo[1].split(':')[0])
             thumb_height = int(propInfo[1].split(':')[1])
-            thumb_sizes.append((thumb_name,thumb_width,thumb_height))
+            thumb_label = "%s : %ipx*%ipx" %(_(propInfo[0].capitalize()), thumb_width, thumb_height)
+            thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label))
         thumb_sizes.sort(key=lambda ts: ts[1])
         return thumb_sizes
 
