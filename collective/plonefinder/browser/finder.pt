@@ -321,8 +321,9 @@
                                 tal:repeat="action actions_menu/choose_image_size/actions">
                                 <a tal:content="python:action[3]"
                                    href="#"
-                                   tal:define="thumb_size python:action[0]"
-                                   tal:attributes="onclick string:Browser.selectItem('${r/uid}/image_$thumb_size');; return false;">
+                                   tal:define="thumb_size python:action[0];
+                                               thumb_size_url_extension python:action[4]"
+                                   tal:attributes="onclick string:Browser.selectItem('${r/uid}${thumb_size_url_extension}');; return false;">
                                    Thumb : 128px*128px
                                 </a>
                             </li>
@@ -403,6 +404,11 @@
   <metal:block define-macro="plone_browser_popup"
                tal:condition="python: ispopup and not onlybody">
     <head>
+    
+      <!-- Internet Explorer fix, forces IE8 into newest possible rendering
+               engine even if it's on an intranet. This has to be defined before any
+               script/style tags. -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
       <tal:block replace="structure provider:plone.htmlhead" />  
       
@@ -445,8 +451,7 @@
       <style type="text/css" media="all" 
              tal:condition="view/cssaddons"
              tal:content="structure string:${view/cssaddons}">
-      </style>     
-      
+      </style> 
     
     </head>
     

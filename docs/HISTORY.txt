@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.0.0-b
+-------
+
+* images sizes displayed in finder are taken from portal properties
+  imaging properties
+
+* choose image sizes : contextual menus added
+
+* many IE fixes and cosmetic changes
+
 1.0.0-a
 -------
 

@@ -1,7 +1,14 @@
 TODO :
 -----
 
-- add thumb size selection for images
+
+- IEfixes (IE8 has some minor width height or position bugs)
+
+- other cosmetic changes :
+
+  - position for listing bar is not optimal
+
+- i18n
 
 - add new features for each browsed item (rename, change State, delete, copy/cut/paste)
 

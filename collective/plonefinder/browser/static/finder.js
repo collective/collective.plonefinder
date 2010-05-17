@@ -1,6 +1,11 @@
 
 /* helpers */
 
+var ua = navigator.userAgent;
+var isIE8 = (ua.match(/MSIE 8\.0/)); 
+var isIE = jQuery.browser.msie;
+var isOldIE = (isIE && ! isIE8)?true:false;
+
 jQuery.fn.changeClass = function(c1,c2) {
     return this.each(function() {
         this_class=jQuery(this).attr('class');
@@ -87,25 +92,6 @@ function findPosY(obj) {
     }
   } else if (obj && obj.y) curtop += obj.y;
   return curtop;
-}
-
-function getPageScroll(){
-
-	var yScroll;
-
-	if (self.pageYOffset) {
-		xScroll = self.pageXOffset;
-		yScroll = self.pageYOffset;
-	} else if (document.documentElement && document.documentElement.scrollTop){	 // Explorer 6 Strict
-		xScroll = document.documentElement.scrollLeft;
-    yScroll = document.documentElement.scrollTop;
-	} else if (document.body) {// all other Explorers
-		xScroll = document.body.scrollLeft;
-    yScroll = document.body.scrollTop;
-	}
-
-	arrayPageScroll = new Array(xScroll,yScroll) 
-	return arrayPageScroll;
 }
 
 
@@ -244,8 +230,23 @@ compileData = function(dataname, data, formData) {
   return dataname + '=' + encodeURI(data);
 }
 
-
-
+// absolutize a block position
+// used for contextual menus positioning
+// width and height can be forced
+absolutizeBlockPosition = function(block, width, height) {
+    bwidth = (typeof width == "undefined")?block.width():width;
+    bheight = (typeof height == "undefined")?block.height():height;
+    offsetpos = block.offset();
+    block.css('position', 'absolute');
+    block.css('z-index', '5000');
+    block.css(offsetpos);
+		postop = offsetpos.top;
+		posleft = offsetpos.left;
+    wwidth = jQuery(window).width(); 
+    wheight = jQuery(window).height();
+    if (posleft+bwidth > wwidth) block.css({'left': wwidth-bwidth-5});
+    if (postop+bheight > wheight) block.css({'top': wheight-bheight-5});
+}
 
 var Browser = {
 	maximized: false,
@@ -441,7 +442,7 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
         		    Browser.maximize();
         		  else
         		  	Browser.size(size);*/
-        		if (! jQuery.browser.msie) {
+        		if (! isOldIE) {
                 jQuery('.finder_panel').height(bodyHeight - 12 + 'px');
             }
         		else {
@@ -455,6 +456,7 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
         		TB_launch();
             Browser.url = jQuery('#browsed_url').val();
             Browser.batch();           
+            Browser.displayactionmenus();
          } });  
 }
 
@@ -640,9 +642,13 @@ Browser.displayactionmenus = function() {
       jQuery(this).addClass('selected');
       rel = jQuery(this).parent();
       menu = jQuery('.finderActionMenuContainer', rel);
+      if (jQuery(this).parents('.floatContainer').length) {
+          absolutizeBlockPosition(jQuery(rel),menu.width(),menu.height());
+      }
       menu.show();
       menu.mouseleave(function(){ 
           rel = jQuery(this).parent();
+          jQuery(rel).removeAttr('style');
           jQuery('a.actionMenusButton', rel).removeClass('selected');
           jQuery(this).hide();
       });
@@ -659,7 +665,7 @@ Browser.Popup_init = function() {
   jQuery('body').css('overflow', 'hidden');
   Browser.window = jQuery('#plone-browser > .window');
   arrayPageSize = getPageSize();
-  if (! jQuery.browser.msie) {
+  if (! isOldIE) {
       jQuery('.popup .finder_panel').height(arrayPageSize [3] -130);
   }
   else {

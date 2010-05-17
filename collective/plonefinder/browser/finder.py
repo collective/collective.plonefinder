@@ -444,8 +444,6 @@ class Finder(BrowserView):
                     imaging_properties = getToolByName(context, 'portal_properties').imaging_properties
                     thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
                     thumb_sizes = self.getThumbSizes()
-                    # images sizes actions menu
-                    r['actions_menu']['choose_image_size'] = {'label' : _(u'Choose image size'), 'actions' : thumb_sizes}
                     # define thumb icon and preview urls for display
                     thumb = icon = '%s/image' %r['url']
                     preview = '%s/image?isImage=1' %r['url']
@@ -461,6 +459,9 @@ class Finder(BrowserView):
                         if ts[1] >= 400 and ts[2] >= 400 :
                             preview = '%s/image_%s?isImage=1' %(r['url'], ts[0])
                             break
+                    # images sizes actions menu
+                    thumb_sizes.extend([('full',width ,height ,_('Full size'), '/image')])
+                    r['actions_menu']['choose_image_size'] = {'label' : _(u'Choose image size'), 'actions' : thumb_sizes}
                     r['is_image'] = True
                     r['preview_url'] = preview
                     r['url'] = '%s/image' %r['url']
@@ -511,8 +512,9 @@ class Finder(BrowserView):
             thumb_name = propInfo[0]
             thumb_width = int(propInfo[1].split(':')[0])
             thumb_height = int(propInfo[1].split(':')[1])
-            thumb_label = "%s : %ipx*%ipx" %(_(propInfo[0].capitalize()), thumb_width, thumb_height)
-            thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label))
+            thumb_label = "%s : %ipx*%ipx" %(_(thumb_name.capitalize()), thumb_width, thumb_height)
+            thumb_extension = "/image_%s" %thumb_name
+            thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label, thumb_extension))
         thumb_sizes.sort(key=lambda ts: ts[1])
         return thumb_sizes
 
