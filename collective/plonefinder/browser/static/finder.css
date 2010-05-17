@@ -235,6 +235,8 @@
   padding-top:5px;
   text-align:center;
   cursor: pointer !important;
+  white-space: nowrap;
+  margin-bottom: 5px;
 }
 
 .floatContainer .legend {
@@ -474,7 +476,7 @@ a.folderSelect:hover {
 }
 
 .listContainer .lcreated {
-  width: 110px;
+  width: 115px;
 }
 
 .floatContainer .lcreated {
@@ -861,14 +863,14 @@ a.addFolderView {
 .floatContainer .actionsMenusRelContainer {
     position: relative;
     left: 102px;
-    top: 105px;
+    top: -13px;
     width: 11px;
     height: 8px;
     overflow: visible;
 }
 
 .landscape .actionsMenusRelContainer {
-    top: 92px;
+    top: -26px;
 }
 
 .listContainer .actionsMenusRelContainer {
@@ -908,13 +910,8 @@ a.actionMenusButton {
     display: none;
     position: absolute;
     z-index: 2000;
-    bottom: -17px;
-    left: -10px;
-}
-
-.listContainer .finderActionMenuContainer {
-    bottom:auto;
     top: -30px;
+    left: -10px;
 }
 
 .finderActionMenu {
@@ -943,9 +940,21 @@ a.actionMenusButton {
 .finderActionMenu .finderActionMenuItem a {
     width: auto;
     height: auto;
-    border: none;
+    border: none !important;
     text-decoration: none;
     margin:0;
     padding: 2px;
     text-align: left;
+}
+
+*html .finderActionMenu .finderActionMenuItem a {
+    height: 0.1%;
+}
+
+*+html .finderActionMenu .finderActionMenuItem a {
+    height: 0.1%;
+}
+
+.finderActionMenu .finderActionMenuItem a:hover {
+    border: none !important;
 }
