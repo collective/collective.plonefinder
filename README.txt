@@ -34,3 +34,8 @@ Note :
 
 - Questions and comments to support@ingeniweb.com
 
+TODO :
+======
+
+- Ajax opening/moving and all window effects
+
