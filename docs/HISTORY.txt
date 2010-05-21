@@ -11,6 +11,8 @@ Changelog
 
 * many IE fixes and cosmetic changes
 
+* plone4 icons style used also under plone3
+
 1.0.0-a
 -------
 
