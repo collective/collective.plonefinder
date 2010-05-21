@@ -44,6 +44,7 @@ class Finder(BrowserView):
         super(Finder, self).__init__(context, request)
         portal_url = getToolByName(context, 'portal_url')
         portal = portal_url.getPortalObject()
+        self.is_plone3 = self.isPlone3()
         self.portal_url = portal_url()
         self.portal = portal 
         self.portalpath = '/'.join(portal.getPhysicalPath())       
@@ -501,22 +502,33 @@ class Finder(BrowserView):
         """
         return an ordered list of thumb sizes
         taken from portal properties imaging properties
-        return a list of tuples [(label, width,height)]
+        when exists
+        list of tuples [(label, width, height, thumb_label, thumb_extension)]
         """
         context = aq_inner(self.context)
-        imaging_properties = getToolByName(context, 'portal_properties').imaging_properties
-        thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
-        thumb_sizes = []
-        for prop in thumb_sizes_props :
-            propInfo = prop.split(' ')
-            thumb_name = propInfo[0]
-            thumb_width = int(propInfo[1].split(':')[0])
-            thumb_height = int(propInfo[1].split(':')[1])
-            thumb_label = "%s : %ipx*%ipx" %(_(thumb_name.capitalize()), thumb_width, thumb_height)
-            thumb_extension = "/image_%s" %thumb_name
-            thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label, thumb_extension))
-        thumb_sizes.sort(key=lambda ts: ts[1])
-        return thumb_sizes
+        pprops = getToolByName(context, 'portal_properties')
+        if hasattr(pprops, 'imaging_properties') :
+            imaging_properties = pprops.imaging_properties
+            thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
+            thumb_sizes = []
+            for prop in thumb_sizes_props :
+                propInfo = prop.split(' ')
+                thumb_name = propInfo[0]
+                thumb_width = int(propInfo[1].split(':')[0])
+                thumb_height = int(propInfo[1].split(':')[1])
+                thumb_label = "%s : %ipx*%ipx" %(_(thumb_name.capitalize()), thumb_width, thumb_height)
+                thumb_extension = "/image_%s" %thumb_name
+                thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label, thumb_extension))
+            thumb_sizes.sort(key=lambda ts: ts[1])
+            return thumb_sizes
+        
+        return [('listing', 16, 16, _('Listing'), '/image_listing'),
+                ('icon', 32, 32, _('Icon'), '/image_icon'),
+                ('tile', 64, 64, _('Tile'), '/image_tile'),
+                ('thumb', 128, 128, _('Thumb'), '/image_thumb'),
+                ('mini', 200, 200, _('Mini'), '/image_mini'),
+                ('preview', 400, 400, _('Preview'), '/image_preview'),
+                ('large', 768, 768, _('Large'), '/image_large')]
 
     def getImageInfos(self, image_obj):        
         """
@@ -554,4 +566,13 @@ class Finder(BrowserView):
            
         return make_query(self.cleanrequest)             
         
-        
+
+    def isPlone3 (self) :
+        """
+        """        
+        context = aq_inner(self.context)
+        mt = getToolByName(context, 'portal_migration')
+        plone_version = mt.getInstanceVersion()
+        if int(plone_version[0]) == 3 :
+            return True
+        return False
