@@ -5,13 +5,15 @@ Changelog
 -------
 
 * images sizes displayed in finder are taken from portal properties
-  imaging properties
+  imaging properties when exists
 
 * choose image sizes : contextual menus added
 
 * many IE fixes and cosmetic changes
 
 * plone4 icons style used also under plone3
+
+* reference objects widget added for zope3 forms (can be used in portlets) 
 
 1.0.0-a
 -------
