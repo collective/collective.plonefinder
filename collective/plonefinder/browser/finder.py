@@ -445,9 +445,7 @@ class Finder(BrowserView):
                             width = max
                         if height > min :
                             height = min
-                            width = int(min/ratio)                                                                              
-                    imaging_properties = getToolByName(context, 'portal_properties').imaging_properties
-                    thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
+                            width = int(min/ratio)               
                     thumb_sizes = self.getThumbSizes()
                     # define thumb icon and preview urls for display
                     thumb = icon = '%s/image' %r['url']
