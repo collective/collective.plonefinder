@@ -77,6 +77,7 @@ class Finder(BrowserView):
         self.query = None
         self.imagestypes = ['Image', 'News Item']
         self.selectiontype = 'uid'
+        self.allowimagesizeselection = True
         self.fieldid = 'demofield'
         self.fieldname = 'demofield'
         self.fieldtype = 'list'
@@ -172,7 +173,10 @@ class Finder(BrowserView):
         
         # use self.selectiontype or selectiontype in request to overload selectiontype
         # could be 'uid' or 'url'
-        self.selectiontype = request.get('selectiontype', self.selectiontype) 
+        self.selectiontype =  
+        
+        # set it to False to disallow sizes menu
+        self.allowimagesizeselection = request.get('allowimagesizeselection', self.allowimagesizeselection)
         
         # field id which will receive the selection
         self.fieldid = request.get('fieldid', self.fieldid)
@@ -462,7 +466,8 @@ class Finder(BrowserView):
                             break
                     # images sizes actions menu
                     thumb_sizes.extend([('full',width ,height ,_('Full size'), '/image')])
-                    r['actions_menu']['choose_image_size'] = {'label' : _(u'Choose image size'), 'actions' : thumb_sizes}
+                    if self.allowimagesizeselection :
+                        r['actions_menu']['choose_image_size'] = {'label' : _(u'Choose image size'), 'actions' : thumb_sizes}
                     r['is_image'] = True
                     r['preview_url'] = preview
                     r['url'] = '%s/image' %r['url']
