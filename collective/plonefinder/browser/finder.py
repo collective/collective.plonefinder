@@ -173,7 +173,7 @@ class Finder(BrowserView):
         
         # use self.selectiontype or selectiontype in request to overload selectiontype
         # could be 'uid' or 'url'
-        self.selectiontype =  
+        self.selectiontype =  request.get('selectiontype', self.selectiontype)
         
         # set it to False to disallow sizes menu
         self.allowimagesizeselection = request.get('allowimagesizeselection', self.allowimagesizeselection)
