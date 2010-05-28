@@ -631,12 +631,14 @@ Browser.sorton = function(sort_on, sort_order) {
    or just create a finderSelectItem function in your window.opener  */
    
 Browser.selectItem = function (UID, title, image_preview) {
-	var fieldid = getBrowserData(Browser.formData, 'fieldid');
-  if (typeof window.opener.finderSelectItem !='undefined') window.opener.finderSelectItem(UID, title, image_preview, fieldid);
-	else {
-      if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID + " for fieldid " + fieldid);
-    	else alert("Selected a middle size image with this UID: " + UID + " for fieldid " + fieldid);
-  }
+    var fieldid = getBrowserData(Browser.formData, 'fieldid');
+    if (typeof window.opener.finderSelectItem !='undefined') window.opener.finderSelectItem(UID, title, image_preview, fieldid);
+    else {
+        if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID + " for fieldid " + fieldid);
+      	else alert("Selected a middle size image with this UID: " + UID + " for fieldid " + fieldid);
+    }
+    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+    jQuery('#msg-done').fadeOut(10000);  
 };
 
 

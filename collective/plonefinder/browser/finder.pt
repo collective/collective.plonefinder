@@ -29,7 +29,8 @@
                          parentpath view/parentpath;
                          findername view/findername;
                          folders view/folders;
-                         results view/results;                         
+                         results view/results;        
+                         allowimagesizeselection view/allowimagesizeselection;                 
                          Batch python:modules['Products.CMFPlone'].Batch;
                          batch python:Batch(results, b_size, int(b_start), orphan=1);
                          toLocalizedTime nocall: context/@@plone/toLocalizedTime;
@@ -283,7 +284,7 @@
                          tal:define="blacklisted r/blacklisted;
                                      blclass python:blacklisted and ' blacklisted' or '';
                                      is_image r/is_image;
-                                     selectPreviewImageString python:is_image and 'true' or 'false';"
+                                     selectPreviewImageString python:(is_image and allowimagesizeselection) and 'true' or 'false';"
                          tal:attributes="class   string: ${r/container_class}${blclass};
                                          title   string:select ${r/type};
                                          onclick string:Browser.selectItem('${r/uid}', '${r/title}', $selectPreviewImageString);; return false;" >
