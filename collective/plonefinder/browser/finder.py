@@ -174,11 +174,11 @@ class Finder(BrowserView):
         # could be 'uid' or 'url'
         self.selectiontype = request.get('selectiontype', self.selectiontype) 
         
-        # TODO field id which will receive the selection
-        self.fieldid = 'demofield' 
+        # field id which will receive the selection
+        self.fieldid = request.get('fieldid', self.fieldid)
         
         # TODO field name which will receive the selection   
-        self.fieldname = 'demofield'   
+        self.fieldname = request.get('fieldname', self.fieldname)
         
         # TODO could be string
         self.fieldtype = request.get('fieldtype', self.fieldtype)        
@@ -243,7 +243,7 @@ class Finder(BrowserView):
         
         # upload disallowed if user do not have permission to 
         # Add portal content on context        
-        if self.allowupload :
+        if self.allowupload or request.get('allowupload', False) :
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.scope)) :
                 self.allowupload = False         
@@ -253,7 +253,7 @@ class Finder(BrowserView):
         # allowaddfolder disallowed if user do not have permission to 
         # add portal content on context        
         # disallowed also when context is not IFinderUploadCapable
-        if self.allowaddfolder :
+        if self.allowaddfolder or request.get('allowaddfolder', False) :
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.scope)) :
                 self.allowaddfolder = False 
@@ -522,13 +522,13 @@ class Finder(BrowserView):
             thumb_sizes.sort(key=lambda ts: ts[1])
             return thumb_sizes
         
-        return [('listing', 16, 16, _('Listing'), '/image_listing'),
-                ('icon', 32, 32, _('Icon'), '/image_icon'),
-                ('tile', 64, 64, _('Tile'), '/image_tile'),
-                ('thumb', 128, 128, _('Thumb'), '/image_thumb'),
-                ('mini', 200, 200, _('Mini'), '/image_mini'),
-                ('preview', 400, 400, _('Preview'), '/image_preview'),
-                ('large', 768, 768, _('Large'), '/image_large')]
+        return [('listing', 16, 16, '%s : 16px*16px' %_('Listing'), '/image_listing'),
+                ('icon', 32, 32, '%s : 32px*32px' %_('Icon'), '/image_icon'),
+                ('tile', 64, 64, '%s : 64px*64px' %_('Tile'), '/image_tile'),
+                ('thumb', 128, 128, '%s : 128px*128px' %_('Thumb'), '/image_thumb'),
+                ('mini', 200, 200, '%s : 200px*200px' %_('Mini'), '/image_mini'),
+                ('preview', 400, 400, '%s : 400px*400px' %_('Preview'), '/image_preview'),
+                ('large', 768, 768, '%s : 768px*768px' %_('Large'), '/image_large')]
 
     def getImageInfos(self, image_obj):        
         """

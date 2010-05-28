@@ -268,7 +268,7 @@
                                  <a href="javascript: void(0);"
                                     class="folderSelect"
                                     i18n:attributes="title"
-                                    tal:attributes="onclick string:Browser.selectItem('${f/uid}');; return false;
+                                    tal:attributes="onclick string:Browser.selectItem('${f/uid}', '${f/title}');; return false;
                                                     title   string:Select ${f/type};">
                                     &nbsp;
                                  </a>                   
@@ -286,7 +286,7 @@
                                      selectPreviewImageString python:is_image and 'true' or 'false';"
                          tal:attributes="class   string: ${r/container_class}${blclass};
                                          title   string:select ${r/type};
-                                         onclick string:Browser.selectItem('${r/uid}', $selectPreviewImageString);; return false;" >
+                                         onclick string:Browser.selectItem('${r/uid}', '${r/title}', $selectPreviewImageString);; return false;" >
                         <img tal:condition="is_image"
                              tal:attributes="src r/thumb; style r/style" />
                         <div tal:condition="not: is_image"
@@ -323,7 +323,7 @@
                                    href="#"
                                    tal:define="thumb_size python:action[0];
                                                thumb_size_url_extension python:action[4]"
-                                   tal:attributes="onclick string:Browser.selectItem('${r/uid}${thumb_size_url_extension}');; return false;">
+                                   tal:attributes="onclick string:Browser.selectItem('${r/uid}${thumb_size_url_extension}', '${r/title}');; return false;">
                                    Thumb : 128px*128px
                                 </a>
                             </li>

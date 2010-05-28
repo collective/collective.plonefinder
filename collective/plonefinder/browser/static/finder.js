@@ -157,6 +157,14 @@ isInString = function(str1, str2) {
     catch(e) {return false}
 }
 
+
+function getBrowserData( formData, paramName ) {
+    var oRegex = new RegExp( '[\?&]' + paramName + '=([^&]+)', 'i' ) ;
+    var oMatch = oRegex.exec( formData ) ;    
+    if ( oMatch && oMatch.length > 1 ) return oMatch[1] ;
+    else return '' ;
+}
+
 function getQueryObject( query ) {
    var Params = new Object();
    var listDatas = new Object();
@@ -618,10 +626,17 @@ Browser.sorton = function(sort_on, sort_order) {
   Browser.update('', '', 0, sort_on, sort_order);	
 }
 
-/* redefine this method in your own widget */
-Browser.selectItem = function (UID, image_preview) {
-	if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID);
-	else alert("Selected a middle size image with this UID: " + UID);
+/* redefine this method in your own widget
+   see ckeditor finder as example
+   or just create a finderSelectItem function in your window.opener  */
+   
+Browser.selectItem = function (UID, title, image_preview) {
+	var fieldid = getBrowserData(Browser.formData, 'fieldid');
+  if (typeof window.opener.finderSelectItem !='undefined') window.opener.finderSelectItem(UID, title, image_preview, fieldid);
+	else {
+      if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID + " for fieldid " + fieldid);
+    	else alert("Selected a middle size image with this UID: " + UID + " for fieldid " + fieldid);
+  }
 };
 
 
