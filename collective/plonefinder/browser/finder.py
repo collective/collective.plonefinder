@@ -262,7 +262,9 @@ class Finder(BrowserView):
             if not(tool.checkPermission('Add portal content', self.scope)) :
                 self.allowaddfolder = False 
             if not IFinderUploadCapable.providedBy(self.scope) :
-                self.allowaddfolder = False              
+                self.allowaddfolder = False     
+                   
+        self.cleanrequest = self.cleanRequest()          
         
         return self.template()             
 
@@ -555,7 +557,7 @@ class Finder(BrowserView):
         ignored = ('blacklist', 'addtoblacklist', 'removefromblacklist', 'searchsubmit', 'newsession', 'emptyblacklist', 'b_start', 'finder_sort_on', 'sort_order')
         dictRequest = {}
         for param, value in request.form.items():
-            if (value and
+            if ( value is not None and
                 (param not in ignored) and
                 (param not in FORM_PARAMS)):
                 dictRequest[param] = value
