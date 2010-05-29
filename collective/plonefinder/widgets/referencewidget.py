@@ -51,12 +51,15 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
     def getTitleFromValue(self, value) :
         base = self._getBase()
         reference_tool = getToolByName(base, 'reference_catalog')
+        pm = getToolByName(base, 'portal_membership')
         # the value could be
         # uid or uid/image_thumb or uid/view or uid/download ....
         uid = value.split('/')[0]
         obj = reference_tool.lookupObject(uid)
         if obj is not None :
-            return obj.pretty_title_or_id()
+            if pm.checkPermission('View', obj) :
+                return obj.pretty_title_or_id()
+            return '%s : %s ' %(_(u"You don't have permission to access this object"),uid)
         else :
             raise InvalidValue("uid %s not found in reference tool" % value)
 
