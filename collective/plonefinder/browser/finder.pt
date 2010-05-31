@@ -21,6 +21,7 @@
                          b_start request/b_start | b_start;                      
                          typecss view/typecss;
                          browsed_url view/browsed_url;
+                         forcecloseoninsert view/forcecloseoninsert;
                          ispopup view/ispopup;
                          portal view/portal;
                          portal_url view/portal_url;
@@ -43,7 +44,11 @@
           <input id="browsed_url"
                  name="browsed_url"
                  type="hidden"
-                 tal:attributes="value browsed_url" />   
+                 tal:attributes="value browsed_url" /> 
+          <input id="forcecloseoninsert"
+                 name="forcecloseoninsert"
+                 type="hidden"
+                 tal:attributes="value forcecloseoninsert" />  
           <input id="finderName"
                  name="finderName"
                  type="hidden"

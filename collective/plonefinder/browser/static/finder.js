@@ -256,6 +256,12 @@ absolutizeBlockPosition = function(block, width, height) {
     if (postop+bheight > wheight) block.css({'top': wheight-bheight-5});
 }
 
+/*
+
+Browser main object
+
+*/
+
 var Browser = {
 	maximized: false,
 	url: null,
@@ -270,7 +276,8 @@ var Browser = {
 	fixedHeight: 0,
 	ispopup: false,
 	formdata: '',
-	finderUrl: '@@plone_finder'
+	finderUrl: '@@plone_finder',
+	forcecloseoninsert: 0
 };
 
 Browser.fixHeight = function() {
@@ -631,14 +638,18 @@ Browser.sorton = function(sort_on, sort_order) {
    or just create a finderSelectItem function in your window.opener  */
    
 Browser.selectItem = function (UID, title, image_preview) {
+    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
     var fieldid = getBrowserData(Browser.formData, 'fieldid');
     if (typeof window.opener.finderSelectItem !='undefined') window.opener.finderSelectItem(UID, title, image_preview, fieldid);
     else {
         if (typeof image_preview == "undefined" || !image_preview) alert("Selected: " + UID + " for fieldid " + fieldid);
       	else alert("Selected a middle size image with this UID: " + UID + " for fieldid " + fieldid);
     }
-    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
-    jQuery('#msg-done').fadeOut(10000);  
+    if (Browser.forcecloseoninsert) Browser.close();
+    else {
+        jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+        jQuery('#msg-done').fadeOut(10000); 
+    } 
 };
 
 
@@ -700,6 +711,7 @@ Browser.init = function() {
     Browser.formData = jQuery('#nextQuery').val();
     Browser.url = jQuery('#browsed_url').val();
     Browser.finderUrl = '@@' + jQuery('#finderName').val();
+    Browser.forcecloseoninsert = parseInt(jQuery('#forcecloseoninsert').val()) ;
     if (jQuery('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();
