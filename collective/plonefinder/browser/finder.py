@@ -59,6 +59,7 @@ class Finder(BrowserView):
         self.scopetype = ''
         self.scopeiconclass = 'divicon'
         self.multiselect = True
+        self.forcecloseonsinsert = 0
         self.browsedpath = ''
         self.parentpath = ''
         self.types = []
@@ -104,8 +105,14 @@ class Finder(BrowserView):
         self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
         self.setScopeInfos(context, request, self.showbreadcrumbs)                            
                     
-        # use self.multiselect = False (or multiselect = False in request) to close window after selection
+        # use self.multiselect = False (or multiselect = False in request)
+        # when multiselect is False window is closed on insert
         self.multiselect = request.get('multiselect', self.multiselect)            
+        # to force close on insert even in multiselect mode
+        self.forcecloseonsinsert = request.get('forcecloseonsinsert', self.forcecloseonsinsert)
+                
+        if not self.multiselect :
+             self.forcecloseonsinsert = 1    
                  
         # use self.types (or types in request) to specify portal_types in catalog request
         self.types = request.get('types', self.types)          
