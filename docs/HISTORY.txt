@@ -9,6 +9,8 @@ SVN Unreleased
   object is not removed from list, but a message is displayed in place of object title :
   '%s : %s ' %(_(u"You don't have permission to access this object"),uid)
 
+* added : close window when self.multiselect = False or self.forcecloseonsinsert = False
+
 1.0.0-b
 -------
 
