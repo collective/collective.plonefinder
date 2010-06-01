@@ -28,7 +28,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
     allowupload = 0
     allowaddfolder = 0
     allowimagesizeselection = 0
-    forcecloseoninsert = 1
+    forcecloseoninsert = 0
                 
     def __init__(self, field, request):
         """
