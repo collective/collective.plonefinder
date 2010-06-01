@@ -59,7 +59,7 @@ class Finder(BrowserView):
         self.scopetype = ''
         self.scopeiconclass = 'divicon'
         self.multiselect = True
-        self.forcecloseonsinsert = 0
+        self.forcecloseoninsert = 0
         self.browsedpath = ''
         self.parentpath = ''
         self.types = []
@@ -109,10 +109,10 @@ class Finder(BrowserView):
         # when multiselect is False window is closed on insert
         self.multiselect = request.get('multiselect', self.multiselect)            
         # to force close on insert even in multiselect mode
-        self.forcecloseonsinsert = request.get('forcecloseonsinsert', self.forcecloseonsinsert)
+        self.forcecloseoninsert = request.get('forcecloseoninsert', self.forcecloseoninsert)
                 
         if not self.multiselect :
-             self.forcecloseonsinsert = 1    
+             self.forcecloseoninsert = 1    
                  
         # use self.types (or types in request) to specify portal_types in catalog request
         self.types = request.get('types', self.types)          
