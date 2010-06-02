@@ -11,9 +11,11 @@ SVN Unreleased
 
 * added : close window when self.multiselect = False or self.forcecloseonsinsert = False
 
-* fix selectItem when quotes in titles
+* fix selectItem when there were quotes in titles
 
-* doc changed
+* added a base attribute to reference widget used for finder opening folder.
+ 
+* use unicode chars for up and down arrows in reference widget.
 
 1.0.0-b
 -------
