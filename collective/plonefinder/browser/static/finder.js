@@ -647,7 +647,7 @@ Browser.selectItem = function (UID, title, image_preview) {
     }
     if (Browser.forcecloseoninsert) Browser.close();
     else {
-        jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+        jQuery('.statusBar > div', Browser.window).hide('10000').filter('#msg-done').show();
         jQuery('#msg-done').fadeOut(10000); 
     } 
 };
