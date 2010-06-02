@@ -397,6 +397,7 @@ class Finder(BrowserView):
             r['uid'] = b.UID
             r['url'] = b.getURL()
             r['title'] = b.pretty_title_or_id()
+            r['jstitle'] = r['title'].replace("\x27", "\x5C\x27")
             r['description'] = b.Description                         
             r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
             r['type'] = b.portal_type
@@ -423,6 +424,7 @@ class Finder(BrowserView):
             r['url'] = b.getURL()
             r['path'] = b.getPath
             r['title'] = b.pretty_title_or_id()
+            r['jstitle'] = r['title'].replace("\x27", "\x5C\x27")
             r['description'] = b.Description
             r['state_class'] = 'state-%s' %b.review_state 
             r['is_folderish'] = b.is_folderish or False
