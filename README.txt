@@ -53,7 +53,6 @@ Example of use in a portlet form for a Tuple field named target_contents::
     target_contents = schema.Tuple (title=u"Browse for contents",
                                     description =u"Choose contents to display "
                                                   "with a plone finder window. ",
-                                    required = False,
                                     default= ()
                                     )
 
@@ -88,7 +87,6 @@ Example of code for files referencing with files upload support::
                                   description =u"Choose files to display "
                                                  "with a plone finder window. "
                                                  "You can upload new files. ",
-                                  required = False,
                                   default= ()
                                   )
 
@@ -103,7 +101,6 @@ Example of code for images referencing with images upload support::
                                                  "with a plone finder window. "
                                                  "You can select different image sizes. "
                                                  "You can upload new images. ",
-                                  required = False,
                                   default= ()
                                   )
 
