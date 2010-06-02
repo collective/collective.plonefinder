@@ -42,6 +42,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
         else :
             voc = None
         super(FinderSelectWidget, self).__init__(field, voc, request)
+        
     
     def _getBase(self) :
         if hasattr(self.context.context, self.context.__name__):
@@ -71,7 +72,8 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
         base = self._getBase()
         # TODO : put all these queryString pairs in session (see finder.py)
         finderquery = 'fieldid=%s&fieldname=%s&typeview=%s&selectiontype=%s&allowupload:int=%i&allowaddfolder:int=%i&allowimagesizeselection:int=%i&forcecloseoninsert:int=%i'\
-                      %(self.name, self.name, self.typeview, self.selectiontype, int(self.allowupload), int(self.allowaddfolder), int(self.allowimagesizeselection), int(self.forcecloseoninsert))
+                      %( self.name, self.name, self.typeview, self.selectiontype, 
+                         int(self.allowupload), int(self.allowaddfolder), int(self.allowimagesizeselection), int(self.forcecloseoninsert))
         for typeId in self.types :
             finderquery += '&types:list=%s' %typeId.replace(' ', '+')
         return "openFinder('%s/@@plone_finder?%s')" %(base.absolute_url(),finderquery)
