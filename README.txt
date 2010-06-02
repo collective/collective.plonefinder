@@ -59,11 +59,23 @@ Example of use in a portlet form for a Tuple field named target_contents::
 
     form_fields['target_contents'].custom_widget = FinderSelectWidget
 
-You can use the FinderSelectWidget with some properties set, example::
+You can use the FinderSelectWidget with some properties set using the update 
+method in your AddForm or EditForm, example for a portlet AddForm::
 
-    form_fields['target_contents'].custom_widget = FinderSelectWidget
-    form_fields['target_contents'].custom_widget.types = ['Image', 'News Item']
-    form_fields['target_contents'].custom_widget.typeview = 'image'
+    class AddForm(base.AddForm):
+        """Portlet add form.
+        """
+        form_fields = form.Fields(IReferencesPortlet)
+        form_fields['targets'].custom_widget = FinderSelectWidget
+        label = u"Add References Portlet"
+    
+        def update(self) :
+            super(AddForm, self).update()
+            self.widgets['targets'].typeview = 'image'
+            self.widgets['targets'].forcecloseoninsert = 1
+            
+        def create(self, data):
+            return Assignment(**data)
 
 There are also two customized Widget for files and images. Look at the code
 to create your own specific widget.
