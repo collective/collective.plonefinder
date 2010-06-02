@@ -11,6 +11,10 @@ SVN Unreleased
 
 * added : close window when self.multiselect = False or self.forcecloseonsinsert = False
 
+* fix selectItem when quotes in titles
+
+* doc changed
+
 1.0.0-b
 -------
 
