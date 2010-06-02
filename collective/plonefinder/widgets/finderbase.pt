@@ -164,28 +164,28 @@ function selectionError()
     </td>
     <td>
       <button
-          name="upButton" type="button" value="^"
+          name="upButton" type="button" value="▲"
           onclick="javascript:moveUp()"
           style="width: 20px; text-align: center; font-weight: bold; margin-bottom: 5px"
           tal:attributes="onClick string:moveUp('${view/name}');
                           title view/moveuplabel"
-          >^</button>
+          >▲</button>
       <br />
       <button
-          name="downButton" type="button" value="v"
+          name="downButton" type="button" value="▼"
           onclick="javascript:moveDown()"
           style="width: 20px; text-align: center; font-weight: bold; margin-bottom: 5px"
           tal:attributes="onClick string:moveDown('${view/name}');
                           title view/movedownlabel"
-          >v</button>
+          >▼</button>
       <br />
       <button
-          name="deleteButton" type="button" value="x"
+          name="deleteButton" type="button" value="-"
           onclick="javascript:moveDown()"
           style="width: 20px; text-align: center; font-weight: bold; margin-bottom: 5px"
           tal:attributes="onClick string:deleteEntry('${view/name}');
                           title view/deleteentrylabel"
-          >x</button>
+          >-</button>
       <br />
       <button
           name="addButton" type="button" value="+"
