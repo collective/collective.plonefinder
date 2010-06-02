@@ -29,6 +29,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
     allowaddfolder = 0
     allowimagesizeselection = 0
     forcecloseoninsert = 0
+    base = None
                 
     def __init__(self, field, request):
         """
@@ -41,19 +42,17 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
             voc = field.value_type.vocabulary
         else :
             voc = None
+        if self.base is None :
+            self.base = getSite()
         super(FinderSelectWidget, self).__init__(field, voc, request)
         
-    
-    def _getBase(self) :
-        if hasattr(self.context.context, self.context.__name__):
-            return aq_inner(aq_inner(self.context).context)
-        else :
-            return getSite()
+  
+    def _getBaseUrl(self) :
+        return self.base.absolute_url()
     
     def getTitleFromValue(self, value) :
-        base = self._getBase()
-        reference_tool = getToolByName(base, 'reference_catalog')
-        pm = getToolByName(base, 'portal_membership')
+        reference_tool = getToolByName(self.base, 'reference_catalog')
+        pm = getToolByName(self.base, 'portal_membership')
         # the value could be
         # uid or uid/image_thumb or uid/view or uid/download ....
         uid = value.split('/')[0]
@@ -69,14 +68,14 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
         """
         return the finder link
         """
-        base = self._getBase()
+        base_url = self._getBaseUrl()
         # TODO : put all these queryString pairs in session (see finder.py)
         finderquery = 'fieldid=%s&fieldname=%s&typeview=%s&selectiontype=%s&allowupload:int=%i&allowaddfolder:int=%i&allowimagesizeselection:int=%i&forcecloseoninsert:int=%i'\
                       %( self.name, self.name, self.typeview, self.selectiontype, 
                          int(self.allowupload), int(self.allowaddfolder), int(self.allowimagesizeselection), int(self.forcecloseoninsert))
         for typeId in self.types :
             finderquery += '&types:list=%s' %typeId.replace(' ', '+')
-        return "openFinder('%s/@@plone_finder?%s')" %(base.absolute_url(),finderquery)
+        return "openFinder('%s/@@plone_finder?%s')" %(base_url,finderquery)
 
     def convertTokensToValues(self, tokens):
         """Convert term tokens to the terms themselves.

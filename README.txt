@@ -76,6 +76,13 @@ method in your AddForm or EditForm, example for a portlet AddForm::
         def create(self, data):
             return Assignment(**data)
 
+If you want, you can also pass a context as base for the widget, to get the current 
+or parent folder open in the finder. Example in a portlet using the update
+method::
+
+        assignment = aq_parent(aq_inner(self.context))
+        self.widgets['targets'].base = aq_parent(aq_inner(assignment))
+
 There are also two customized Widget for files and images. Look at the code
 to create your own specific widget.
 
