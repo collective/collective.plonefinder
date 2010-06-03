@@ -76,7 +76,7 @@ class Finder(BrowserView):
         self.addtoblacklist = [] 
         self.removefromblacklist = []
         self.query = None
-        self.imagestypes = ['Image', 'News Item']
+        self.imagestypes = ('Image', 'News Item')
         self.selectiontype = 'uid'
         self.allowimagesizeselection = True
         self.fieldid = 'demofield'
@@ -176,7 +176,7 @@ class Finder(BrowserView):
         self.query = request.get('query', self.query)         
         
         # TODO Images types in portal properties
-        self.imagestypes = ['Image', 'News Item']
+        self.imagestypes = request.get('imagestypes', self.imagestypes)
         
         # use self.selectiontype or selectiontype in request to overload selectiontype
         # could be 'uid' or 'url'

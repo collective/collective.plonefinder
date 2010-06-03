@@ -23,6 +23,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
     deleteentrylabel = _(u'Remove item')
     types = []
     typeview = 'file'
+    imagestypes = ('Image', 'News Item')
     query = None
     selectiontype = 'uid'
     allowupload = 0
@@ -75,6 +76,8 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
                          int(self.allowupload), int(self.allowaddfolder), int(self.allowimagesizeselection), int(self.forcecloseoninsert))
         for typeId in self.types :
             finderquery += '&types:list=%s' %typeId.replace(' ', '+')
+        for imgtypeId in self.imagestypes :
+            finderquery += '&imagestypes:list=%s' %imgtypeId.replace(' ', '+')
         return "openFinder('%s/@@plone_finder?%s')" %(base_url,finderquery)
 
     def convertTokensToValues(self, tokens):
