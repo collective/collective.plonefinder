@@ -77,6 +77,7 @@ class Finder(BrowserView):
         self.removefromblacklist = []
         self.query = None
         self.imagestypes = ('Image', 'News Item')
+        self.filestypes = ('File', 'PloneExFile')
         self.selectiontype = 'uid'
         self.allowimagesizeselection = True
         self.fieldid = 'demofield'
@@ -175,8 +176,11 @@ class Finder(BrowserView):
         # use self.query (or query in request) to overload entire query
         self.query = request.get('query', self.query)         
         
-        # TODO Images types in portal properties
+        # imagestypes used to show or not thumbs in browser
         self.imagestypes = request.get('imagestypes', self.imagestypes)
+        
+        # filestypes used to show mime-type icons in browser
+        self.filestypes = request.get('filestypes', self.filestypes)
         
         # use self.selectiontype or selectiontype in request to overload selectiontype
         # could be 'uid' or 'url'
@@ -462,11 +466,16 @@ class Finder(BrowserView):
                     r['style'] = ''                    
             else :    
                 orientation = 'small'
-                thumb = icon = None
+                r['style'] = ''
+                if b.portal_type in self.filestypes :
+                    o = b.getObject()
+                    icon_base = o.getIcon()
+                    if icon_base :
+                        r['style'] = 'background-image: url(./%s)' %icon_base
                 r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
+                thumb = icon = None
                 r['is_image'] = False
                 r['container_class'] = 'fileContainer'
-                r['style'] = ''
             if self.typeview == 'image' :
                 r['orientation_class'] =  orientation
                 r['thumb'] = thumb
