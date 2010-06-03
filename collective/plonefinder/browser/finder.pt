@@ -268,7 +268,7 @@
                         <img tal:condition="is_image"
                              tal:attributes="src r/thumb; style r/style" />
                         <div tal:condition="not: is_image"
-                             tal:attributes="class r/iconclass">&nbsp;</div>
+                             tal:attributes="class r/iconclass; style r/style">&nbsp;</div>
                         <div tal:content="r/title"
                              tal:attributes="class string:title ${r/state_class}">sample Portrait 1</div>
                         <div class="legend lsize" tal:content="r/size">54 kB</div>
