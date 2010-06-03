@@ -415,7 +415,7 @@
       
       <style type="text/css" media="all" 
              tal:condition="view/is_plone3"
-             tal:content="string:@import url($portal_url/++resource++plonefinder_static/plone3.css);">
+             tal:content="string:@import url($portal_url/finder-content-types-3.x.css);">
       </style>   
       
       <style type="text/css" media="all" 

@@ -1,0 +1,19 @@
+/*
+** content types generated css for plone3
+**
+*/
+
+<dtml-in "portal_types_list">
+  <dtml-let item=sequence-item
+            type_id="item['id']"
+            type_icon="item['icon']">
+    .contenttype-&dtml-type_id; { 
+        background-image: url(&dtml-portal_url;/&dtml-type_icon;); 
+        background-repeat: no-repeat; 
+        background-position: center center;
+    }
+  </dtml-let>
+</dtml-in>
+
+
+
