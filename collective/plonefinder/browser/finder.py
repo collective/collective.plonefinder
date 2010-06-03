@@ -204,7 +204,6 @@ class Finder(BrowserView):
         self.searchsubmit = request.get('searchsubmit', self.searchsubmit)          
                           
         firstpassresults = self.finderResults()        
-        resultids = [r['uid'] for r in firstpassresults]   
         
         # remove blacklisted uids or just set it as blacklisted if needed
         results = []
@@ -215,40 +214,12 @@ class Finder(BrowserView):
                     results.append(r)
                 elif  self.showblacklisted :
                     r['blacklisted'] = True
-                    results.append(r)
-            firstpassresults = results                   
+                    results.append(r)              
         
-        # if we can browse, we must remove folders from results
-        # we must set these folders as linkables
-        # and put these folders at top of results
-        # excepted when self.sort_on is changed
+        self.results = results
+        self.folders = []        
         if self.browse :
-            results = []
-            firstpassfolders = self.finderBrowsingResults()
-            if self.sort_request :
-                if not self.sort_withcatalog :                    
-                    firstpassresults.sort(key=lambda k: k[self.sort_on])
-                    if self.sort_order == 'reverse' :
-                        firstpassresults.reverse()
-                self.results = firstpassresults
-                self.folders = firstpassfolders
-            else :
-                folderids = [f['uid'] for f in firstpassfolders]
-                for r in firstpassresults :
-                    if r['uid'] not in folderids :
-                        results.append(r)
-                self.results = results       
-                folders = []
-                for f in firstpassfolders :
-                    if f['uid'] in resultids :    
-                        f['islinkable'] = True
-                    else :     
-                        f['islinkable'] = False
-                    folders.append(f)
-                self.folders = folders        
-        else :
-            self.results = firstpassresults  
-            self.folders = [] 
+            self.folders = self.finderBrowsingResults()
                    
         self.cleanrequest = self.cleanRequest()          
         
@@ -362,8 +333,7 @@ class Finder(BrowserView):
                     searchterms = _quote_bad_chars(r)+'*'                
                     
                     query['SearchableText'] = searchterms
-            
-            #query = {'path': {'query': '/cktest', 'depth': 2}, 'sort_on': 'getObjPositionInParent'}
+
             return query            
             
     def finderBrowsingQuery(self) :
@@ -403,6 +373,7 @@ class Finder(BrowserView):
             r['type'] = b.portal_type
             r['path'] = b.getPath
             r['state_class'] = 'state-%s' %b.review_state 
+            r['islinkable'] = False
 
             results.append(r)
         
