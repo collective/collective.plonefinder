@@ -17,6 +17,8 @@ SVN Unreleased
  
 * use unicode chars for up and down arrows in reference widget.
 
+* allow change imagetypes using request and referencewidget 
+
 1.0.0-b
 -------
 
