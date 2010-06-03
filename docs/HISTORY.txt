@@ -19,6 +19,10 @@ SVN Unreleased
 
 * allow change imagetypes using request and referencewidget 
 
+* remove navigation inside main windows (too much complexity) 
+
+* added a generated css for plone3 content-types icons
+
 1.0.0-b
 -------
 
