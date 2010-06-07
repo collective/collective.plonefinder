@@ -208,6 +208,10 @@ class Finder(BrowserView):
         self.searchsubmit = request.get('searchsubmit', self.searchsubmit)          
                           
         firstpassresults = self.finderResults()        
+        if self.sort_request and not self.sort_withcatalog :                    
+            firstpassresults.sort(key=lambda k: k[self.sort_on])
+            if self.sort_order == 'reverse' :
+                firstpassresults.reverse()
         
         # remove blacklisted uids or just set it as blacklisted if needed
         results = []
