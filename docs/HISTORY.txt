@@ -23,6 +23,10 @@ SVN Unreleased
 
 * added a generated css for plone3 content-types icons
 
+* added new property self.filestypes in browser
+
+* added mime-type icons for filestypes in finder
+
 1.0.0-b
 -------
 

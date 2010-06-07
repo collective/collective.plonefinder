@@ -143,10 +143,6 @@ Todo :
 
 - Finder improvements :
 
-  - css fixes :
-  
-    - solution to get content-type file icons (fix regression since plone4 getIcon changes)
-
   - Ajax opening/moving/resizing and all window effects inside the same browser window (in progress, need some js refactoring)
   
   - improve contextual actions menu (change workflow state, rename, delete, copy, paste ...)
