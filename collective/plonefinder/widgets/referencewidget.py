@@ -63,7 +63,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget) :
                 return obj.pretty_title_or_id()
             return '%s : %s ' %(_(u"You don't have permission to access this object"),uid)
         else :
-            raise InvalidValue("uid %s not found in reference tool" % value)
+            return '%s : %s ' %(_(u"Object not found with uid"),uid)
 
     def finderlink(self) :
         """
