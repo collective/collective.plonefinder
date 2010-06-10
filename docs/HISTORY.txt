@@ -27,6 +27,9 @@ SVN Unreleased
 
 * added mime-type icons for filestypes in finder
 
+* FinderSelectWidget : do not raise an error anymore when object is not found 
+  but just returns a message in place of title (object with uid doesn't exist)
+
 1.0.0-b
 -------
 
