@@ -231,19 +231,21 @@ class Finder(BrowserView):
                    
         self.cleanrequest = self.cleanRequest()          
         
+        self.allowupload = request.get('allowupload', self.allowupload)
         # upload disallowed if user do not have permission to 
         # Add portal content on context        
-        if self.allowupload or request.get('allowupload', False) :
+        if self.allowupload :
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.scope)) :
                 self.allowupload = False         
             if not IFinderUploadCapable.providedBy(self.scope) :
                 self.allowupload = False           
         
+        self.allowaddfolder = request.get('allowaddfolder', self.allowaddfolder)
         # allowaddfolder disallowed if user do not have permission to 
         # add portal content on context        
         # disallowed also when context is not IFinderUploadCapable
-        if self.allowaddfolder or request.get('allowaddfolder', False) :
+        if self.allowaddfolder :
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.scope)) :
                 self.allowaddfolder = False 
