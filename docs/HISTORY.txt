@@ -30,6 +30,9 @@ SVN Unreleased
 * FinderSelectWidget : do not raise an error anymore when object is not found 
   but just returns a message in place of title (object with uid doesn't exist)
 
+* Fix regression on allowupload (was never allowed)
+  macadames - 2010/07/21
+
 1.0.0-b
 -------
 
