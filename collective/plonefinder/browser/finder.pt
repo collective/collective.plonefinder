@@ -90,7 +90,8 @@
                        title="Search Site"
                        tabindex="0"
                        tal:attributes="value SearchableText" /> 
-                <select name="browsedpath" id="browsedpath">
+                <select name="browsedpath" id="browsedpath"
+                        tal:condition="view/browse">
                   <option tal:attributes="value portalpath"
                           i18n:translate="label_all_site">
                     all site
@@ -101,6 +102,12 @@
                     this folder
                   </option>
                 </select>
+                
+                <input type="hidden"
+                       tal:attributes="value browsedpath"
+                       name="browsedpath"
+                       tal:condition="not:view/browse" />
+                       
                 <input class="searchBrowserButton" 
                        type="submit" 
                        value="Search"
