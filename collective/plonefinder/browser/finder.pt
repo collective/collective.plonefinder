@@ -182,10 +182,10 @@
 
           <table border="0" cellpading="0" cellspacing="0" class="columns" id="browser-columns">
             <tr>
-              <td class="column" id="column-1">
-                <div id="plone-browser-navigation"
-                     class="finder_panel"
+              <td class="column" id="column-1"
                      tal:condition="view/browse">
+                <div id="plone-browser-navigation"
+                     class="finder_panel">
                   <div class="listContainer folder"
                        tal:define="path view/browsedpath;
                                    title view/scopetitle">

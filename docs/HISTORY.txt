@@ -33,6 +33,10 @@ SVN Unreleased
 * Fix regression on allowupload (was never allowed)
   macadames - 2010/07/21
 
+* Fix enable/disable browsing using request or self.browse = False
+  macadames - 2010/07/21
+
+
 1.0.0-b
 -------
 
