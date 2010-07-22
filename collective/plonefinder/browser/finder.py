@@ -103,7 +103,12 @@ class Finder(BrowserView):
         context = aq_inner(self.context)
         request = aq_inner(self.request)                                       
         session = request.get('SESSION', None)  
+        # use self.browse=False (or browse=False in request) to disallow browsing globally
+        self.browse = request.get('browse', self.browse)        
         self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
+        if not self.browse :
+            self.showbreadcrumbs = False
+            
         self.setScopeInfos(context, request, self.showbreadcrumbs)                            
                     
         # use self.multiselect = False (or multiselect = False in request)
@@ -128,9 +133,6 @@ class Finder(BrowserView):
         self.typeview = request.get('typeview', self.typeview)    
         if self.typeview == 'image' :
             self.typecss = 'float'      
-              
-        # use self.browse=False (or browse=False in request) to disallow browsing
-        self.browse = request.get('browse', self.browse)
 
         if request.get('finder_sort_on') :
             self.sort_on = request.get('finder_sort_on')
