@@ -61,14 +61,18 @@ THE SOFTWARE.
     margin-bottom: 15px;
 }
 
-#uploadify-upload {
-    text-decoration: none;
-    cursor: pointer;
+.uploadifybuttons {
+    clear: both;
+    margin-top: 10px;
+    padding: 0 10px;
+    display: none;
 }
-#uploadify-clear-queue {
-    margin-left: 10px;
-    text-decoration: none;
-    cursor: pointer;
+
+.uploadifybutton {
+    cursor:pointer;
+    text-align:center;
+    text-decoration:none;
+    padding: 2px 20px;
 }
 
 #label-upload{
@@ -79,6 +83,16 @@ THE SOFTWARE.
 
 #uploaderUploader {
   margin: 10px 0 0 10px !important;
+}
+
+.uploadField {
+  margin-bottom: 3px;
+}
+
+.uploadField input {
+  font-size: 10px;
+  width: 130px;
+  height: 13px;
 }
 
 /* vim: set ft=css ts=4 sw=4 expandtab : */
