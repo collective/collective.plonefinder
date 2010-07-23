@@ -12,10 +12,26 @@
 <div id="finder-uploader"
      i18n:domain="collective.plonefinder">
     <div id="uploadify">
-      <label i18n:translate="label_upload_your_files"
-             id="label-upload">Upload your files : </label>    
+      <label i18n:translate="label_choose_your_files"
+             id="label-upload">Choose your files : </label>    
       <!-- uploadify comes here -->
       <div id="uploader"></div>              
+      <!-- upload button -->
+      <input type="hidden"
+             id="uploadify_label_file_title"
+             i18n:domain="plone"
+             i18n:attributes="value Title" />
+             
+      <div class="uploadifybuttons">
+        <a id="uploadify-upload"
+           class="context uploadifybutton"
+           i18n:translate="label_upload_files"
+           href="javascript:sendDataAndUpload();">Upload Files</a>
+        <!-- clear button -->
+        <a id="uploadify-clear-queue"
+           class="context uploadifybutton"
+           href="javascript:jQuery('#uploader').uploadifyClearQueue();">Clear Queue</a>      
+      </div>
     </div>        
     <!-- uploadify javascript -->
     <script type="text/javascript"

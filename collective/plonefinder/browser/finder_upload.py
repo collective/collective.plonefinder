@@ -70,6 +70,42 @@ class FinderUploadView(BrowserView):
         return self.template()
 
 FINDER_UPLOAD_JS = """
+    addUploadifyFields = function(event, data ) {
+        var labelfiletitle = jQuery('#uploadify_label_file_title').val();
+        jQuery('.uploadifyQueueItem').each(function() {
+            ID = jQuery(this).attr('id').replace('uploader','');
+            if (!jQuery('.uploadField' ,this).length) {
+              jQuery('.cancel' ,this).after('\
+                  <div class="uploadField">\
+                      <label>' + labelfiletitle + ' : </label>\
+                      <input type="text" \
+                             class="file_title_field" \
+                             id="file_title_' + ID + '" \
+                             name="file_title_' + ID + '" \
+                             value="" />\
+                  </div>\
+              ');            
+            }
+        });
+        return showButtons();
+    }
+    showButtons = function() {
+        if (jQuery('.uploadifyQueueItem').length) {
+            jQuery('.uploadifybuttons').show();
+            return 'ok';
+        }
+        return false;
+    }
+    sendDataAndUpload = function() {
+        filesData = {};
+        jQuery('.uploadifyQueueItem input').each(function(){
+            key = jQuery(this).attr('name');
+            value = jQuery(this).val();
+            filesData[key]= value;
+        })
+        jQuery('#uploader').uploadifySettings('scriptData', filesData);
+        jQuery('#uploader').uploadifyUpload();
+    }
     jQuery(document).ready(function() {
         jQuery('#uploader').uploadify({
             'uploader'      : '%(portal_url)s/++resource++plonefinder_static/uploader.swf',
@@ -87,7 +123,8 @@ FINDER_UPLOAD_JS = """
             'buttonText'    : '%(ul_button_text)s',
             'buttonImg'     : '%(ul_button_image)s',
             'scriptAccess'  : '%(ul_script_access)s',
-            'hideButton'    : %(ul_hide_button)s
+            'hideButton'    : %(ul_hide_button)s,
+            'onSelectOnce'      : addUploadifyFields
         });
     });
 """
@@ -111,7 +148,7 @@ class FinderUploadInit(BrowserView):
             portal_url          = portal_url,
             context_url         = context.absolute_url(),
             physical_path       = "/".join(context.getPhysicalPath()),
-            ul_auto_upload      = sp.getProperty('ul_auto_upload', 'true'),
+            ul_auto_upload      = sp.getProperty('ul_auto_upload', 'false'),
             ul_allow_multi      = sp.getProperty('ul_allow_multi', 'true'),
             ul_sim_upload_limit = sp.getProperty('ul_sim_upload_limit', 4),
             ul_size_limit       = sp.getProperty('ul_size_limit', ''),
@@ -172,6 +209,8 @@ class FinderUploadFile(BrowserView):
         file_data = request.form.get("Filedata", None)
         content_type = mimetypes.guess_type(file_name)[0]
         portal_type = session.get('typeupload', request.get('typeupload', ''))
+        
+        print '\n\n\n>>>>> %s<<<<<' %str(request.form)
         
         if not portal_type :
             ctr = getToolByName(context, 'content_type_registry')
