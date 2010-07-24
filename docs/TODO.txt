@@ -12,8 +12,6 @@ TODO :
 
 - add new features for each browsed item (rename, change State, delete, copy/cut/paste)
 
-- add simple upload form
-
 - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
 
 - add GS profile for some options  

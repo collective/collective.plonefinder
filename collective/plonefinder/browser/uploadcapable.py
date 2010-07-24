@@ -46,7 +46,7 @@ class FinderUploadCapableFileFactory(object):
     def __init__(self, context):
         self.context = aq_inner(context)
 
-    def __call__(self, name, content_type, data, portal_type):
+    def __call__(self, name, title, content_type, data, portal_type):
 
         context = aq_inner(self.context)
         charset = context.getCharset()
@@ -64,7 +64,11 @@ class FinderUploadCapableFileFactory(object):
             obj = ploneutils._createObjectByType(portal_type, self.context, newid)
             mutator = obj.getPrimaryField().getMutator(obj)
             mutator(data, content_type=content_type)
-            obj.setTitle(name)
+            if not title :
+                # try to split filenames because we don't want 
+                # big titles without spaces
+                title = name.split('.')[0].replace('_',' ').replace('-',' ')
+            obj.setTitle(title)
             obj.reindexObject()
             transaction.commit()
         finally:

@@ -39,6 +39,8 @@ SVN Unreleased
 * no search on another path, when browsing is disable
   macadames - 2010/07/22
 
+* title fields added to multiple upload using jquery.uploadify
+  macadames - 2010/07/24
 
 1.0.0-b
 -------
