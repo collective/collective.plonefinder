@@ -77,11 +77,15 @@ FINDER_UPLOAD_JS = """
             if (!jQuery('.uploadField' ,this).length) {
               jQuery('.cancel' ,this).after('\
                   <div class="uploadField">\
-                      <label>' + labelfiletitle + ' : </label>\
+                      <label>' + labelfiletitle + ' : </label> \
+                      <input type="hidden" \
+                             class="file_id_field" \
+                             name="file_id" \
+                             value ="'  + ID + '" /> \
                       <input type="text" \
                              class="file_title_field" \
-                             id="file_title_' + ID + '" \
-                             name="file_title_' + ID + '" \
+                             id="title_' + ID + '" \
+                             name="title" \
                              value="" />\
                   </div>\
               ');            
@@ -97,14 +101,13 @@ FINDER_UPLOAD_JS = """
         return false;
     }
     sendDataAndUpload = function() {
-        filesData = {};
-        jQuery('.uploadifyQueueItem input').each(function(){
-            key = jQuery(this).attr('name');
-            value = jQuery(this).val();
-            filesData[key]= value;
+        jQuery('.uploadifyQueueItem').each(function(){
+            filesData = {};
+            ID = jQuery('.file_id_field',this).val();
+            filesData['title'] = jQuery('.file_title_field',this).val();
+            jQuery('#uploader').uploadifySettings('scriptData', filesData);     
+            jQuery('#uploader').uploadifyUpload(ID);       
         })
-        jQuery('#uploader').uploadifySettings('scriptData', filesData);
-        jQuery('#uploader').uploadifyUpload();
     }
     jQuery(document).ready(function() {
         jQuery('#uploader').uploadify({
@@ -112,7 +115,6 @@ FINDER_UPLOAD_JS = """
             'script'        : '%(context_url)s/@@finder_upload_file',
             'cancelImg'     : '%(portal_url)s/++resource++plonefinder_static/cancel.png',
             'folder'        : '%(physical_path)s',
-            'scriptData'    : {'ticket': '%(ticket)s'},
             'onAllComplete' : Browser.onUploadComplete,
             'auto'          : %(ul_auto_upload)s,
             'multi'         : %(ul_allow_multi)s,
@@ -124,7 +126,8 @@ FINDER_UPLOAD_JS = """
             'buttonImg'     : '%(ul_button_image)s',
             'scriptAccess'  : '%(ul_script_access)s',
             'hideButton'    : %(ul_hide_button)s,
-            'onSelectOnce'      : addUploadifyFields
+            'onSelectOnce'  : addUploadifyFields,
+            'scriptData'    : {'ticket' : '%(ticket)s'}
         });
     });
 """
@@ -209,8 +212,7 @@ class FinderUploadFile(BrowserView):
         file_data = request.form.get("Filedata", None)
         content_type = mimetypes.guess_type(file_name)[0]
         portal_type = session.get('typeupload', request.get('typeupload', ''))
-        
-        print '\n\n\n>>>>> %s<<<<<' %str(request.form)
+        title =  request.form.get("title", None)
         
         if not portal_type :
             ctr = getToolByName(context, 'content_type_registry')
@@ -218,10 +220,10 @@ class FinderUploadFile(BrowserView):
         
         if file_data:
             factory = IFileFactory(context)
-            logger.info("uploading file: filename=%s, content_type=%s, portal_type=%s" % \
-                    (file_name, content_type, portal_type))                             
+            logger.info("uploading file: filename=%s, title=%s, content_type=%s, portal_type=%s" % \
+                    (file_name, title, content_type, portal_type))                             
             
-            f = factory(file_name, content_type, file_data, portal_type)
+            f = factory(file_name, title, content_type, file_data, portal_type)
             logger.info("file url: %s" % f.absolute_url())
         
             SecurityManagement.setSecurityManager(old_sm)   
