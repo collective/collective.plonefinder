@@ -29,7 +29,6 @@ THE SOFTWARE.
     border: 3px solid #E5E5E5;
     margin-top: 5px;
     padding: 5px 10px;
-    width: 210px;
 }
 
 .uploadifyError {
@@ -64,7 +63,7 @@ THE SOFTWARE.
 .uploadifybuttons {
     clear: both;
     margin-top: 10px;
-    padding: 0 10px;
+    text-align:center;
     display: none;
 }
 
@@ -91,7 +90,7 @@ THE SOFTWARE.
 
 .uploadField input {
   font-size: 10px;
-  width: 130px;
+  width: 65%;
   height: 13px;
 }
 
