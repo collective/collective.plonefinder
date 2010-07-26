@@ -29,6 +29,7 @@
            href="javascript:sendDataAndUpload();">Upload Files</a>
         <!-- clear button -->
         <a id="uploadify-clear-queue"
+           i18n:translate="label_clear_queue"
            class="context uploadifybutton"
            href="javascript:jQuery('#uploader').uploadifyClearQueue();">Clear Queue</a>      
       </div>

@@ -17,6 +17,7 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile 
 
 import ticket as ticketmod
+from collective.plonefinder import siteMessageFactory as _
 from collective.plonefinder import logger
 
 
@@ -160,7 +161,7 @@ class FinderUploadInit(BrowserView):
             ul_size_limit       = sp.getProperty('ul_size_limit', ''),
             ul_file_description = sp.getProperty('ul_file_description', ''),
             ul_file_extensions  = sp.getProperty('ul_file_extensions', '*.*;'),
-            ul_button_text      = sp.getProperty('ul_button_text', 'BROWSE'),
+            ul_button_text      = sp.getProperty('ul_button_text', _(u'Browse')),
             ul_button_image     = sp.getProperty('ul_button_image', ''),
             ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
