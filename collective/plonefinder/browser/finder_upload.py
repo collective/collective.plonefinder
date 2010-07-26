@@ -101,10 +101,13 @@ FINDER_UPLOAD_JS = """
         return false;
     }
     sendDataAndUpload = function() {
-        jQuery('.uploadifyQueueItem').each(function(){
+        QueueItems = jQuery('.uploadifyQueueItem');
+        nbItems = QueueItems.length;
+        QueueItems.each(function(i){
             filesData = {};
             ID = jQuery('.file_id_field',this).val();
             filesData['title'] = jQuery('.file_title_field',this).val();
+            if (i==nbItems-1) filesData['ticket_invalidate'] = 'ok';
             jQuery('#uploader').uploadifySettings('scriptData', filesData);     
             jQuery('#uploader').uploadifyUpload(ID);       
         })
@@ -205,9 +208,6 @@ class FinderUploadFile(BrowserView):
         SecurityManagement.newSecurityManager(self.request, user)
         logger.debug('Switched to user "%s"' % username)
         
-        # we must do it only when multiupload is finished
-        # ticketmod.invalidateTicket(url,ticket)        
-        
         file_name = request.form.get("Filename", "")
         file_data = request.form.get("Filedata", None)
         content_type = mimetypes.guess_type(file_name)[0]
@@ -227,8 +227,13 @@ class FinderUploadFile(BrowserView):
             logger.info("file url: %s" % f.absolute_url())
         
             SecurityManagement.setSecurityManager(old_sm)   
+        
+            # invalidate ticket when multiupload is finished
+            if request.form.get("ticket_invalidate", None) :     
+                logger.info("ticket %s is invalidated" % str(ticket))
+                ticketmod.invalidateTicket(url,ticket)  
 
-            return f.absolute_url()        
+            return f.absolute_url()         
     
     
     def __call__(self):
