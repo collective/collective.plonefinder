@@ -10,16 +10,15 @@
   <include package=".browser" />
   <include package=".widgets" />
   
-  <!-- Register the installation GenericSetup extension profile
-       We dont need it for now --> 
+  <!-- Register the installation GenericSetup extension profile --> 
        
-  <!-- genericsetup:registerProfile
+  <genericsetup:registerProfile
       name="default"
       title="Collective Plone Finder"
       directory="profiles/default"
       description="A finder to search/select portal objects for Plone"
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      / --> 
+      /> 
      
   
   <!-- -*- extra stuff goes here -*- -->
