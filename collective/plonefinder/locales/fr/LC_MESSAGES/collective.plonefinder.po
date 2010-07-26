@@ -16,6 +16,7 @@ msgstr ""
 "Domain: collective.plonefinder\n"
 "X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch fr-fr\n"
 
+
 #. Default: "Browse"
 msgid "Browse"
 msgstr "Parcourir"
@@ -26,10 +27,10 @@ msgstr "Choisir les fichiers : "
 
 #. Default: "Upload Files"
 msgid "label_upload_files"
-msgstr "Envoyer les fichiers"
+msgstr "Envoyer fichiers"
 
 #. Default: "Clear Queue"
 msgid "label_clear_queue"
-msgstr "Tout supprimer"
+msgstr "Annuler"
 
 

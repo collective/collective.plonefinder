@@ -68,6 +68,7 @@ class FinderUploadView(BrowserView):
     template = ViewPageTemplateFile("finder_upload.pt")
 
     def __call__(self):
+        context = aq_inner(self.context)
         return self.template()
 
 FINDER_UPLOAD_JS = """
@@ -147,9 +148,12 @@ class FinderUploadInit(BrowserView):
 
     def upload_settings(self):
         context = aq_inner(self.context)
+        request = self.request
+        
         sp = getToolByName(context, "portal_properties").site_properties
         portal_url = getToolByName(context, 'portal_url')()        
         ticket = context.restrictedTraverse('@@ticket')()
+        
         settings = dict(
             ticket              = ticket,
             portal_url          = portal_url,
@@ -161,7 +165,7 @@ class FinderUploadInit(BrowserView):
             ul_size_limit       = sp.getProperty('ul_size_limit', ''),
             ul_file_description = sp.getProperty('ul_file_description', ''),
             ul_file_extensions  = sp.getProperty('ul_file_extensions', '*.*;'),
-            ul_button_text      = sp.getProperty('ul_button_text', _(u'Browse')),
+            ul_button_text      = sp.getProperty('ul_button_text', context.translate(u'Browse', domain="collective.plonefinder")),
             ul_button_image     = sp.getProperty('ul_button_image', ''),
             ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),

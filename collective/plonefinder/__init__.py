@@ -2,7 +2,7 @@
 """
 
 import logging
-from zope.i18nmessageid import MessageFactory
+from zope.i18n import MessageFactory
 logger = logging.getLogger("collective.plonefinder")
 
 siteMessageFactory = MessageFactory("collective.plonefinder")
