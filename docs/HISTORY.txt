@@ -42,6 +42,9 @@ SVN Unreleased
 * title fields added to multiple upload using jquery.uploadify
   macadames - 2010/07/24
 
+* translation for upload labels in french added
+  macadames - 2010/07/26
+
 1.0.0-b
 -------
 

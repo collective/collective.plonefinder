@@ -1,0 +1,35 @@
+# Translation of collective.plonefinder.pot to French
+msgid ""
+msgstr ""
+"Project-Id-Version: collective.plonefinder\n"
+"POT-Creation-Date: 2010-07-26 11:30+0200\n"
+"PO-Revision-Date: 2010-07-26 11:30+0200\n"
+"Last-Translator: Jean-mat Grimaldi <jeanmat.grimaldi@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language-Code: fr\n"
+"Language-Name: French\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.plonefinder\n"
+"X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch fr-fr\n"
+
+#. Default: "Browse"
+msgid "Browse"
+msgstr "Parcourir"
+
+#. Default: "Choose your files : "
+msgid "label_choose_your_files"
+msgstr "Choisir les fichiers : "
+
+#. Default: "Upload Files"
+msgid "label_upload_files"
+msgstr "Envoyer les fichiers"
+
+#. Default: "Clear Queue"
+msgid "label_clear_queue"
+msgstr "Tout supprimer"
+
+
