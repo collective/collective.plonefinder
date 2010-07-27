@@ -7,6 +7,8 @@ TODO :
 - other cosmetic changes :
 
   - position for listing bar is not optimal
+  
+  - listing bar style is not ok with plone 3.x
 
 - i18n
 
@@ -14,7 +16,9 @@ TODO :
 
 - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
 
-- add GS profile for some options  
+- add some options in GS profile
+
+- important : use INavigationRoot as browser root (minor changes in code)
 
 - add doctests and jquery tests
 
