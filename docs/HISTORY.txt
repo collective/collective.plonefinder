@@ -45,6 +45,11 @@ SVN Unreleased
 * translation for upload labels in french added
   macadames - 2010/07/26
 
+* authentication for flash upload is done using cookie
+  when possible (same method as collective.uploadify)
+  otherwise using a ticket (method PloneFlashUpload)
+  macadames - 2010/07/28
+
 1.0.0-b
 -------
 

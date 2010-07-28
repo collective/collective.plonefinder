@@ -53,6 +53,7 @@
       />  	        
 
   <!-- Finder Upload View -->
+       
   <browser:page
       for=".interfaces.IFinderUploadCapable"
       name="finder_upload"
@@ -65,12 +66,12 @@
       name="finder_upload_init"
       class=".finder_upload.FinderUploadInit"
       permission="cmf.AddPortalContent"/>      
-      
-  <!-- Finder Upload File 
-       the permission Zope.Public is important
-       because flash uploadify loose the authentification
-       we use our own security implementation with a ticket -->  
-       
+  
+  <!-- we use permission zope.Public 
+       on upload_file view (called in flash)
+       for users authenticated 
+       without cookie -->   
+           
   <browser:page
       for="*"
       name="finder_upload_file"
@@ -78,7 +79,9 @@
       permission="zope.Public"/> 
 
 
-  <!-- ticket view which generate a ticket for each user/folder absolute url -->
+  <!-- ticket view which generate a ticket for each user/folder absolute url
+       used only when no user cookie is available (not standard authentification) -->
+
   <browser:page
       for=".interfaces.IFinderUploadCapable"
       name="ticket"

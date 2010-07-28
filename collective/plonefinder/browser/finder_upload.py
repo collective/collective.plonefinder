@@ -1,8 +1,6 @@
 # code taken from collective.uploadify
 # for the base of the logic
-# with some ameliorations
-# use the ticket.py from PloneFlashUpload
-# to avoid authentification problems with flash upload form
+# with many ameliorations
 
 import mimetypes
 
@@ -26,7 +24,13 @@ def encode(s):
     """
 
     return "d".join(map(str, map(ord, s)))
-    
+
+
+def decode(s):
+    """ decode string
+    """
+
+    return "".join(map(chr, map(int, s.split("d"))))
     
 def find_user(context, userid):
     """Walk up all of the possible acl_users to find the user with the
@@ -58,8 +62,6 @@ def find_user(context, userid):
         user = user.__of__(acl_users)
 
     return user
-    
-
 
 class FinderUploadView(BrowserView):
     """ The Finder Upload View
@@ -132,7 +134,7 @@ FINDER_UPLOAD_JS = """
             'scriptAccess'  : '%(ul_script_access)s',
             'hideButton'    : %(ul_hide_button)s,
             'onSelectOnce'  : addUploadifyFields,
-            'scriptData'    : {'ticket' : '%(ticket)s'}
+            'scriptData'    : {'ticket' : '%(ticket)s', 'cookie': '%(cookie)s', 'typeupload' : '%(typeupload)s'}
         });
     });
 """
@@ -149,13 +151,20 @@ class FinderUploadInit(BrowserView):
     def upload_settings(self):
         context = aq_inner(self.context)
         request = self.request
+        session = request.get('SESSION', None)
         
         sp = getToolByName(context, "portal_properties").site_properties
-        portal_url = getToolByName(context, 'portal_url')()        
-        ticket = context.restrictedTraverse('@@ticket')()
+        portal_url = getToolByName(context, 'portal_url')()    
+        ticket = ''
+        cookie = encode(request.cookies.get('__ac', ''))
+        # use a ticket when cookie is empty
+        if not cookie :
+            ticket = context.restrictedTraverse('@@ticket')()
         
         settings = dict(
             ticket              = ticket,
+            cookie              = cookie,
+            typeupload          = session.get('typeupload', request.get('typeupload', '')),
             portal_url          = portal_url,
             context_url         = context.absolute_url(),
             physical_path       = "/".join(context.getPhysicalPath()),
@@ -181,42 +190,48 @@ class FinderUploadInit(BrowserView):
 class FinderUploadFile(BrowserView):
     """ Upload a file
     """
+
+    def __init__(self, context, request):        
+        self.context = context
+        self.request = request        
                             
     def finder_upload_file(self) :
         
         context = aq_inner(self.context)
-        request = self.request
-        session = request.get('SESSION', None)
-        
-        ticket = self.request.form.get('ticket',None)
-        if ticket is None:
-            # try to get ticket from QueryString in cas of GET method
-            qs = self.request.get('QUERY_STRING','ticket=')
-            ticket = qs.split('=')[-1] or None
-
-        logger.debug('Ticket being used is "%s"' % str(ticket))        
-        
-        logger.info('Ticket being used is "%s"' % str(ticket))   
-
-        if ticket is None:
-            raise Unauthorized('No ticket specified')             
+        request = self.request          
         
         url = context.absolute_url()
-        username = ticketmod.ticketOwner(url, ticket)
-        if username is None:
-            logger.warn('Ticket "%s" was invalidated, cannot be used '
-                        'any more.' % str(ticket))
-            raise Unauthorized('Ticket is not valid')
-
-        old_sm = SecurityManagement.getSecurityManager()
-        user = find_user(context, username)
-        SecurityManagement.newSecurityManager(self.request, user)
-        logger.debug('Switched to user "%s"' % username)
+        cookie = self.request.form.get("cookie")
+        if cookie:
+            self.request.cookies["__ac"] = decode(cookie)
+            logger.info('Authenticate using plone standard cookie')
         
+        # if cookie is empty authentication is done using ticket
+        else :
+            ticket = self.request.form.get('ticket',None)
+            if ticket is None:
+                # try to get ticket from QueryString in case of GET method
+                qs = self.request.get('QUERY_STRING','ticket=')
+                ticket = qs.split('=')[-1] or None  
+            if ticket is None:
+                raise Unauthorized('No cookie, and no ticket specified')        
+            
+            logger.info('Authenticate using ticket, the ticket is "%s"' % str(ticket)) 
+            username = ticketmod.ticketOwner(url, ticket)
+            if username is None:
+                logger.info('Ticket "%s" was invalidated, cannot be used '
+                            'any more.' % str(ticket))
+                raise Unauthorized('Ticket is not valid')
+    
+            old_sm = SecurityManagement.getSecurityManager()
+            user = find_user(context, username)
+            SecurityManagement.newSecurityManager(self.request, user)
+            logger.info('Switched to user "%s"' % username)        
+            
         file_name = request.form.get("Filename", "")
         file_data = request.form.get("Filedata", None)
         content_type = mimetypes.guess_type(file_name)[0]
-        portal_type = session.get('typeupload', request.get('typeupload', ''))
+        portal_type = request.form.get('typeupload', '')
         title =  request.form.get("title", None)
         
         if not portal_type :
@@ -230,14 +245,15 @@ class FinderUploadFile(BrowserView):
             
             f = factory(file_name, title, content_type, file_data, portal_type)
             logger.info("file url: %s" % f.absolute_url())
-        
-            SecurityManagement.setSecurityManager(old_sm)   
-        
-            # invalidate ticket when multiupload is finished
-            if request.form.get("ticket_invalidate", None) :     
-                logger.info("ticket %s is invalidated" % str(ticket))
-                ticketmod.invalidateTicket(url,ticket)  
-
+            
+            if not cookie :
+                SecurityManagement.setSecurityManager(old_sm)   
+            
+                # invalidate ticket when multiupload is finished
+                if request.form.get("ticket_invalidate", None) :     
+                    logger.info("ticket %s is invalidated" % str(ticket))
+                    ticketmod.invalidateTicket(url,ticket)  
+                    
             return f.absolute_url()         
     
     
