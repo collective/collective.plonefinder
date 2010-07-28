@@ -26,7 +26,8 @@ from thread import allocate_lock
 from Acquisition import aq_inner
 from zope import interface
 from zope import component
-
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.filerepresentation.interfaces import IFileFactory, IDirectoryFactory
 from zope.app.container.interfaces import INameChooser
 from plone.i18n.normalizer.interfaces import IIDNormalizer
@@ -55,20 +56,18 @@ class FinderUploadCapableFileFactory(object):
         normalizer = component.getUtility(IIDNormalizer)
         chooser = INameChooser(self.context)
         newid = chooser.chooseName(normalizer.normalize(name), self.context.aq_parent)
+        if not title :
+            # try to split filenames because we don't want 
+            # big titles without spaces
+            title = name.split('.')[0].replace('_',' ').replace('-',' ')
 
-        # otherwise I get ZPublisher.Conflict ConflictErrors
-        # when uploading multiple files
         upload_lock.acquire()
         try:
             transaction.begin()
-            obj = ploneutils._createObjectByType(portal_type, self.context, newid)
+            context.invokeFactory(type_name=portal_type, id=newid, title=title)
+            obj = getattr(context, newid)
             mutator = obj.getPrimaryField().getMutator(obj)
             mutator(data, content_type=content_type)
-            if not title :
-                # try to split filenames because we don't want 
-                # big titles without spaces
-                title = name.split('.')[0].replace('_',' ').replace('-',' ')
-            obj.setTitle(title)
             obj.reindexObject()
             transaction.commit()
         finally:
