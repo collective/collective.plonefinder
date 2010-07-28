@@ -111,7 +111,6 @@ FINDER_UPLOAD_JS = """
             filesData = {};
             ID = jQuery('.file_id_field',this).val();
             filesData['title'] = jQuery('.file_title_field',this).val();
-            if (i==nbItems-1) filesData['ticket_invalidate'] = 'ok';
             jQuery('#uploader').uploadifySettings('scriptData', filesData);     
             jQuery('#uploader').uploadifyUpload(ID);       
         })
@@ -193,21 +192,19 @@ class FinderUploadFile(BrowserView):
 
     def __init__(self, context, request):        
         self.context = context
-        self.request = request        
+        self.request = request     
+        self.cookie = self.request.form.get("cookie")
+        if self.cookie :
+            self.request.cookies["__ac"] = decode(self.cookie)
+            logger.info('Authenticate using plone standard cookie')   
                             
     def finder_upload_file(self) :
         
         context = aq_inner(self.context)
         request = self.request          
-        
         url = context.absolute_url()
-        cookie = self.request.form.get("cookie")
-        if cookie:
-            self.request.cookies["__ac"] = decode(cookie)
-            logger.info('Authenticate using plone standard cookie')
-        
-        # if cookie is empty authentication is done using ticket
-        else :
+        # if cookie is empty authentication is done using a ticket
+        if not self.cookie :
             ticket = self.request.form.get('ticket',None)
             if ticket is None:
                 # try to get ticket from QueryString in case of GET method
@@ -246,13 +243,8 @@ class FinderUploadFile(BrowserView):
             f = factory(file_name, title, content_type, file_data, portal_type)
             logger.info("file url: %s" % f.absolute_url())
             
-            if not cookie :
+            if not self.cookie :
                 SecurityManagement.setSecurityManager(old_sm)   
-            
-                # invalidate ticket when multiupload is finished
-                if request.form.get("ticket_invalidate", None) :     
-                    logger.info("ticket %s is invalidated" % str(ticket))
-                    ticketmod.invalidateTicket(url,ticket)  
                     
             return f.absolute_url()         
     

@@ -50,6 +50,11 @@ SVN Unreleased
   otherwise using a ticket (method PloneFlashUpload)
   macadames - 2010/07/28
 
+* use standard archetypes method "invokeFactory", to
+  create new objects using uploaded files, to respect
+  the complete plone createObject process.
+  macadames - 2010/07/28
+
 1.0.0-b
 -------
 
