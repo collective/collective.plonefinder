@@ -55,6 +55,10 @@ SVN Unreleased
   the complete plone createObject process.
   macadames - 2010/07/28
 
+* added new mediaupload key in request to set content-type
+  for upload (very useful with jquery.uploadify)
+  macadames - 2010/07/28
+
 1.0.0-b
 -------
 

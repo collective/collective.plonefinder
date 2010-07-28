@@ -13,6 +13,7 @@ from zope.filerepresentation.interfaces import IFileFactory
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile 
+from Products.ATContentTypes.interfaces import IImageContent
 
 import ticket as ticketmod
 from collective.plonefinder import siteMessageFactory as _
@@ -62,6 +63,25 @@ def find_user(context, userid):
         user = user.__of__(acl_users)
 
     return user
+
+def _listTypesForInterface(context, interface):
+    """
+    List of portal types that have File interface
+    @param context: context
+    @param interface: Zope interface
+    @return: ['Image', 'News Item']
+    """
+    archetype_tool = getToolByName(context, 'archetype_tool')
+    all_types = archetype_tool.listRegisteredTypes(inProject=True)
+    # zope3 Interface
+    try :
+        all_types = [tipe['portal_type'] for tipe in all_types
+                      if interface.implementedBy(tipe['klass'])]
+    # zope2 interface
+    except :
+        all_types = [tipe['portal_type'] for tipe in all_types
+                      if interface.isImplementedByInstancesOf(tipe['klass'])]
+    return dict.fromkeys(all_types).keys() 
 
 class FinderUploadView(BrowserView):
     """ The Finder Upload View
@@ -147,6 +167,30 @@ class FinderUploadInit(BrowserView):
         super(FinderUploadInit, self).__init__(context, request)
         self.context = aq_inner(context)
 
+    def ul_content_types_infos (self, mediaupload):
+        """
+        return some content types infos depending on mediaupload type
+        mediaupload could be 'image', 'video', 'audio' or any
+        extension like '*.doc'
+        """
+        context = aq_inner(self.context)
+        ext = '*.*;'
+        msg = u'Choose files to upload'
+        if mediaupload == 'image' :
+            ext = '*.jpg;*.jpeg;*.gif;*.png;'
+            msg = u'Choose images to upload'
+        elif mediaupload == 'video' :
+            ext = '*.flv;*.avi;*.wmv;*.mpg;'
+            msg = u'Choose video files to upload'
+        elif mediaupload == 'audio' :
+            ext = '*.mp3;*.wav;*.ogg;*.mp4;*.wma;*.aif;'
+            msg = u'Choose audio files to upload'
+        else :
+            ext = mediaupload 
+            msg = u'Choose file for upload : ' + ext 
+        
+        return ( ext, context.translate(msg, domain="collective.plonefinder"))
+    
     def upload_settings(self):
         context = aq_inner(self.context)
         request = self.request
@@ -163,22 +207,36 @@ class FinderUploadInit(BrowserView):
         settings = dict(
             ticket              = ticket,
             cookie              = cookie,
-            typeupload          = session.get('typeupload', request.get('typeupload', '')),
             portal_url          = portal_url,
+            typeupload          = '',
             context_url         = context.absolute_url(),
             physical_path       = "/".join(context.getPhysicalPath()),
             ul_auto_upload      = sp.getProperty('ul_auto_upload', 'false'),
             ul_allow_multi      = sp.getProperty('ul_allow_multi', 'true'),
             ul_sim_upload_limit = sp.getProperty('ul_sim_upload_limit', 4),
             ul_size_limit       = sp.getProperty('ul_size_limit', ''),
-            ul_file_description = sp.getProperty('ul_file_description', ''),
-            ul_file_extensions  = sp.getProperty('ul_file_extensions', '*.*;'),
             ul_button_text      = sp.getProperty('ul_button_text', context.translate(u'Browse', domain="collective.plonefinder")),
             ul_button_image     = sp.getProperty('ul_button_image', ''),
             ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
         )        
         
+        mediaupload = session.get('mediaupload', request.get('mediaupload', ''))  
+        typeupload = session.get('typeupload', request.get('typeupload', ''))
+        settings['typeupload'] = typeupload
+        if mediaupload :
+            ul_content_types_infos = self.ul_content_types_infos(mediaupload)
+        elif typeupload :
+            imageTypes = _listTypesForInterface(context, IImageContent)
+            if typeupload in imageTypes :
+                ul_content_types_infos = self.ul_content_types_infos('image')
+        else :
+            ul_content_types_infos = (sp.getProperty('ul_file_extensions', '*.*;'),
+                                      sp.getProperty('ul_file_description', ''),)
+        
+        settings['ul_file_extensions'] = ul_content_types_infos[0]
+        settings['ul_file_description'] = ul_content_types_infos[1]
+            
         return settings
 
     def __call__(self):
