@@ -22,7 +22,8 @@ __docformat__ = 'plaintext'
 
 import transaction
 from thread import allocate_lock
-
+from AccessControl import Unauthorized
+from ZODB.POSException import ConflictError
 from Acquisition import aq_inner
 from zope import interface
 from zope import component
@@ -52,7 +53,7 @@ class FinderUploadCapableFileFactory(object):
         context = aq_inner(self.context)
         charset = context.getCharset()
         name = name.decode(charset)
-
+        error = ''
         normalizer = component.getUtility(IIDNormalizer)
         chooser = INameChooser(self.context)
         newid = chooser.chooseName(normalizer.normalize(name), self.context.aq_parent)
@@ -61,18 +62,31 @@ class FinderUploadCapableFileFactory(object):
             # big titles without spaces
             title = name.split('.')[0].replace('_',' ').replace('-',' ')
 
-        upload_lock.acquire()
-        try:
+        if newid in context.objectIds() :
+            error = 'Object id %s always exist' %newid
+        else :
+            upload_lock.acquire()
             transaction.begin()
-            context.invokeFactory(type_name=portal_type, id=newid, title=title)
-            obj = getattr(context, newid)
-            mutator = obj.getPrimaryField().getMutator(obj)
-            mutator(data, content_type=content_type)
-            obj.reindexObject()
+            try:
+                context.invokeFactory(type_name=portal_type, id=newid, title=title)
+            except Unauthorized : 
+                error = 'You are not authorized to upload'
+            except ConflictError : 
+                error = 'ZODB Conflict Error'
+            except :
+                error = 'Unknown error during upload'
+            if not error :
+                obj = getattr(context, newid)
+                mutator = obj.getPrimaryField().getMutator(obj)
+                mutator(data, content_type=content_type)
+                obj.reindexObject()
             transaction.commit()
-        finally:
             upload_lock.release()
-        return obj
+        
+        if not error :
+            return obj
+        else :
+            raise error
         
 class FinderCreateFolderCapableFactory(object):
     interface.implements(IDirectoryFactory)

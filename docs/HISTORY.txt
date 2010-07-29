@@ -59,6 +59,10 @@ SVN Unreleased
   for upload (very useful with jquery.uploadify)
   macadames - 2010/07/28
 
+* improve jquery.uploadify process with errors handling
+  macadames - 2010/07/29
+  
+
 1.0.0-b
 -------
 

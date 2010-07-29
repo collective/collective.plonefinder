@@ -33,4 +33,32 @@ msgstr "Envoyer fichiers"
 msgid "label_clear_queue"
 msgstr "Annuler"
 
+#. Default: "All files uploaded with success."
+msgid "All files uploaded with success."
+msgstr "Tous les fichiers ont été envoyé avec succès."
+
+#. Default: " files uploaded with success, "
+msgid " files uploaded with success, "
+msgstr " fichiers envoyés avec succès, "
+
+#. Default: " file's upload return an error."
+msgid " file's upload return an error."
+msgstr " envois de fichiers retournent une erreur."
+
+#. Default: "Choose files to upload"
+msgid "Choose files to upload"
+msgstr "Choisir les fichiers à envoyer"
+
+#. Default: "Choose images to upload"
+msgid "Choose images to upload"
+msgstr "Choisir les images à envoyer"
+
+#. Default: "Choose video files to upload"
+msgid "Choose video files to upload"
+msgstr "Choisir les fichiers vidéo à envoyer"
+
+#. Default: "Choose audio files to upload"
+msgid "Choose audio files to upload"
+msgstr "Choisir les fichiers audio à envoyer"
+
 

@@ -135,13 +135,24 @@ FINDER_UPLOAD_JS = """
             jQuery('#uploader').uploadifyUpload(ID);       
         })
     }
+    onAllUploadsComplete = function(event, data){
+        if (!data.errors) {
+           alert('%(ul_msg_all_sucess)s');
+           Browser.onUploadComplete();
+        }
+        else {
+           msg= data.filesUploaded + '%(ul_msg_some_sucess)s' + data.errors + '%(ul_msg_some_errors)s';
+           alert(msg);
+        }
+    }
     jQuery(document).ready(function() {
         jQuery('#uploader').uploadify({
             'uploader'      : '%(portal_url)s/++resource++plonefinder_static/uploader.swf',
             'script'        : '%(context_url)s/@@finder_upload_file',
+            //'checkScript'   : '%(context_url)s/@@finder_upload_check_file',
             'cancelImg'     : '%(portal_url)s/++resource++plonefinder_static/cancel.png',
             'folder'        : '%(physical_path)s',
-            'onAllComplete' : Browser.onUploadComplete,
+            'onAllComplete' : onAllUploadsComplete,
             'auto'          : %(ul_auto_upload)s,
             'multi'         : %(ul_allow_multi)s,
             'simUploadLimit': '%(ul_sim_upload_limit)s',
@@ -189,8 +200,14 @@ class FinderUploadInit(BrowserView):
             ext = mediaupload 
             msg = u'Choose file for upload : ' + ext 
         
-        return ( ext, context.translate(msg, domain="collective.plonefinder"))
+        # XXX fixme : the _ (SiteMessageFactory) doesn't work
+        #return ( ext, _(msg))
+        return ( ext, self._utranslate(msg))
     
+    def _utranslate(self, msg):
+        context = aq_inner(self.context)
+        return context.utranslate(msg, domain="collective.plonefinder")
+
     def upload_settings(self):
         context = aq_inner(self.context)
         request = self.request
@@ -219,6 +236,9 @@ class FinderUploadInit(BrowserView):
             ul_button_image     = sp.getProperty('ul_button_image', ''),
             ul_hide_button      = sp.getProperty('ul_hide_button', 'false'),
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
+            ul_msg_all_sucess   = self._utranslate( u'All files uploaded with success.'),
+            ul_msg_some_sucess   = self._utranslate( u' files uploaded with success, '),
+            ul_msg_some_errors   = self._utranslate( u" file's upload return an error."),
         )        
         
         mediaupload = session.get('mediaupload', request.get('mediaupload', ''))  
@@ -243,45 +263,59 @@ class FinderUploadInit(BrowserView):
         settings = self.upload_settings()
         return FINDER_UPLOAD_JS % settings        
         
-        
-class FinderUploadFile(BrowserView):
-    """ Upload a file
-    """
 
+class FinderUploadAuthenticate(BrowserView):
+    """
+    base view for finder upload authentication
+    """
     def __init__(self, context, request):        
         self.context = context
         self.request = request     
         self.cookie = self.request.form.get("cookie")
         if self.cookie :
             self.request.cookies["__ac"] = decode(self.cookie)
-            logger.info('Authenticate using plone standard cookie')   
+            logger.info('Authenticate using plone standard cookie')    
+            
+    def _auth_with_ticket (self):
+        """
+        when cookie is empty authentication is done using a ticket
+        """
+        
+        context = aq_inner(self.context)
+        request = self.request
+        url = context.absolute_url()
+
+        ticket = request.form.get('ticket',None)
+        if ticket is None:
+            # try to get ticket from QueryString in case of GET method
+            qs = request.get('QUERY_STRING','ticket=')
+            ticket = qs.split('=')[-1] or None  
+        if ticket is None:
+            raise Unauthorized('No cookie, and no ticket specified')        
+        
+        logger.info('Authenticate using ticket, the ticket is "%s"' % str(ticket)) 
+        username = ticketmod.ticketOwner(url, ticket)
+        if username is None:
+            logger.info('Ticket "%s" was invalidated, cannot be used '
+                        'any more.' % str(ticket))
+            raise Unauthorized('Ticket is not valid')
+
+        self.old_sm = SecurityManagement.getSecurityManager()
+        user = find_user(context, username)
+        SecurityManagement.newSecurityManager(self.request, user)
+        logger.info('Switched to user "%s"' % username)   
+
+        
+class FinderUploadFile(FinderUploadAuthenticate):
+    """ Upload a file
+    """  
                             
     def finder_upload_file(self) :
         
         context = aq_inner(self.context)
-        request = self.request          
-        url = context.absolute_url()
-        # if cookie is empty authentication is done using a ticket
+        request = self.request        
         if not self.cookie :
-            ticket = self.request.form.get('ticket',None)
-            if ticket is None:
-                # try to get ticket from QueryString in case of GET method
-                qs = self.request.get('QUERY_STRING','ticket=')
-                ticket = qs.split('=')[-1] or None  
-            if ticket is None:
-                raise Unauthorized('No cookie, and no ticket specified')        
-            
-            logger.info('Authenticate using ticket, the ticket is "%s"' % str(ticket)) 
-            username = ticketmod.ticketOwner(url, ticket)
-            if username is None:
-                logger.info('Ticket "%s" was invalidated, cannot be used '
-                            'any more.' % str(ticket))
-                raise Unauthorized('Ticket is not valid')
-    
-            old_sm = SecurityManagement.getSecurityManager()
-            user = find_user(context, username)
-            SecurityManagement.newSecurityManager(self.request, user)
-            logger.info('Switched to user "%s"' % username)        
+            self._auth_with_ticket()         
             
         file_name = request.form.get("Filename", "")
         file_data = request.form.get("Filedata", None)
@@ -302,7 +336,7 @@ class FinderUploadFile(BrowserView):
             logger.info("file url: %s" % f.absolute_url())
             
             if not self.cookie :
-                SecurityManagement.setSecurityManager(old_sm)   
+                SecurityManagement.setSecurityManager(self.old_sm)   
                     
             return f.absolute_url()         
     
@@ -311,5 +345,36 @@ class FinderUploadFile(BrowserView):
         """
         """        
         return self.finder_upload_file()  
+
+class FinderUploadCheckFile(BrowserView):
+    """
+    check if file exists
+    """
+     
+
+    def finder_upload_check_file(self) :
+        
+        context = aq_inner(self.context)
+        request = self.request          
+        url = context.absolute_url()       
+        
+        always_exist = {}
+        formdict = request.form
+        ids = context.objectIds()
+        
+        for k,v in formdict.items():
+            if k!='folder' :
+                if v in ids :
+                    always_exist[k] = v
+        
+        print '\n\n\n>>>>>%s<<<<<\n\n' %str(always_exist)
+        
+        return str(always_exist)
+    
+    
+    def __call__(self):
+        """
+        """        
+        return self.finder_upload_check_file()  
         
                              
