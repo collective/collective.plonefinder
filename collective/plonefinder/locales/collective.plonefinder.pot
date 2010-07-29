@@ -30,4 +30,32 @@ msgstr ""
 msgid "label_clear_queue"
 msgstr ""
 
+#. Default: "All files uploaded with success."
+msgid "All files uploaded with success."
+msgstr ""
+
+#. Default: " files uploaded with success, "
+msgid " files uploaded with success, "
+msgstr ""
+
+#. Default: " file's upload return an error."
+msgid " file's upload return an error."
+msgstr ""
+
+#. Default: "Choose files to upload"
+msgid "Choose files to upload"
+msgstr ""
+
+#. Default: "Choose images to upload"
+msgid "Choose images to upload"
+msgstr ""
+
+#. Default: "Choose video files to upload"
+msgid "Choose video files to upload"
+msgstr ""
+
+#. Default: "Choose audio files to upload"
+msgid "Choose audio files to upload"
+msgstr ""
+
 

@@ -67,7 +67,8 @@
       class=".finder_upload.FinderUploadInit"
       permission="cmf.AddPortalContent"/>      
   
-  <!-- we use permission zope.Public 
+  <!-- Finder upload file View
+       we use permission zope.Public 
        on upload_file view (called in flash)
        for users authenticated 
        without cookie -->   
@@ -77,6 +78,14 @@
       name="finder_upload_file"
       class=".finder_upload.FinderUploadFile"
       permission="zope.Public"/> 
+           
+  <!-- finder upload check file -->
+  
+  <browser:page
+      for="*"
+      name="finder_upload_check_file"
+      class=".finder_upload.FinderUploadCheckFile"
+      permission="cmf.AddPortalContent"/> 
 
 
   <!-- ticket view which generate a ticket for each user/folder absolute url
