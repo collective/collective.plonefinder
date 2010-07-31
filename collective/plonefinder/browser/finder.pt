@@ -187,7 +187,7 @@
               </tal:block>
           </div>         
 
-          <table border="0" cellpading="0" cellspacing="0" class="columns" id="browser-columns">
+          <table border="0" cellpading="0" cellspacing="0" class="columns icons-on" id="browser-columns">
             <tr>
               <td class="column" id="column-1"
                      tal:condition="view/browse">

@@ -61,7 +61,10 @@ SVN Unreleased
 
 * improve jquery.uploadify process with errors handling
   macadames - 2010/07/29
-  
+
+* added new css class required to show icons on plone4
+  'icons-on'
+  macadames - 2010/07/29
 
 1.0.0-b
 -------
