@@ -200,13 +200,12 @@ class FinderUploadInit(BrowserView):
             ext = mediaupload 
             msg = u'Choose file for upload : ' + ext 
         
-        # XXX fixme : the _ (SiteMessageFactory) doesn't work
-        #return ( ext, _(msg))
         return ( ext, self._utranslate(msg))
     
     def _utranslate(self, msg):
+        # XXX fixme : the _ (SiteMessageFactory) doesn't work
         context = aq_inner(self.context)
-        return context.utranslate(msg, domain="collective.plonefinder")
+        return context.translate(msg, domain="collective.plonefinder")
 
     def upload_settings(self):
         context = aq_inner(self.context)
