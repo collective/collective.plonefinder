@@ -38,6 +38,12 @@
   padding: 0;
 }
 
+#plone-browser td.column > div {
+  -moz-border-radius : 5px;
+  -webkit-border-radius : 5px;
+  border-radius : 5px;
+}
+
 #column-1 {
   width: 222px;
 }
@@ -606,29 +612,42 @@ a.folderUp {
   display: block;
   float:  right;
   height: 18px;
-  width:  18px;
   margin: 0 2px;
+  color: #666;
+}
+
+#menuViews a {
+  width:  18px;
+}
+
+#menuActions a {
+  padding-left: 20px;
+}
+#menuActions a span {
+  line-height: 18px;
+  font-size: 11px;
+  margin-right: 2px;
 }
 
 *+html #menuViews a,
 *+html #menuActions a {
   height: 20px;
-  width:  20px;
 }
 
 *html #menuViews a,
 *html #menuActions a {
   height: 20px;
-  width:  20px;
 }
 
 #menuViews a.selected,
 #menuActions a.selected {
   border: 1px solid black;
+  color: black
 }
 #menuViews a:hover,
 #menuActions a:hover {
   border: 1px solid #8cacbb;
+  color: black;
 }
 
 a.fileView {
@@ -669,8 +688,22 @@ a.addFolderView {
 
 #msg-loading,
 #msg-done {
-  height:18px;
+  height:19px;
   display: none;
+  font-weight:bold;
+}
+
+#msg-done {
+  -moz-border-radius:3px 3px 3px 3px;
+  -webkit-border-radius:3px 3px 3px 3px;
+  border-radius:3px 3px 3px 3px;
+  background-color:#777;
+  color:white;
+  display:none;
+  height:18px;
+  padding:2px;
+  text-align:center;
+  width:121px;
 }
 
 #start-refresh {
@@ -726,7 +759,7 @@ a.addFolderView {
   padding: 0 5px; 
   position: relative;
   top: -8px;
-  width: 40%;
+  width: 50%;
   font-size: 10px !important;
 }
 
@@ -793,9 +826,10 @@ a.addFolderView {
 }
 
 #choose-size {
-    float:left;
+    float:right;
     font-size:10px;
-    margin-right:54px;
+    margin-right:8px;
+    margin-left: 30px;
 }
 
 /* left navigation */
@@ -831,7 +865,11 @@ a.addFolderView {
 /* create folder form */
 
 #finder-newfolder {
-  padding: 10px 5px;
+  padding: 0 5px;
+}
+
+#finder-newfolder form {
+  margin-top: 10px;
 }
 
 #label_create_new_folder {
@@ -974,4 +1012,17 @@ a.actionMenusButton {
 
 .finderActionMenu .finderActionMenuItem a:hover {
     border: none !important;
+}
+
+h4.pannelHeader {
+  background-color:#AAAAAA;
+  border: 1px solid #666;
+  color:white;
+  margin:0;
+  padding:0;
+  font-weight: normal;
+  text-align:center;
+  -moz-border-radius: 5px 5px 0 0;
+  -webkit-border-radius:  5px 5px 0 0;
+  border-radius :  5px 5px 0 0;
 }

@@ -82,6 +82,7 @@ THE SOFTWARE.
 
 #uploaderUploader {
   margin: 10px 0 0 10px !important;
+  float: right;
 }
 
 .uploadField {
@@ -92,6 +93,10 @@ THE SOFTWARE.
   font-size: 10px;
   width: 65%;
   height: 13px;
+}
+
+.uploadifyQueue {
+  clear: both;
 }
 
 /* vim: set ft=css ts=4 sw=4 expandtab : */

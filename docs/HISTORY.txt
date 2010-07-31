@@ -64,14 +64,19 @@ SVN Unreleased
 
 * added new css class required to show icons on plone4
   'icons-on'
-  macadames - 2010/07/29
+  macadames - 2010/07/31
 
 * fix upload buttons styles on plone4
-  macadames - 2010/07/29
+  macadames - 2010/07/31
 
 * fix some css styles on Plone3 or Plone4 + classic Theme
-  macadames - 2010/07/29
-  
+  macadames - 2010/07/31
+
+* design improvements  
+  macadames - 2010/07/31
+
+* french translation in progress
+  macadames - 2010/07/31
 
 1.0.0-b
 -------

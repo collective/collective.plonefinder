@@ -58,4 +58,62 @@ msgstr ""
 msgid "Choose audio files to upload"
 msgstr ""
 
+#. Default: "Files Quick Upload"
+msgid "header_file_quick_upload"
+msgstr ""
 
+#. Default: "Create a new folder"
+msgid "header_create_new_folder"
+msgstr ""
+
+#. Default: "Files quick upload"
+msgid "label_files_quick__upload"
+msgstr ""
+
+#. Default: "Create new folder"
+msgid "label_create_new_folder"
+msgstr ""
+
+#. Default: "Close window"
+msgid "label_close_window"
+msgstr ""
+
+#. Default: "Maximize window"
+msgid "label_maximize_window"
+msgstr ""
+
+#. Default: "All site"
+msgid "label_all_site"
+msgstr ""
+
+#. Default: "This folder only"
+msgid "label_this_folder_only"
+msgstr ""
+
+#. Default: "Photo album view"
+msgid "label_photo_album_view"
+msgstr ""
+
+#. Default: "File listing view"
+msgid "label_file_listing_view"
+msgstr ""
+
+#. Default: "Choose page's results number :"
+msgid "label_choose_results_number"
+msgstr ""
+
+#. Default: "next page"
+msgid "label_next_page"
+msgstr ""
+
+#. Default: "previous page"
+msgid "label_previous_page"
+msgstr ""
+
+#. Default: "Loading please wait..."
+msgid "label_msg_loading"
+msgstr ""
+
+#. Default: "Done."
+msgid "label_msg_done"
+msgstr ""
