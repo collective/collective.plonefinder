@@ -12,6 +12,10 @@
 <div id="finder-uploader"
      i18n:domain="collective.plonefinder">
     <div id="uploadify">
+      <h4 class="pannelHeader"
+          i18n:translate="header_file_quick_upload">
+        Files Quick Upload
+      </h4>
       <label i18n:translate="label_choose_your_files"
              id="label-upload">Choose your files : </label>    
       <!-- uploadify comes here -->

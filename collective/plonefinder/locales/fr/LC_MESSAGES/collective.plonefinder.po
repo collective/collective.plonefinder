@@ -61,4 +61,63 @@ msgstr "Choisir les fichiers vidéo à envoyer"
 msgid "Choose audio files to upload"
 msgstr "Choisir les fichiers audio à envoyer"
 
+#. Default: "Files Quick Upload"
+msgid "header_file_quick_upload"
+msgstr "Envoi rapide de fichiers"
+
+#. Default: "Create a new folder"
+msgid "header_create_new_folder"
+msgstr "Créer un nouveau dossier"
+
+#. Default: "Files quick upload"
+msgid "label_files_quick__upload"
+msgstr "Envoi rapide de fichiers"
+
+#. Default: "Create new folder"
+msgid "label_create_new_folder"
+msgstr "Créer nouveau dossier"
+
+#. Default: "Close window"
+msgid "label_close_window"
+msgstr "Fermer la fenêtre"
+
+#. Default: "Maximize window"
+msgid "label_maximize_window"
+msgstr "Agrandir la fenêtre"
+
+#. Default: "All site"
+msgid "label_all_site"
+msgstr "Sur tout le site"
+
+#. Default: "This folder only"
+msgid "label_this_folder_only"
+msgstr "Ce dossier seulement"
+
+#. Default: "Photo album view"
+msgid "label_photo_album_view"
+msgstr "Vue album photos"
+
+#. Default: "File listing view"
+msgid "label_file_listing_view"
+msgstr "Vue liste de fichiers"
+
+#. Default: "Choose page's results number :"
+msgid "label_choose_results_number"
+msgstr "Choisir le nombre de résultats par page :"
+
+#. Default: "next page"
+msgid "label_next_page"
+msgstr "page suivante"
+
+#. Default: "previous page"
+msgid "label_previous_page"
+msgstr "page précédente"
+
+#. Default: "Loading please wait..."
+msgid "label_msg_loading"
+msgstr "Chargement en cours, veuillez patienter ..."
+
+#. Default: "Done."
+msgid "label_msg_done"
+msgstr "Effectué."
 

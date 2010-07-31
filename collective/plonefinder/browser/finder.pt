@@ -68,12 +68,14 @@
                  tal:attributes="value SearchableText" />    
           <div id="plone-browser-menu">
             <a class="closeWindow"
-               i18n:translate=""
+               i18n:attributes="title label_close_window"
+               title="Close window"
                href="javascript: void(0);"
                onclick="Browser.close(); return false;">
             </a>
             <a class="maximize"
-               i18n:translate=""
+               i18n:attributes="title label_maximize_window"
+               title="Maximize window"
                href="javascript: void(0);"
                onclick="Browser.maximize(); return false;">
             </a>          
@@ -94,12 +96,12 @@
                         tal:condition="view/browse">
                   <option tal:attributes="value portalpath"
                           i18n:translate="label_all_site">
-                    all site
+                    All site
                   </option>          
                   <option tal:attributes="value browsedpath"
                           tal:condition="python:browsedpath!=portalpath"
-                          i18n:translate="label_this_folder">
-                    this folder
+                          i18n:translate="label_this_folder_only">
+                    This folder only
                   </option>
                 </select>
                 
@@ -125,13 +127,13 @@
                      tal:attributes="value typeview" />
               <a href="javascript: void(0);"
                  onclick="Browser.setView('image'); return false;"
-                 title="album view"
+                 title="Photo album view"
                  tal:attributes="class python:typeview=='image' and 'imageView selected' or 'imageView'"
-                 i18n:attributes="title label_album_view;">
+                 i18n:attributes="title label_photo_album_view;">
               </a>                  
               <a href="javascript: void(0);"
                  onclick="Browser.setView('file'); return false;"
-                 title="file listing view"
+                 title="File listing view"
                  tal:attributes="class python:typeview=='file' and 'fileView selected' or 'fileView'"
                  i18n:attributes="title label_file_listing_view;">
               </a>
@@ -141,14 +143,14 @@
                  tal:condition="view/allowupload"
                  title="upload"
                  href="javascript:Browser.openUploader()"
-                 tal:attributes="href string:javascript:Browser.openUploader()"
-                 i18n:attributes="title label_upload;">
+                 tal:attributes="href string:javascript:Browser.openUploader()">
+                 <span i18n:translate="label_files_quick__upload">Files quick upload</span>
               </a>             
               <a class="addFolderView"
                  tal:condition="view/allowaddfolder"
                  title="add new folder"
-                 tal:attributes="href string:javascript:Browser.openAddFolderForm()"
-                 i18n:attributes="title label_add_new_folder;">
+                 tal:attributes="href string:javascript:Browser.openAddFolderForm()">
+                 <span i18n:translate="label_create_new_folder">Create new folder</span>
               </a>            
             </div>
           </div>               
@@ -355,10 +357,12 @@
                 
             <metal:block use-macro="context/@@findermacros/macros/plone_browser_body" />      
             <div class="statusBar">
-              <div id="msg-loading">
+              <div id="msg-loading"
+                   i18n:translate="label_msg_loading">
                 Loading please wait...
               </div>
-              <div id="msg-done">
+              <div id="msg-done"
+                   i18n:translate="label_msg_done">
                 Done.
               </div>
             </div>                  

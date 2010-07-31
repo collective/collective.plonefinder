@@ -18,9 +18,9 @@
     <div id="choose-size"
          i18n:domain="collective.plonefinder">
         <span id="b_size_label"
-              i18n:domain="plonefinder"
+              i18n:domain="collective.plonefinder"
               i18n:translate="label_choose_results_number">
-          Choose results number :
+          Choose page's results number :
         </span>  
         <input type="text"
                size="4"
@@ -41,9 +41,11 @@
     <tal:block condition="python: batch.next or  batch.previous">
       <div class="next"
         tal:define="n batch/next | nothing"
+        i18n:domain="collective.plonefinder"
         tal:attributes="class python: n and 'next' or 'next next-off'">
           <a href=""
              title="next page"
+             i18n:attributes="title label_next_page"
              tal:condition="n"
              tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:n.first} ))">
              &nbsp;
@@ -52,9 +54,11 @@
   
       <div class="previous"
         tal:define="p batch/previous | nothing"
+        i18n:domain="collective.plonefinder"
         tal:attributes="class python: p and 'previous' or 'previous previous-off'">
           <a href=""
              title="previous page"
+             i18n:attributes="title label_previous_page"
              tal:condition="p"
              tal:attributes="href python: '%s?%s' % (url , mq( request.form, {batch.b_start_str:p.first} ))">
              &nbsp;
