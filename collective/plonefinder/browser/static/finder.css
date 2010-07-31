@@ -8,6 +8,7 @@
   padding: 0 !important;
   z-index: 1000;
   font-size: 12px;
+  font-family: Arial, Helvetica, Geneva, sans-serif;
 }
 
 #plone-browser .overlay {
@@ -726,6 +727,21 @@ a.addFolderView {
   position: relative;
   top: -8px;
   width: 40%;
+  font-size: 10px !important;
+}
+
+#plone-browser .listingBar a {
+  border: 1px solid #CCCCCC;
+  display: inline-block;
+  padding:0.25em 0.5em;
+}
+
+#plone-browser .listingBar span.current {
+  border: 1px solid #555;
+  display: inline-block;
+  padding:0.25em 0.5em;
+  background-color: #555;
+  color: white !important;
 }
 
 #plone-browser .listingBar a:hover {
@@ -935,6 +951,7 @@ a.actionMenusButton {
 
 .finderActionMenu li {
     display: block;
+    margin: 0 !important;
 }
 
 .finderActionMenu .finderActionMenuItem a {
