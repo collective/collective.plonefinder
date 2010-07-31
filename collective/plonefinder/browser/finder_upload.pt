@@ -23,15 +23,18 @@
              i18n:attributes="value Title" />
              
       <div class="uploadifybuttons">
-        <a id="uploadify-upload"
-           class="context uploadifybutton"
-           i18n:translate="label_upload_files"
-           href="javascript:sendDataAndUpload();">Upload Files</a>
-        <!-- clear button -->
-        <a id="uploadify-clear-queue"
-           i18n:translate="label_clear_queue"
-           class="context uploadifybutton"
-           href="javascript:jQuery('#uploader').uploadifyClearQueue();">Clear Queue</a>      
+        <input type="button" 
+               id="uploadify-upload"
+               class="context uploadifybutton"
+               value="Upload Files"
+               i18n:attributes="value label_upload_files"
+               onclick="sendDataAndUpload()" />
+        <input type="button" 
+               id="uploadify-clear-queue"
+               class="context uploadifybutton"
+               value="Clear Queue"
+               i18n:attributes="value label_clear_queue"
+               onclick="jQuery('#uploader').uploadifyClearQueue()" /> 
       </div>
     </div>        
     <!-- uploadify javascript -->
