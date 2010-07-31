@@ -63,7 +63,7 @@ class FinderUploadCapableFileFactory(object):
             title = name.split('.')[0].replace('_',' ').replace('-',' ')
 
         if newid in context.objectIds() :
-            error = 'Object id %s always exist' %newid
+            raise NameError, 'Object id %s always exist' %newid
         else :
             upload_lock.acquire()
             transaction.begin()
@@ -86,7 +86,7 @@ class FinderUploadCapableFileFactory(object):
         if not error :
             return obj
         else :
-            raise error
+            raise
         
 class FinderCreateFolderCapableFactory(object):
     interface.implements(IDirectoryFactory)
