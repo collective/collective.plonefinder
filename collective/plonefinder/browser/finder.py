@@ -11,7 +11,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
-from Products.CMFPlone.interfaces import IPloneSiteRoot
+from plone.app.layout.navigation.interfaces import INavigationRoot
 from Products.ATContentTypes.interface import IImageContent
 
 from collective.plonefinder.interfaces import IFinder
@@ -272,7 +272,7 @@ class Finder(BrowserView):
                 self.scope = scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
             else :
                 folder = aq_inner(context)
-                while not IPloneSiteRoot.providedBy(folder)  : 
+                while not INavigationRoot.providedBy(folder)  : 
                     if bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
                         break
                     folder = aq_inner(folder.aq_parent)    
@@ -283,11 +283,11 @@ class Finder(BrowserView):
         self.scopeiconclass = 'contenttype-%s divicon' % scopetype.lower().replace(' ','-')
         
         # set browsedpath and browsed_url
-        if not IPloneSiteRoot.providedBy(scope) : 
+        if not INavigationRoot.providedBy(scope) : 
             self.browsedpath = '/'.join(scope.getPhysicalPath())        
             self.browsed_url = scope.absolute_url()
             parentscope = aq_inner(scope.aq_parent)
-            if not IPloneSiteRoot.providedBy(parentscope) :
+            if not INavigationRoot.providedBy(parentscope) :
                 self.parentpath = '/'.join(parentscope.getPhysicalPath()) 
             else :
                 self.parentpath =  self.portalpath   
@@ -300,7 +300,7 @@ class Finder(BrowserView):
         if showbreadcrumbs :
             crumbs = []
             item = scope
-            while not IPloneSiteRoot.providedBy(item) :
+            while not INavigationRoot.providedBy(item) :
                  crumb = {}
                  crumb['path'] = '/'.join(item.getPhysicalPath())
                  crumb['title'] = item.title_or_id()
