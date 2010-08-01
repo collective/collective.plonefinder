@@ -1,5 +1,4 @@
 
-
 #plone-browser {
   position: absolute;
   left: 0; top: 0;
@@ -118,7 +117,6 @@
 }
 
 #plone-browser-menu {
-  background-color: #F0EEEE;
   padding: 2px 12px 5px 12px;
   height: 25px;
   margin:0;
@@ -137,11 +135,11 @@
 #plone-browser-body {
   /* shown in js to avoid bad resize effects */
   visibility : hidden;
-  background-color: #F1F1E3;
+  background-color: #e5f6ff;
   margin: 0 10px;
   padding:5px;
   overflow:auto;
-  border: 1px solid #000000;
+  border: 1px solid #011e57;
 }
 
 #box-edit-browser-menu {
@@ -154,7 +152,7 @@
   background: transparent url(./menu_browser.png) center left no-repeat;
   padding: 2px 0 3px 19px;
   margin-top: -2px;
-  color:black;
+  color:#011e57;
   font-size: 90%;
   font-weight: bold;
 }
@@ -175,7 +173,7 @@
 
 .floatContainer a {
   display: block;
-  border: 1px solid #F1F1E3;
+  border: 1px solid #e5f6ff;
   margin: 2px 2px 0 0;
   padding:2px;
   text-align: center;
@@ -183,6 +181,9 @@
   width:110px;
   height:130px;
   overflow: hidden;
+  -moz-border-radius:5px;
+  -webkit-border-radius:5px;
+  border-radius:5px;
 }
 
 .divicon {
@@ -200,6 +201,10 @@
   margin-left: 42px;
 }
 
+.browsableicon {
+  background: transparent url(./folders-plus.png) top left no-repeat;
+}
+
 .floatContainer .fileFolder .divicon,
 .floatContainer .imageFolder .divicon {
   margin-top:25px;
@@ -210,8 +215,8 @@
   filter:alpha(opacity=80);  
 }
 
-.floatContainer .fileFolder .contenttype-folder,
-.floatContainer .imageFolder .contenttype-folder {
+.floatContainer .fileFolder .browsableicon,
+.floatContainer .imageFolder .browsableicon {
   display: none !important;
 }
 
@@ -225,7 +230,7 @@
 }
 
 .floatContainer a:hover{
-  border: 1px solid #000000;
+  border: 1px solid #021b4b;
   background-color: #FFFFFF;
 }
 
@@ -301,18 +306,6 @@ a.folderSelect:hover {
   z-index:1500;
 }
 
-/*IE fixes for loupe div */
-
-*+html .loupe,
-*+html .folderSelect {
-  height: 17px;
-}
-
-*html .loupe,
-*html .folderSelect {
-  height: 17px;
-}
-
 
 .floatContainer .linkFolder,
 .floatContainer .fileFolder,
@@ -326,7 +319,7 @@ a.folderSelect:hover {
 
 .floatContainer a.imageContainer{
   display: block;
-  border: 1px solid #F1F1E3;
+  border: 1px solid #e5f6ff;
   margin: 2px 2px 0 0;
   padding:2px;
   text-align: center;
@@ -342,7 +335,7 @@ a.folderSelect:hover {
 }
 
 .floatContainer a.imageContainer:hover{
-  border: 1px solid #000000;
+  border: 1px solid #021b4b;
   background-color: #FFFFFF;
 }
 
@@ -370,20 +363,8 @@ a.folderSelect:hover {
   position: relative;
 }
 
-/* IE6 fix */
-*html .listContainer {
-  height:1% !important;
-  overflow: visible !important;
-}
-
-/* IE7 fix */
-*+html .listContainer {
-  min-height:1%  !important;
-  overflow: visible !important;
-}
-
 #sortheaders {
-  background-color: #EEE !important;
+  background-color: #e0e4ff !important;
   height: 12px;
   overflow: hidden;
 }
@@ -548,32 +529,25 @@ a.folderSelect:hover {
 
 #plone-browser input {
   border-color: #BABABA;
-  font-size: 10px;
-}
-
-#plone-browser #SearchableText {
-  height: 19px;
+  font-size: 90%;
+  padding: 1px 2px 1px 2px;
+  -moz-border-radius:3px 3px 3px 3px;
+  -webkit-border-radius:3px 3px 3px 3px;
+  border-radius:3px 3px 3px 3px;
 }
 
 #plone-browser input.searchBrowserButton {
   background: transparent url(./search_icon.gif) 2px 1px no-repeat;
   cursor: pointer;
-  height: 19px;
-  padding: 1px 2px 1px 15px;
+  padding-left: 15px;
   position: relative;
   top: -2px;
 }
 
 #plone-browser select {
-  min-height: 15px;
   border-color: #BABABA;
-  line-height: 11px;
-  font-size: 10px;
-  min-width: 85px;
-}
-
-*html #plone-browser select {
-  height: 15px;
+  line-height: 1.2em;
+  font-size: 90%;
 }
 
 a.folderUp {
@@ -614,7 +588,6 @@ a.folderUp {
 
 #menuViews a,
 #menuActions a {
-  border: 1px solid #FFFFFF;
   text-decoration:none;
   display: block;
   float:  right;
@@ -624,10 +597,12 @@ a.folderUp {
 }
 
 #menuViews a {
+  border: 1px solid #FFF;
   width:  18px;
 }
 
 #menuActions a {
+  border: 1px solid #E0E4FF;
   padding-left: 20px;
 }
 #menuActions a span {
@@ -636,25 +611,15 @@ a.folderUp {
   margin-right: 2px;
 }
 
-*+html #menuViews a,
-*+html #menuActions a {
-  height: 20px;
-}
-
-*html #menuViews a,
-*html #menuActions a {
-  height: 20px;
-}
-
 #menuViews a.selected,
 #menuActions a.selected {
-  border: 1px solid black;
-  color: black
+  border: 1px solid #011e57;
+  color: #011e57
 }
 #menuViews a:hover,
 #menuActions a:hover {
   border: 1px solid #8cacbb;
-  color: black;
+  color: #011e57;
 }
 
 a.fileView {
@@ -742,7 +707,7 @@ a.addFolderView {
 .popup .browserStatic {
    position: static;
    height: 100%;
-   background-color: #EEE;
+   background-color: #e0e4ff;
 }
 
 .popup .listContainer a {
@@ -751,7 +716,7 @@ a.addFolderView {
 }
 
 .popup a:hover {
-   color: black !important;
+   color: #011e57 !important;
 }
 
 .popup .closeWindow {
@@ -848,7 +813,7 @@ a.addFolderView {
 #plone-browser-navigation {
   /* shown in js to avoid bad resize effects */
   visibility : hidden;
-  border: 1px solid black;
+  border: 1px solid #011e57;
   background-color: white;
   margin: 0 0 0 12px;
   padding: 5px;
@@ -866,7 +831,7 @@ a.addFolderView {
 #right-panel {
   width: 250px;
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid #011e57;
   background-color: white;
   overflow: auto;
   margin: 0 10px 0 0;
@@ -1012,21 +977,12 @@ a.actionMenusButton {
     text-align: left;
 }
 
-*html .finderActionMenu .finderActionMenuItem a {
-    height: 0.1%;
-}
-
-*+html .finderActionMenu .finderActionMenuItem a {
-    height: 0.1%;
-}
-
 .finderActionMenu .finderActionMenuItem a:hover {
     border: none !important;
 }
 
 h4.pannelHeader {
-  background-color:#AAAAAA;
-  border: 1px solid #666;
+  background-color:#81A7C2;
   color:white;
   margin:0;
   padding:0;

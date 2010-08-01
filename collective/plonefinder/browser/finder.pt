@@ -201,6 +201,7 @@
                      <a tal:condition="parentpath"
                         class="folderUp"
                         href="javascript: void(0);"
+                        title="Go to parent"
                         tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
                         title="parent folder"
                         i18n:attributes="title">&nbsp;               
@@ -222,7 +223,8 @@
                     <tal:folders repeat="f folders">
                         <div class="listContainer folder">
                              <a href="javascript: void(0);"
-                                tal:attributes="onclick string:Browser.update('${f/path}', '');; return false;">
+                                tal:attributes="title string: browse ${f/type};
+                                                onclick string:Browser.update('${f/path}', '');; return false;">
                                 <div tal:attributes="class string:${typeview}Folder">
                                   <div tal:attributes="class f/iconclass">&nbsp;</div>
                                 </div>
@@ -237,7 +239,27 @@
               </td>
               <td class="column" id="column-2">
                 <div id="plone-browser-body"
-                     class="finder_panel">            
+                     class="finder_panel">     
+                  
+                  <tal:block condition="python: view.browse and not view.searchsubmit">
+                      <tal:folders repeat="f folders">
+                          <div tal:attributes="class string: ${typecss}Container folder;">
+                               <a href="javascript: void(0);"
+                                  title="Browse"
+                                  tal:attributes="title string: browse ${f/type};
+                                                  onclick string:Browser.update('${f/path}', '');; return false;">
+                                  <div tal:attributes="class string:${typeview}Folder">
+                                    <div class="browsableicon divicon">&nbsp;</div>
+                                  </div>
+                                  <div class="title"
+                                       tal:content="f/title"
+                                       tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
+                                  <div class="legend"></div>
+                               </a>
+                          </div> 
+                      </tal:folders>
+                  </tal:block>       
+                  
                   <div tal:condition="python: batch"
                        class="listContainer" id="sortheaders"
                        tal:attributes="style python: typeview=='image' and 'display:none' or nothing;
@@ -426,6 +448,14 @@
       <style type="text/css" media="all" 
              tal:content="string:@import url($portal_url/++resource++plonefinder_static/thickbox.css);">
       </style>
+
+      <tal:iefixstart replace="structure string:&lt;!--[if lte IE 7]&gt;" />    
+         <link rel="stylesheet" 
+               type="text/css"
+               media="screen" 
+               tal:attributes="href string:$portal_url/++resource++plonefinder_static/finder-iefixes.css" />
+      <tal:iefixend replace="structure string:&lt;![endif]--&gt;" />
+
       
       <style type="text/css" media="all" 
              tal:condition="view/cssaddons"

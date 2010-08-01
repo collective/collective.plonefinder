@@ -1,0 +1,29 @@
+.finderActionMenu .finderActionMenuItem a {
+    height: 0.1%;
+}
+.loupe,
+.folderSelect {
+  height: 17px;
+}
+.listContainer {
+  min-height:1%  !important;
+  overflow: visible !important;
+}
+/* IE6 fix */
+*html .listContainer {
+  height:1% !important;
+  overflow: visible !important;
+}
+#menuViews a {
+  width: 20px;
+}
+#menuViews a,
+#menuActions a {
+  height: 20px;
+}
+.listingBar {
+  width: 50%;
+}
+a.actionMenusButton {
+  position: absolute !important;
+}
