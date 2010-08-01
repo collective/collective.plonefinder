@@ -78,6 +78,16 @@ SVN Unreleased
 * french translation in progress
   macadames - 2010/07/31
 
+* use InavigationRoot for the finder root no more IPloneSiteRot
+  macadames - 2010/07/31
+
+* batch design improvements added
+  macadames - 2010/07/31
+
+* design changes
+  blue is the new color
+  macadames - 2010/07/31
+
 1.0.0-b
 -------
 
