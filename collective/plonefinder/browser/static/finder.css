@@ -215,6 +215,11 @@
   display: none !important;
 }
 
+.contenttype-file {
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .floatContainer a:hover .title{
   text-decoration: underline;
 }
@@ -463,6 +468,8 @@ a.folderSelect:hover {
 .listContainer .divicon {
   position: relative;
   top: -3px;
+  /* overload bad icon padding from plone4 styles */
+  padding-left: 0 !important;
 }
 
 .listContainer a {
