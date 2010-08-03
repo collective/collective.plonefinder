@@ -236,14 +236,14 @@
 
 .floatContainer.portrait img {
   padding:0;
-  margin: 7px 0;
+  margin: 7px 0 0;
   border:none;
 }
 
 .floatContainer.landscape img {
   padding:0;
   margin-top:15px;
-  margin-bottom:0;
+  margin-bottom: 3px;
   border:none;
 }
 
@@ -253,7 +253,7 @@
   text-align:center;
   cursor: pointer !important;
   white-space: nowrap;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 .floatContainer .legend {
@@ -434,12 +434,6 @@ a.folderSelect:hover {
 
 .listContainer .scopetitle {
   font-weight: bold;
-}
-
-#plone-browser-navigation .listContainer .title {
-  width: 157px !important;
-  overflow: hidden;
-  padding-left: 3px;
 }
 
 .listContainer * {
@@ -821,10 +815,32 @@ a.addFolderView {
   overflow: auto;
 }
 
-.retrait {
-  margin-left: 3px;
+#plone-browser-navigation .listContainer .title {
+  width: auto !important;
 }
 
+.retrait {
+  margin-left: 5px;
+}
+
+#plone-browser-navigation a:hover,
+#plone-browser-navigation a:hover .title {
+  color: #011E57 !important;
+  text-decoration: none !important;
+}
+
+#plone-browser-navigation .navitem {
+   border: none;
+   padding: 0 3px 0 10px;
+   background: transparent url('./navitem-bg.png') 0px 2px no-repeat;
+}
+
+#plone-browser-navigation .currentnode,
+#plone-browser-navigation .currentitem {
+   background: transparent url('./navitem-selected-bg.png') 0px 2px no-repeat;
+   border: none !important;
+   font-weight: bold;
+}
 
 /* right-panel used for upload / create folder / view details */
 

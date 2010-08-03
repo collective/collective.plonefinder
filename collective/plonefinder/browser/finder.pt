@@ -26,10 +26,11 @@
                          portal view/portal;
                          portal_url view/portal_url;
                          browsedpath view/browsedpath;
-                         portalpath view/portalpath;
+                         portalpath view/rootpath;
                          parentpath view/parentpath;
                          findername view/findername;
                          folders view/folders;
+                         rootfolders view/rootfolders;
                          results view/results;        
                          allowimagesizeselection view/allowimagesizeselection;                 
                          Batch python:modules['Products.CMFPlone'].Batch;
@@ -219,22 +220,25 @@
                              tal:content="title">sample Folder 1</div>
                      </a>                
                   </div>
-                  <div class="retrait">
-                    <tal:folders repeat="f folders">
-                        <div class="listContainer folder">
-                             <a href="javascript: void(0);"
-                                tal:attributes="title string: browse ${f/type};
-                                                onclick string:Browser.update('${f/path}', '');; return false;">
-                                <div tal:attributes="class string:${typeview}Folder">
-                                  <div tal:attributes="class f/iconclass">&nbsp;</div>
-                                </div>
-                                <div class="title"
-                                     tal:content="f/title"
-                                     tal:attributes="class string:title ${f/state_class}">sample Folder 1</div>
-                             </a>                     
-                        </div> 
-                    </tal:folders>   
-                  </div>       
+                  <metal:block define-macro="finder-navigation-recurse">
+                      <div class="retrait">
+                        <tal:folders repeat="f rootfolders">
+                            <div class="listContainer folder">
+                                 <a href="javascript: void(0);"
+                                    tal:attributes="title string: browse ${f/type};
+                                                    onclick string:Browser.update('${f/path}', '');; return false;">
+                                    <div class="title"
+                                         tal:content="f/title"
+                                         tal:attributes="class string:title navitem ${f/state_class}${f/path_class}">sample Folder 1</div>
+                                    <tal:recurse define="rootfolders f/sub_folders">
+                                      <metal:main tal:condition="rootfolders"
+                                                  metal:use-macro="context/@@findermacros/macros/finder-navigation-recurse" />
+                                    </tal:recurse>
+                                 </a>                     
+                            </div> 
+                        </tal:folders>   
+                      </div>       
+                  </metal:block>
                 </div>
               </td>
               <td class="column" id="column-2">
