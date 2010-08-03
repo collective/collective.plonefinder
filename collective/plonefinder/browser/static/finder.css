@@ -823,6 +823,10 @@ a.addFolderView {
   margin-left: 5px;
 }
 
+#plone-browser-navigation .listContainer * {
+  float: none !important;
+}
+
 #plone-browser-navigation a:hover,
 #plone-browser-navigation a:hover .title {
   color: #011E57 !important;
