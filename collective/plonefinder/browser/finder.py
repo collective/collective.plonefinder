@@ -304,7 +304,7 @@ class Finder(BrowserView):
                 while not INavigationRoot.providedBy(root)  :
                     root = aq_inner(root.aq_parent)
                 self.root = root
-                self.rootpath = '/'.join(self.root.getPhysicalPath())
+                self.rootpath = '/'.join(root.getPhysicalPath())
         # find scope if undefined
         # by default scope = browsedpath or first parent folderish or context if context is a folder        
         scope = self.scope
@@ -322,14 +322,11 @@ class Finder(BrowserView):
         self.scopeiconclass = 'contenttype-%s divicon' % scopetype.lower().replace(' ','-')
         
         # set browsedpath and browsed_url
+        self.browsedpath = '/'.join(scope.getPhysicalPath())        
+        self.browsed_url = scope.absolute_url()
         if scope is not self.root : 
-            self.browsedpath = '/'.join(scope.getPhysicalPath())        
-            self.browsed_url = scope.absolute_url()
             parentscope = aq_inner(scope.aq_parent)
-            self.parentpath = '/'.join(parentscope.getPhysicalPath())  
-        else :
-            self.browsedpath = self.rootpath
-            self.browsed_url = self.root.absolute_url()     
+            self.parentpath = '/'.join(parentscope.getPhysicalPath())   
         
         # set breadcrumbs    
         # TODO : use self.catalog                     
