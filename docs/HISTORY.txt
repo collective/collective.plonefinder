@@ -19,8 +19,6 @@ SVN Unreleased
 
 * allow change imagetypes using request and referencewidget 
 
-* remove navigation inside main windows (too much complexity) 
-
 * added a generated css for plone3 content-types icons
 
 * added new property self.filestypes in browser
@@ -41,9 +39,6 @@ SVN Unreleased
 
 * title fields added to multiple upload using jquery.uploadify
   macadames - 2010/07/24
-
-* translation for upload labels in french added
-  macadames - 2010/07/26
 
 * authentication for flash upload is done using cookie
   when possible (same method as collective.uploadify)
@@ -79,14 +74,18 @@ SVN Unreleased
   macadames - 2010/07/31
 
 * use InavigationRoot for the finder root no more IPloneSiteRot
-  macadames - 2010/07/31
+  macadames - 2010/08/01
 
-* batch design improvements added
-  macadames - 2010/07/31
-
-* design changes
+* design improvements
   blue is the new color
-  macadames - 2010/07/31
+  macadames - 2010/08/01
+
+* added new view attributes root and rootpath
+  used to change the browser root
+  macadames - 2010/08/02
+
+* Added a real left navigation tree
+  macadames - 2010/08/02
 
 1.0.0-b
 -------

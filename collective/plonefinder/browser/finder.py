@@ -28,6 +28,28 @@ def _quote_bad_chars(s):
         s = s.replace(char, _quotestring(char))
     return s
 
+def getPathClass(browsedpath, currentpath) :
+    """
+    if currentpath == browsedpath return ' currentitem'
+    if currentpath is parent of browsedpath return ' currentnode'
+    else return ''
+    """
+    
+    if currentpath==browsedpath :
+        return ' currentitem'
+    else :
+        browsedpathList = browsedpath.split('/')
+        currentpathList = currentpath.split('/')
+        if len(browsedpathList) > len(currentpathList) :
+            isCurrentNode = True
+            for index, id in enumerate(currentpathList):
+                if id != browsedpathList[index] :
+                    isCurrentNode = False
+                    break
+            if isCurrentNode :
+                return ' currentnode'
+    return ''
+               
 
 FORM_PARAMS = ('SearchableText',)                                                
 
@@ -60,6 +82,8 @@ class Finder(BrowserView):
         self.scopeiconclass = 'divicon'
         self.multiselect = True
         self.forcecloseoninsert = 0
+        self.root = None
+        self.rootpath = ''
         self.browsedpath = ''
         self.parentpath = ''
         self.types = []
@@ -84,7 +108,7 @@ class Finder(BrowserView):
         self.fieldname = 'demofield'
         self.fieldtype = 'list'
         self.ispopup = True
-        self.showblacklisted = False 
+        self.showblacklisted = True 
         self.searchsubmit = False  
         self.allowupload = False
         self.allowaddfolder = False
@@ -103,6 +127,8 @@ class Finder(BrowserView):
         context = aq_inner(self.context)
         request = aq_inner(self.request)                                       
         session = request.get('SESSION', None)  
+        # use self.rootpath or rootpath in request or session to change browser root
+        self.rootpath = request.get('rootpath', self.rootpath)
         # use self.browse=False (or browse=False in request) to disallow browsing globally
         self.browse = request.get('browse', self.browse)        
         self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
@@ -227,15 +253,20 @@ class Finder(BrowserView):
                     results.append(r)              
         
         self.results = results
-        self.folders = []        
+        self.folders = []       
+        self.rootfolders = [] 
         if self.browse :
             self.folders = self.finderBrowsingResults()
+            if self.scope is self.root :
+                self.rootfolders = self.folders
+            else :
+                self.rootfolders = self.finderNavBrowsingResults() 
                    
         self.cleanrequest = self.cleanRequest()          
         
         self.allowupload = request.get('allowupload', self.allowupload)
         # upload disallowed if user do not have permission to 
-        # Add portal content on context        
+        # Add portal content on main window context        
         if self.allowupload :
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.scope)) :
@@ -264,6 +295,16 @@ class Finder(BrowserView):
         set scope and all infos related to scope
         """
         browsedpath = request.get('browsedpath', self.browsedpath)
+        # find browser root and rootpath if undefined
+        if self.root is None :
+            if self.rootpath :
+                self.root = aq_inner(self.portal.restrictedTraverse(self.rootpath))
+            else :
+                root = aq_inner(context)
+                while not INavigationRoot.providedBy(root)  :
+                    root = aq_inner(root.aq_parent)
+                self.root = root
+                self.rootpath = '/'.join(self.root.getPhysicalPath())
         # find scope if undefined
         # by default scope = browsedpath or first parent folderish or context if context is a folder        
         scope = self.scope
@@ -272,9 +313,7 @@ class Finder(BrowserView):
                 self.scope = scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
             else :
                 folder = aq_inner(context)
-                while not INavigationRoot.providedBy(folder)  : 
-                    if bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
-                        break
+                if not bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
                     folder = aq_inner(folder.aq_parent)    
                 self.scope = scope = folder 
                 
@@ -283,29 +322,28 @@ class Finder(BrowserView):
         self.scopeiconclass = 'contenttype-%s divicon' % scopetype.lower().replace(' ','-')
         
         # set browsedpath and browsed_url
-        if not INavigationRoot.providedBy(scope) : 
+        if scope is not self.root : 
             self.browsedpath = '/'.join(scope.getPhysicalPath())        
             self.browsed_url = scope.absolute_url()
             parentscope = aq_inner(scope.aq_parent)
-            if not INavigationRoot.providedBy(parentscope) :
-                self.parentpath = '/'.join(parentscope.getPhysicalPath()) 
-            else :
-                self.parentpath =  self.portalpath   
+            self.parentpath = '/'.join(parentscope.getPhysicalPath())  
         else :
-            self.browsedpath = self.portalpath
-            self.browsed_url = self.portal_url     
+            self.browsedpath = self.rootpath
+            self.browsed_url = self.root.absolute_url()     
         
         # set breadcrumbs    
         # TODO : use self.catalog                     
         if showbreadcrumbs :
             crumbs = []
             item = scope
-            while not INavigationRoot.providedBy(item) :
+            itempath = self.browsedpath
+            while itempath != self.rootpath :
                  crumb = {}
-                 crumb['path'] = '/'.join(item.getPhysicalPath())
+                 crumb['path'] = itempath 
                  crumb['title'] = item.title_or_id()
                  crumbs.append(crumb)
                  item = aq_inner(item.aq_parent)
+                 itempath = '/'.join(item.getPhysicalPath())
             crumbs.reverse()
             self.breadcrumbs = crumbs                   
         
@@ -348,7 +386,15 @@ class Finder(BrowserView):
 
             return query            
             
-    def finderBrowsingQuery(self) :
+    def finderNavBrowsingResults(self, querypath='') :
+        """
+        method used to get left navigation subtree results
+        """
+        if not querypath :
+            querypath = self.rootpath
+        return self.finderBrowsingResults(querypath=querypath, isnav=True)
+    
+    def finderBrowsingQuery(self, querypath=None) :
         """
         return query for folderishs to browse
         """
@@ -358,7 +404,10 @@ class Finder(BrowserView):
             query = {}        
             path = {}
             path['depth'] = 1
-            path['query'] =  self.browsedpath
+            if querypath :
+                path['query'] =  querypath
+            else :
+                path['query'] =  self.browsedpath
             query['path'] = path
             query['is_folderish'] = True
             query['sort_on'] = 'getObjPositionInParent'
@@ -366,12 +415,14 @@ class Finder(BrowserView):
             
                        
     
-    def finderBrowsingResults (self) :
+    def finderBrowsingResults (self, querypath=None, isnav=False) :
         """
         return results to browse
+        method used for finder left navigation
+        and navigation inside main window
         """ 
         cat = self.catalog
-        query = self.finderBrowsingQuery()
+        query = self.finderBrowsingQuery(querypath)
         brains = cat(**query)           
         results = []
         for b in brains :
@@ -383,9 +434,16 @@ class Finder(BrowserView):
             r['description'] = b.Description                         
             r['iconclass'] = 'contenttype-%s divicon' % b.portal_type.lower().replace(' ','-')
             r['type'] = b.portal_type
-            r['path'] = b.getPath
-            r['state_class'] = 'state-%s' %b.review_state 
-            r['islinkable'] = False
+            r['path'] = b.getPath()
+            r['state_class'] = 'state-%s' %b.review_state
+            r['path_class'] = ''
+            r['sub_folders'] = []
+            if isnav :
+                r['path_class'] = getPathClass(self.browsedpath, r['path'])
+                # if browser path is current or current node
+                # search for subfolders
+                if r['path_class'] :
+                    r['sub_folders'] = self.finderNavBrowsingResults(querypath=r['path'])
 
             results.append(r)
         
@@ -405,7 +463,7 @@ class Finder(BrowserView):
             r = {}
             r['uid'] = b.UID
             r['url'] = b.getURL()
-            r['path'] = b.getPath
+            r['path'] = b.getPath()
             r['title'] = b.pretty_title_or_id()
             r['jstitle'] = r['title'].replace("\x27", "\x5C\x27")
             r['description'] = b.Description
