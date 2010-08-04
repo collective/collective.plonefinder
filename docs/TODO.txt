@@ -5,7 +5,7 @@ TODO (2010/08/04)
 - IEfixes (IE8 seems OK now, IE7 has some minor width height or position bugs, no more support for IE6)
 
 - add new features for each browsed item (rename, change State, delete, copy/cut/paste), accessible if 
-  allowobjactions == True
+  allowobjectactions == True
 
 - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
   in progress ... (need to improve js and add css/js in portal resources)
@@ -26,4 +26,6 @@ TODO (2010/08/04)
 
   - add a way to select multiple elements with checkboxes + apply an action with button (select, cut, paste, etc ...)
 
+- add an option to open the finder in parent of the first selectedItem (useful with wysiwyg editors)
 
+- improve previews for any kind of objects (not so easy, i don't know ... )
