@@ -204,11 +204,11 @@
                         title="Go to parent"
                         tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
                         title="parent folder"
-                        i18n:attributes="title">&nbsp;               
+                        i18n:attributes="title label_goto_parent">&nbsp;               
                      </a>                 
                      <div class="title scopetitle"
                           tal:condition="parentpath"
-                          tal:content="title">sample Folder 1</div>                           
+                          i18n:translate="label_goto_parent">Go to parent</div>                           
                      <a href="javascript: void(0);"
                         tal:condition="not:parentpath"
                         tal:attributes="onclick string:Browser.update('${path}', '');; return false;">

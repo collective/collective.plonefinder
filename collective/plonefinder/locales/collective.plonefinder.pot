@@ -117,3 +117,8 @@ msgstr ""
 #. Default: "Done."
 msgid "label_msg_done"
 msgstr ""
+
+#. Default: "Go to parent"
+msgid "label_goto_parent"
+msgstr ""
+
