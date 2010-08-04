@@ -1,26 +1,29 @@
-TODO :
------
+TODO (2010/08/04)
+=================
 
 
-- IEfixes (IE8 has some minor width height or position bugs)
+- IEfixes (IE8 seems OK now, IE7 has some minor width height or position bugs, no more support for IE6)
 
-- other cosmetic changes :
-
-  - position for listing bar is not optimal
-  
-  - listing bar style is not ok with plone 3.x
-
-- i18n
-
-- add new features for each browsed item (rename, change State, delete, copy/cut/paste)
+- add new features for each browsed item (rename, change State, delete, copy/cut/paste), accessible if 
+  allowobjactions == True
 
 - make the entire ajax widget working (today only popup widget is operational used for ckeditor)
+  in progress ... (need to improve js and add css/js in portal resources)
 
-- add some options in GS profile
+- add doctests
 
-- important : use INavigationRoot as browser root (minor changes in code)
+- i18n : other languages
 
-- add doctests and jquery tests
+- improve finder for selected elements :
 
+  - add a view "selection", which list selected items
+    easy to implement in js/css/template (always done in the view python code)
+
+  - show selected items with a different style (a background color), 
+    or hide it when showblackisted is off
+
+  - add an ajax request to push selected items in blacklist in selectItem js method > then refresh
+
+  - add a way to select multiple elements with checkboxes + apply an action with button (select, cut, paste, etc ...)
 
 
