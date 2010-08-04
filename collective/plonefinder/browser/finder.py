@@ -12,7 +12,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
 from plone.app.layout.navigation.interfaces import INavigationRoot
-from Products.ATContentTypes.interface import IImageContent
+from Products.ATContentTypes.interface import IImageContent, IATTopic
 
 from collective.plonefinder.interfaces import IFinder
 from interfaces import IFinderUploadCapable
@@ -348,7 +348,7 @@ class Finder(BrowserView):
             self.breadcrumbs = crumbs                   
         
                           
-    def finderQuery(self) :
+    def finderQuery(self, topicQuery=None) :
         """
         return query for results depending on some params
         """
@@ -456,8 +456,15 @@ class Finder(BrowserView):
         """           
         context = aq_inner(self.context)                         
         cat = self.data['catalog']
-        query = self.finderQuery()        
-        brains = cat(**query)    
+        scope = self.data['scope']
+        if IATTopic.providedBy(scope) :
+            supQuery = self.finderQuery()
+            if supQuery.has_key('path'):
+                del supQuery['path']
+            brains = scope.queryCatalog(supQuery)
+        else :
+            query = self.finderQuery()        
+            brains = cat(**query)    
         results = []
         for b in brains :
             r = {}

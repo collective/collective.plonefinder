@@ -91,6 +91,9 @@ SVN Unreleased
   by a data dict ie self.data['root'] in place of self.root
   macadames - 2010/08/04
 
+* use topic queryCatalog when the scope is a topic
+  macadames - 2010/08/04
+
 1.0.0-b
 -------
 
