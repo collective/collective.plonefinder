@@ -66,23 +66,25 @@ class Finder(BrowserView):
         super(Finder, self).__init__(context, request)
         portal_url = getToolByName(context, 'portal_url')
         portal = portal_url.getPortalObject()
+        # dict to place persistent objects
+        self.data = {}
+        self.data['portal'] = portal
+        self.data['root'] = None
+        self.data['scope'] = None
+        self.data['catalog'] =  getToolByName(portal, 'portal_catalog')
         self.is_plone3 = self.isPlone3()
-        self.portal_url = portal_url()
-        self.portal = portal 
+        self.portal_url = portal_url() 
         self.portalpath = '/'.join(portal.getPhysicalPath())       
         self.breadcrumbs = []  
         # all these properties could be overloaded
         # in a Finder's inherited class
         self.findername = 'plone_finder'
-        self.catalog =  getToolByName(self.portal, 'portal_catalog')
         self.showbreadcrumbs=True 
-        self.scope = None
         self.scopetitle = ''
         self.scopetype = ''
         self.scopeiconclass = 'divicon'
         self.multiselect = True
         self.forcecloseoninsert = 0
-        self.root = None
         self.rootpath = ''
         self.browsedpath = ''
         self.parentpath = ''
@@ -169,7 +171,7 @@ class Finder(BrowserView):
             elif self.sort_order=='ascending' :
                 self.sort_inverse = 'reverse'
             self.sort_request = True  
-            if self.sort_on not in self.catalog.indexes() :
+            if self.sort_on not in self.data['catalog'].indexes() :
                 self.sort_withcatalog = False
         
         # use self.displaywithoutquery = False if necessary         
@@ -257,7 +259,7 @@ class Finder(BrowserView):
         self.rootfolders = [] 
         if self.browse :
             self.folders = self.finderBrowsingResults()
-            if self.scope is self.root :
+            if self.data['scope'] is self.data['root'] :
                 self.rootfolders = self.folders
             else :
                 self.rootfolders = self.finderNavBrowsingResults() 
@@ -269,9 +271,9 @@ class Finder(BrowserView):
         # Add portal content on main window context        
         if self.allowupload :
             tool = getToolByName(context, "portal_membership")
-            if not(tool.checkPermission('Add portal content', self.scope)) :
+            if not(tool.checkPermission('Add portal content', self.data['scope'])) :
                 self.allowupload = False         
-            if not IFinderUploadCapable.providedBy(self.scope) :
+            if not IFinderUploadCapable.providedBy(self.data['scope']) :
                 self.allowupload = False           
         
         self.allowaddfolder = request.get('allowaddfolder', self.allowaddfolder)
@@ -280,9 +282,9 @@ class Finder(BrowserView):
         # disallowed also when context is not IFinderUploadCapable
         if self.allowaddfolder :
             tool = getToolByName(context, "portal_membership")
-            if not(tool.checkPermission('Add portal content', self.scope)) :
+            if not(tool.checkPermission('Add portal content', self.data['scope'])) :
                 self.allowaddfolder = False 
-            if not IFinderUploadCapable.providedBy(self.scope) :
+            if not IFinderUploadCapable.providedBy(self.data['scope']) :
                 self.allowaddfolder = False     
                    
         self.cleanrequest = self.cleanRequest()          
@@ -295,27 +297,28 @@ class Finder(BrowserView):
         set scope and all infos related to scope
         """
         browsedpath = request.get('browsedpath', self.browsedpath)
+        portal = self.data['portal']
         # find browser root and rootpath if undefined
-        if self.root is None :
+        if self.data['root'] is None :
             if self.rootpath :
-                self.root = aq_inner(self.portal.restrictedTraverse(self.rootpath))
+                self.data['root'] = aq_inner(portal.restrictedTraverse(self.rootpath))
             else :
                 root = aq_inner(context)
                 while not INavigationRoot.providedBy(root)  :
                     root = aq_inner(root.aq_parent)
-                self.root = root
+                self.data['root'] = root
                 self.rootpath = '/'.join(root.getPhysicalPath())
         # find scope if undefined
         # by default scope = browsedpath or first parent folderish or context if context is a folder        
-        scope = self.scope
+        scope = self.data['scope']
         if scope is None  : 
             if browsedpath :
-                self.scope = scope = aq_inner(self.portal.restrictedTraverse(browsedpath))   
+                self.data['scope'] = scope = aq_inner(portal.restrictedTraverse(browsedpath))   
             else :
                 folder = aq_inner(context)
                 if not bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)) :
                     folder = aq_inner(folder.aq_parent)    
-                self.scope = scope = folder 
+                self.data['scope'] = scope = folder 
                 
         self.scopetitle = scope.pretty_title_or_id()          
         self.scopetype = scopetype = scope.portal_type      
@@ -324,12 +327,12 @@ class Finder(BrowserView):
         # set browsedpath and browsed_url
         self.browsedpath = '/'.join(scope.getPhysicalPath())        
         self.browsed_url = scope.absolute_url()
-        if scope is not self.root : 
+        if scope is not self.data['root'] : 
             parentscope = aq_inner(scope.aq_parent)
             self.parentpath = '/'.join(parentscope.getPhysicalPath())   
         
         # set breadcrumbs    
-        # TODO : use self.catalog                     
+        # TODO : use self.data['catalog']                     
         if showbreadcrumbs :
             crumbs = []
             item = scope
@@ -418,7 +421,7 @@ class Finder(BrowserView):
         method used for finder left navigation
         and navigation inside main window
         """ 
-        cat = self.catalog
+        cat = self.data['catalog']
         query = self.finderBrowsingQuery(querypath)
         brains = cat(**query)           
         results = []
@@ -452,7 +455,7 @@ class Finder(BrowserView):
         return results to select
         """           
         context = aq_inner(self.context)                         
-        cat = self.catalog
+        cat = self.data['catalog']
         query = self.finderQuery()        
         brains = cat(**query)    
         results = []

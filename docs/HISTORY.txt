@@ -87,6 +87,10 @@ SVN Unreleased
 * Added a real left navigation tree
   macadames - 2010/08/02
 
+* replace persistent objects in attribute views
+  by a data dict ie self.data['root'] in place of self.root
+  macadames - 2010/08/04
+
 1.0.0-b
 -------
 

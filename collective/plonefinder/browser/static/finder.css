@@ -436,7 +436,7 @@ a.folderSelect:hover {
   font-weight: bold;
 }
 
-.listContainer * {
+#plone-browser-body .listContainer * {
   float: left;
 }
 
@@ -547,10 +547,15 @@ a.folderSelect:hover {
 a.folderUp {
   line-height: 18px;
   font-size:13px;
-  padding-left: 11px;
+  padding-left: 13px;
   background: transparent url(./folder_up.png) top left no-repeat;
   text-decoration: none;
   margin-right: 3px;
+  float: left;
+}
+
+.scopeIcon {
+  float: left;
 }
 
 #plone-browser-body .floatContainer {
@@ -821,10 +826,6 @@ a.addFolderView {
 
 .retrait {
   margin-left: 5px;
-}
-
-#plone-browser-navigation .listContainer * {
-  float: none !important;
 }
 
 #plone-browser-navigation a:hover,

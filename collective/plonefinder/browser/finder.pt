@@ -23,7 +23,6 @@
                          browsed_url view/browsed_url;
                          forcecloseoninsert view/forcecloseoninsert;
                          ispopup view/ispopup;
-                         portal view/portal;
                          portal_url view/portal_url;
                          browsedpath view/browsedpath;
                          portalpath view/rootpath;
@@ -213,7 +212,7 @@
                      <a href="javascript: void(0);"
                         tal:condition="not:parentpath"
                         tal:attributes="onclick string:Browser.update('${path}', '');; return false;">
-                        <div tal:attributes="class string:${typeview}Folder">
+                        <div tal:attributes="class string:${typeview}Folder scopeIcon">
                           <div tal:attributes="class view/scopeiconclass">&nbsp;</div>
                         </div>
                         <div class="title scopetitle"
