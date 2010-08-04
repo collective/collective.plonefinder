@@ -121,3 +121,8 @@ msgstr "Chargement en cours, veuillez patienter ..."
 msgid "label_msg_done"
 msgstr "Effectué."
 
+#. Default: "Go to parent"
+msgid "label_goto_parent"
+msgstr "Remonter au parent"
+
+
