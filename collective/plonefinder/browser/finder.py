@@ -1,5 +1,8 @@
 
 import mimetypes
+from types import ListType
+from types import TupleType
+from types import StringType
 from ZTUtils import make_query
 from zope.component import getMultiAdapter
 from zope.interface import implements
@@ -11,6 +14,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
+from Products.ZCatalog.Lazy import LazyCat
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from Products.ATContentTypes.interface import IImageContent, IATTopic
 
@@ -49,7 +53,24 @@ def getPathClass(browsedpath, currentpath) :
             if isCurrentNode :
                 return ' currentnode'
     return ''
-               
+
+
+def finderTopicsQueryCatalog(scope, catalog,  **kw):
+    """Redefine the queryCatlog method defined in AT Topics
+       to allow a query override with kw args
+       and to return 0 results when 
+       there are no criteria inside topic
+       (other use cases are not interesting here)
+    """
+
+    query = scope.buildQuery()
+    if query is None:
+        return []
+    else:
+        # Allow parameters to override existing criterias
+        for k,v in kw.items() :
+            query[k]=v
+        return catalog(**query)             
 
 FORM_PARAMS = ('SearchableText',)                                                
 
@@ -461,7 +482,7 @@ class Finder(BrowserView):
             supQuery = self.finderQuery()
             if supQuery.has_key('path'):
                 del supQuery['path']
-            brains = scope.queryCatalog(supQuery)
+            brains = finderTopicsQueryCatalog(scope, cat, **supQuery)
         else :
             query = self.finderQuery()        
             brains = cat(**query)    
