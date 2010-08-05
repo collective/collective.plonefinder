@@ -521,6 +521,10 @@ a.folderSelect:hover {
   display: none !important;
 }
 
+a.blacklisted {
+  background-color: #E0E4FF;
+}
+
 #plone-browser input {
   border-color: #BABABA;
   font-size: 90%;
