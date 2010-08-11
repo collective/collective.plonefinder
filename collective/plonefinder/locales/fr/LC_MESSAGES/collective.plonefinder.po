@@ -41,8 +41,8 @@ msgstr "Tous les fichiers ont été envoyé avec succès."
 msgid " files uploaded with success, "
 msgstr " fichiers envoyés avec succès, "
 
-#. Default: " file's upload return an error."
-msgid " file's upload return an error."
+#. Default: " uploads return an error."
+msgid " uploads return an error."
 msgstr " envois de fichiers retournent une erreur."
 
 #. Default: "Choose files to upload"

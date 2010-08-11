@@ -38,8 +38,8 @@ msgstr ""
 msgid " files uploaded with success, "
 msgstr ""
 
-#. Default: " file's upload return an error."
-msgid " file's upload return an error."
+#. Default: " uploads return an error."
+msgid " uploads return an error."
 msgstr ""
 
 #. Default: "Choose files to upload"
