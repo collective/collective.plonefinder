@@ -137,7 +137,6 @@ FINDER_UPLOAD_JS = """
     }
     onAllUploadsComplete = function(event, data){
         if (!data.errors) {
-           alert('%(ul_msg_all_sucess)s');
            Browser.onUploadComplete();
         }
         else {
@@ -149,7 +148,6 @@ FINDER_UPLOAD_JS = """
         jQuery('#uploader').uploadify({
             'uploader'      : '%(portal_url)s/++resource++plonefinder_static/uploader.swf',
             'script'        : '%(context_url)s/@@finder_upload_file',
-            //'checkScript'   : '%(context_url)s/@@finder_upload_check_file',
             'cancelImg'     : '%(portal_url)s/++resource++plonefinder_static/cancel.png',
             'folder'        : '%(physical_path)s',
             'onAllComplete' : onAllUploadsComplete,
@@ -237,7 +235,7 @@ class FinderUploadInit(BrowserView):
             ul_script_access    = sp.getProperty('ul_script_access', 'sameDomain'),
             ul_msg_all_sucess   = self._utranslate( u'All files uploaded with success.'),
             ul_msg_some_sucess   = self._utranslate( u' files uploaded with success, '),
-            ul_msg_some_errors   = self._utranslate( u" file's upload return an error."),
+            ul_msg_some_errors   = self._utranslate( u" uploads return an error."),
         )        
         
         mediaupload = session.get('mediaupload', request.get('mediaupload', ''))  
