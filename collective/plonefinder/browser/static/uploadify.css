@@ -71,7 +71,7 @@ THE SOFTWARE.
     cursor:pointer;
     text-align:center;
     text-decoration:none;
-    padding: 0 20px !important;
+    padding: 0 2px 0 15px !important;
 }
 
 #label-upload{
