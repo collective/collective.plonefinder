@@ -32,6 +32,8 @@ setup(name='collective.plonefinder',
                         # -*- Extra requirements: -*-
                         ],
       entry_points="""
-      # -*- entry_points -*- 
+      # -*- Entry points: -*-
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )

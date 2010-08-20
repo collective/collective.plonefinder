@@ -94,6 +94,9 @@ SVN Unreleased
 * use topic queryCatalog when the scope is a topic
   macadames - 2010/08/04
 
+* added support for z3c.autoinclude
+  macadames - 2010/08/20
+
 1.0.0-b
 -------
 
