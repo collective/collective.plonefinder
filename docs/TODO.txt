@@ -1,6 +1,7 @@
 TODO (2010/08/04)
 =================
 
+- Put the quickupload in a separate package (no more flashupload, or only as an option)
 
 - IEfixes (IE8 seems OK now, IE7 has some minor width height or position bugs, no more support for IE6)
 
