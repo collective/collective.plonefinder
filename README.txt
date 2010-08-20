@@ -157,8 +157,7 @@ Todo :
 
 - Improve zope3 reference widget properties
 
-  - add option to hide/show or just mark selected items in finder browsing results
-   (just need to store the finder blacklist in session)
+  - add option to hide/show or just mark selected items in finder browsing results (just need to store the finder blacklist in session)
   
   - add option to set a specific catalog query stored in session
   
@@ -167,8 +166,7 @@ Todo :
 
 - New zope3 widget to store urls (for a string field)
 
-- ATPloneFinderWidget for Reference fields 
- (not a big challenge, just need to use ATReferenceBrowserWidget as base to start the work)
+- ATPloneFinderWidget for Reference fields (not a big challenge, just need to use ATReferenceBrowserWidget as base to start the work)
 
 - ATLinkWidget to store internal links
 
