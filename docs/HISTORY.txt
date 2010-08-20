@@ -4,6 +4,9 @@ Changelog
 SVN Unreleased
 --------------
 
+1.0.0-b2
+--------
+
 * fix unauthorized error in edit forms using FinderSelectWidget when user
   don't have the permission to access some referenced contents. In this case
   object is not removed from list, but a message is displayed in place of object title :
