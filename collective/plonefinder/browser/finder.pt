@@ -142,14 +142,15 @@
               <a class="uploadView"
                  tal:condition="view/allowupload"
                  title="upload"
-                 href="javascript:Browser.openUploader()"
-                 tal:attributes="href string:javascript:Browser.openUploader()">
+                 href="javascript: void(0);"
+                 onclick="Browser.openUploader();return false">
                  <span i18n:translate="label_files_quick__upload">Files quick upload</span>
               </a>             
               <a class="addFolderView"
                  tal:condition="view/allowaddfolder"
                  title="add new folder"
-                 tal:attributes="href string:javascript:Browser.openAddFolderForm()">
+                 onclick="Browser.openAddFolderForm();return false"
+                 href="javascript: void(0);">
                  <span i18n:translate="label_create_new_folder">Create new folder</span>
               </a>            
             </div>

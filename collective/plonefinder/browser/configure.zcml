@@ -10,8 +10,7 @@
       name="finder-content-types-3.x.css"
       permission="zope.Public"
       /> 
-
-  <adapter factory=".uploadcapable.FinderUploadCapableFileFactory" />
+      
   <adapter factory=".uploadcapable.FinderCreateFolderCapableFactory" />
 
   <class class="Products.ATContentTypes.content.folder.ATFolder">
@@ -52,52 +51,6 @@
       directory="static"
       />  	        
 
-  <!-- Finder Upload View -->
-       
-  <browser:page
-      for=".interfaces.IFinderUploadCapable"
-      name="finder_upload"
-      class=".finder_upload.FinderUploadView"
-      permission="cmf.AddPortalContent"/>     
-    
-  <!-- Finder Upload javascript Init -->
-  <browser:page
-      for="*"
-      name="finder_upload_init"
-      class=".finder_upload.FinderUploadInit"
-      permission="cmf.AddPortalContent"/>      
-  
-  <!-- Finder upload file View
-       we use permission zope.Public 
-       on upload_file view (called in flash)
-       for users authenticated 
-       without cookie -->   
-           
-  <browser:page
-      for="*"
-      name="finder_upload_file"
-      class=".finder_upload.FinderUploadFile"
-      permission="zope.Public"/> 
-           
-  <!-- finder upload check file -->
-  
-  <browser:page
-      for="*"
-      name="finder_upload_check_file"
-      class=".finder_upload.FinderUploadCheckFile"
-      permission="cmf.AddPortalContent"/> 
-
-
-  <!-- ticket view which generate a ticket for each user/folder absolute url
-       used only when no user cookie is available (not standard authentification) -->
-
-  <browser:page
-      for=".interfaces.IFinderUploadCapable"
-      name="ticket"
-      class=".ticket.TicketView"
-      permission="cmf.AddPortalContent"
-      />
-
   <!-- Finder New Folder Form View -->
   <browser:page
       for=".interfaces.IFinderUploadCapable"
@@ -111,5 +64,13 @@
       name="finder_create_folder"
       class=".finder_newfolder.FinderNewFolder"
       permission="cmf.AddPortalContent"/> 
+
+  <!-- Finder Upload View Just for backward compliance -->
+       
+  <browser:page
+      for="collective.quickupload.browser.interfaces.IQuickUploadCapable"
+      name="finder_upload"
+      class="collective.quickupload.browser.quick_upload.QuickUploadView"
+      permission="cmf.AddPortalContent"/>         
 
 </configure>

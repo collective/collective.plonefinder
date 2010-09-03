@@ -124,7 +124,7 @@ class Finder(BrowserView):
         self.removefromblacklist = []
         self.query = None
         self.imagestypes = ('Image', 'News Item')
-        self.filestypes = ('File', 'PloneExFile')
+        self.filestypes = ('File')
         self.selectiontype = 'uid'
         self.allowimagesizeselection = True
         self.fieldid = 'demofield'
