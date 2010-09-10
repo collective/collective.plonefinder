@@ -149,7 +149,7 @@ class Finder(BrowserView):
         
         context = aq_inner(self.context)
         request = aq_inner(self.request)                                       
-        session = request.get('SESSION', None)  
+        session = request.get('SESSION', {})  
         # use self.rootpath or rootpath in request or session to change browser root
         self.rootpath = request.get('rootpath', self.rootpath)
         # use self.browse=False (or browse=False in request) to disallow browsing globally
@@ -220,9 +220,11 @@ class Finder(BrowserView):
         
         # put new blacklist in session
         if request.get('emptyblacklist', False) :
-            session.set('blacklist', [])
+            if session :
+                session.set('blacklist', [])
         else :
-            session.set('blacklist', self.blacklist)
+            if session :
+                session.set('blacklist', self.blacklist)
             
         # use self.query (or query in request) to overload entire query
         self.query = request.get('query', self.query)         
