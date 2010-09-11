@@ -10,7 +10,7 @@ The intent is to make it usable in different situations :
 - to store selected contents in zope3 forms (portlet forms as example)
 
 - for collective.ckeditor or any possible wysiwyg editor for referencing images or contents inside a rich text field,
-  it's also possible to upload files / images and create folders with this product (big part of code taken from collective.uploadify)
+  it's also possible to upload files / images and create folders with this product (dependency to collective.quickupload)
 
 - for referencable fields inside AT edit forms
 
@@ -147,13 +147,9 @@ Todo :
   
   - improve contextual actions menu (change workflow state, rename, delete, copy, paste ...)
   
-  - add a simple upload ajax form (today only multiple upload using jquery.uploadify is available)
-  
   - add a finder menu action to show/hide the current selection list in right panel
   
   - remove items from selection list in finder window
-  
-  - use navtree in left panel (today a simplified left navigation is provided)
 
 - Improve zope3 reference widget properties
 
