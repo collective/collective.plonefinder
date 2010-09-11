@@ -1,8 +1,12 @@
 Changelog
 =========
 
-SVN Unreleased
---------------
+1.0.0
+-----
+
+* use Plone Quick Upload as upload tool - new dependency to
+  collective.quickupload added
+  macadames - 2010/09
 
 1.0.0-b2
 --------

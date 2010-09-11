@@ -4,6 +4,8 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="collective.plonefinder">
 
+  <include package="collective.quickupload" />
+  
   <browser:page
       for="*"
       class=".typescss.TypesCssProperties"
