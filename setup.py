@@ -5,7 +5,7 @@ This module contains the tool of collective.plonefinder
 import os
 from setuptools import setup, find_packages
 
-version = '1.0.0b2'
+version = '1.0.0'
 
 setup(name='collective.plonefinder',
       version=version,
@@ -20,7 +20,7 @@ setup(name='collective.plonefinder',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         ],
       keywords='Zope Plone Medias Finder',
-      author='Alter Way Solutions',
+      author='Jean-mat Grimaldi / Alter Way Solutions',
       author_email='support@ingeniweb.com',
       url='http://www.alterway.fr',
       license='GPL',
@@ -29,6 +29,7 @@ setup(name='collective.plonefinder',
       include_package_data=True,
       zip_safe=False,
       install_requires=['setuptools',
+                        'collective.quickupload',
                         # -*- Extra requirements: -*-
                         ],
       entry_points="""
