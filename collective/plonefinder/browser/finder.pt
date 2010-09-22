@@ -1,4 +1,3 @@
-
 <metal:block use-macro="context/global_defines/macros/defines" />
 <tal:headers define="request context/REQUEST">
   <tal:block define="charset site_properties/default_charset|string:utf-8;
@@ -418,6 +417,16 @@
 
   <metal:block define-macro="plone_browser_popup"
                tal:condition="python: ispopup and not onlybody">
+  <tal:doctype tal:replace="structure string:&lt;!DOCTYPE html PUBLIC
+    &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot;
+    &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;" />
+  
+  <html xmlns="http://www.w3.org/1999/xhtml"
+        xml:lang="en"
+        lang="en"
+        tal:define="lang language"
+        tal:attributes="lang lang;
+                        xml:lang lang">
     <head>
     
       <!-- Internet Explorer fix, forces IE8 into newest possible rendering
@@ -479,7 +488,7 @@
       </div>
       
     </body>
-
+  </html>
   </metal:block>    
   
   
