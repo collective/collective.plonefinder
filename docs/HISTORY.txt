@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0.1 - SVN UNRELEASED
-----------------------
+1.0.1
+-----
 
 * Css IE7 fixes
   macadames - 2010/09/22
