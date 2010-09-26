@@ -11,6 +11,10 @@ Changelog
   doctype was missing
   macadames - 2010/09/22
 
+* finder.pt : Remove lang attribute on html tag- we don't need it 
+  and it's difficult to maintain between Plone3 / Plone4
+  macadames - 2010/09/26
+
 1.0.0
 -----
 
