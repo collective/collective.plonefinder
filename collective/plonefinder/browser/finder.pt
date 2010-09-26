@@ -423,10 +423,7 @@
   
   <html xmlns="http://www.w3.org/1999/xhtml"
         xml:lang="en"
-        lang="en"
-        tal:define="lang language"
-        tal:attributes="lang lang;
-                        xml:lang lang">
+        lang="en">
     <head>
     
       <!-- Internet Explorer fix, forces IE8 into newest possible rendering
