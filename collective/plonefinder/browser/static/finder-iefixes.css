@@ -1,35 +1,36 @@
+/* $Id$ */
 .finderActionMenu .finderActionMenuItem a {
     height: 0.1%;
 }
 .loupe,
 .folderSelect {
-  height: 17px;
+    height: 17px;
 }
 .listContainer {
-  min-height:1%  !important;
-  overflow: visible !important;
+    min-height:1%  !important;
+    overflow: visible !important;
 }
 /* IE6 fix */
 *html .listContainer {
-  height:1% !important;
-  overflow: visible !important;
+    height:1% !important;
+    overflow: visible !important;
 }
 #menuViews a {
-  width: 20px;
+    width: 20px;
 }
 #menuViews a,
 #menuActions a {
-  height: 20px;
+    height: 20px;
 }
 .listingBar {
-  width: 50%;
+    width: 50%;
 }
 a.actionMenusButton {
-  position: absolute !important;
+    position: absolute !important;
 }
 .portrait .relContainer {
-  left: 0 !important;
+    left: 0 !important;
 }
 .portrait .actionsMenusRelContainer {
-  left: 52px;
+    left: 52px;
 }

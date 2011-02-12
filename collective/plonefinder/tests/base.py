@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+# $Id$
 """Test setup for integration and functional tests.
 
-When we import PloneTestCase and then call setupPloneSite(), all of
-Plone's products are loaded, and a Plone site will be created. This
-happens at module level, which makes it faster to run each test, but
-slows down test runner startup.
+When we import PloneTestCase and then call setupPloneSite(), all of Plone's
+products are loaded, and a Plone site will be created. This happens at module
+level, which makes it faster to run each test, but slows down test runner
+startup.
 """
 
 from Products.Five import zcml
@@ -14,12 +16,11 @@ from Testing import ZopeTestCase as ztc
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import onsetup
 
-# When ZopeTestCase configures Zope, it will *not* auto-load products
-# in Products/. Instead, we have to use a statement such as:
-#   ztc.installProduct('SimpleAttachment')
-# This does *not* apply to products in eggs and Python packages (i.e.
-# not in the Products.*) namespace. For that, see below.
-# All of Plone's products are already set up by PloneTestCase.
+# When ZopeTestCase configures Zope, it will *not* auto-load products in
+# Products/. Instead, we have to use a statement such as:
+# ztc.installProduct('SimpleAttachment') This does *not* apply to products in
+# eggs and Python packages (i.e.  not in the Products.*) namespace. For that,
+# see below.  All of Plone's products are already set up by PloneTestCase.
 
 @onsetup
 def setup_product():

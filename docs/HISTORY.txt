@@ -1,17 +1,35 @@
 Changelog
 =========
 
+SVN trunk
+---------
+
+* Lots of code simplifications (yet not finished, grep for "FIXME:")
+  [glenfant]
+
+* More doc in the README (explain all releavant usages)
+  [glenfant]
+
+* SVN marker in all possible files
+  [glenfant]
+
+* Lots of optims (yet not finished, grep for "FIXME:")
+  [glenfant]
+
+* Commented obscure features in the code
+  [glenfant]
+
 1.0.1
 -----
 
-* Css IE7 fixes
+* CSS IE7 fixes
   macadames - 2010/09/22
 
 * finder.pt : template fix
   doctype was missing
   macadames - 2010/09/22
 
-* finder.pt : Remove lang attribute on html tag- we don't need it 
+* finder.pt : Remove lang attribute on html tag- we don't need it
   and it's difficult to maintain between Plone3 / Plone4
   macadames - 2010/09/26
 
@@ -35,10 +53,10 @@ Changelog
 * fix selectItem when there were quotes in titles
 
 * added a base attribute to reference widget used for finder opening folder.
- 
+
 * use unicode chars for up and down arrows in reference widget.
 
-* allow change imagetypes using request and referencewidget 
+* allow change imagetypes using request and referencewidget
 
 * added a generated css for plone3 content-types icons
 
@@ -46,7 +64,7 @@ Changelog
 
 * added mime-type icons for filestypes in finder
 
-* FinderSelectWidget : do not raise an error anymore when object is not found 
+* FinderSelectWidget : do not raise an error anymore when object is not found
   but just returns a message in place of title (object with uid doesn't exist)
 
 * Fix regression on allowupload (was never allowed)
@@ -88,7 +106,7 @@ Changelog
 * fix some css styles on Plone3 or Plone4 + classic Theme
   macadames - 2010/07/31
 
-* design improvements  
+* design improvements
   macadames - 2010/07/31
 
 * french translation in progress
@@ -130,7 +148,7 @@ Changelog
 
 * plone4 icons style used also under plone3
 
-* reference objects widget added for zope3 forms (can be used in portlets) 
+* reference objects widget added for zope3 forms (can be used in portlets)
 
 1.0.0-a
 -------

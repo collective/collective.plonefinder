@@ -1,39 +1,30 @@
-
 <metal:block use-macro="context/global_defines/macros/defines" />
-<tal:headers define="request context/REQUEST">
-  <tal:block define="charset site_properties/default_charset|string:utf-8;
-                     dummy python:request.RESPONSE.setHeader('Content-Type', 'text/html;;charset=%s' % charset)" />
-  <tal:block define="dummy python:request.RESPONSE.setHeader('Expires', 'Sat, 1 Jan 2000 00:00:00 GMT')" />
-  <tal:block define="dummy python:request.RESPONSE.setHeader('Last-Modified', 'Sat, 1 Jan 2000 00:00:00 GMT')" />
-  <tal:block define="dummy python:request.RESPONSE.setHeader('Cache-control', 'max-age=0,s-maxage=0,must-revalidate')" />
-</tal:headers>
 
+<!-- $Id$ -->
 
 <div id="finder-create-folder"
      i18n:domain="collective.plonefinder">
-    <div id="finder-newfolder">
-      <h4 class="pannelHeader"
-          i18n:translate="header_create_new_folder">Create a new folder</h4>    
-      <form id="create-new-folder">
-        <div class="field">
-          <label>Title</label>
-          <input type="text"
-                 name="folder-title"
-                 id="folder-title"
-                 value="" />
-        </div>         
-        <div class="field">
-          <label>Description</label>       
-          <textarea name="folder-description"
-                    id="folder-description"></textarea>
-        </div>         
-        <div class="formControls">
-          <input type="button"
-                 value="submit" 
-                 onclick="Browser.createFolder()" />    
-        </div>                      
-      </form>           
-    </div>        
+  <div id="finder-newfolder">
+    <h4 class="pannelHeader"
+        i18n:translate="header_create_new_folder">Create a new folder</h4>
+    <form id="create-new-folder">
+      <div class="field">
+        <label>Title</label>
+        <input type="text"
+               name="folder-title"
+               id="folder-title"
+               value="" />
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <textarea name="folder-description"
+                  id="folder-description"></textarea>
+      </div>
+      <div class="formControls">
+        <input type="button"
+               value="submit"
+               onclick="Browser.createFolder()" />
+      </div>
+    </form>
+  </div>
 </div>
-
-
