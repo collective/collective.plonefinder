@@ -4,15 +4,17 @@
     xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="collective.plonefinder">
 
+  <!-- $Id$ -->
+
   <include package="collective.quickupload" />
-  
+
   <browser:page
       for="*"
       class=".typescss.TypesCssProperties"
       name="finder-content-types-3.x.css"
       permission="zope.Public"
-      /> 
-      
+      />
+
   <adapter factory=".uploadcapable.FinderCreateFolderCapableFactory" />
 
   <class class="Products.ATContentTypes.content.folder.ATFolder">
@@ -32,47 +34,49 @@
       name="plone_finder"
       class=".finder.Finder"
   	  permission="zope2.View"
-      />                  
-      
-  <!-- macros used by finder  -->      
+      />
+
+  <!-- macros used by finder  -->
+
   <browser:page
       for="*"
       name="findermacros"
       permission="zope.Public"
-      template="./finder.pt" />      
-      
+      template="./finder.pt" />
+
   <browser:page
       for="*"
       name="finderbatchmacros"
       permission="zope.Public"
-      template="./finder_batch.pt" />   
-        
+      template="./finder_batch.pt" />
+
   <!-- resource directory for widget static files -->
+
   <browser:resourceDirectory
       name="plonefinder_static"
       directory="static"
-      />  	        
+      />
 
   <!-- Finder New Folder Form View -->
   <browser:page
       for=".interfaces.IFinderUploadCapable"
       name="finder_add_folder"
       class=".finder_newfolder.FinderNewFolderView"
-      permission="cmf.AddPortalContent"/>    
+      permission="cmf.AddPortalContent"/>
 
-  <!-- Finder Create New Folder -->  
+  <!-- Finder Create New Folder -->
   <browser:page
       for="*"
       name="finder_create_folder"
       class=".finder_newfolder.FinderNewFolder"
-      permission="cmf.AddPortalContent"/> 
+      permission="cmf.AddPortalContent"/>
 
   <!-- Finder Upload View Just for backward compliance -->
-       
+
   <browser:page
       for="collective.quickupload.browser.interfaces.IQuickUploadCapable"
       name="finder_upload"
       class="collective.quickupload.browser.quick_upload.QuickUploadView"
-      permission="cmf.AddPortalContent"/>         
+      permission="cmf.AddPortalContent"/>
 
 </configure>

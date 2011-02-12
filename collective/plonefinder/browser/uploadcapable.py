@@ -5,24 +5,19 @@ __docformat__ = 'plaintext'
 
 import transaction
 from thread import allocate_lock
-from AccessControl import Unauthorized
-from ZODB.POSException import ConflictError
 from Acquisition import aq_inner
 from zope import interface
 from zope import component
-from zope.event import notify
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.filerepresentation.interfaces import IFileFactory, IDirectoryFactory
+from zope.filerepresentation.interfaces import IDirectoryFactory
 from zope.app.container.interfaces import INameChooser
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 
 from Products.CMFPlone import utils as ploneutils
-from Products.CMFCore import utils as cmfutils
 
 from interfaces import IFinderUploadCapable
 
 upload_lock = allocate_lock()
-        
+
 class FinderCreateFolderCapableFactory(object):
     interface.implements(IDirectoryFactory)
     component.adapts(IFinderUploadCapable)
@@ -51,5 +46,5 @@ class FinderCreateFolderCapableFactory(object):
             transaction.commit()
         finally:
             upload_lock.release()
-        return obj        
+        return obj
 

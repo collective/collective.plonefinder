@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
+# $Id$
 """Main product initializer
 """
 
 import logging
 from zope.i18n import MessageFactory
-logger = logging.getLogger("collective.plonefinder")
+from collective.plonefinder import config
 
-siteMessageFactory = MessageFactory("collective.plonefinder")
+logger = logging.getLogger(config.PROJECTNAME)
+siteMessageFactory = MessageFactory(config.PROJECTNAME)
 
-def initialize(context):
-    """Initializer called when used as a Zope 2 product."""
 
