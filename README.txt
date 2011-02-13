@@ -189,7 +189,7 @@ Full list of customization attributes
    * - ``allowupload``
      - ``False``
      - Do we enable upload files through our widget if the user has appropriate
-       permission?
+       permission? See `Uploadding in custom folderish type`_
    * - ``allowaddfolder``
      - ``False``
      - Do we enable adding new folders through our widget if the user has
@@ -211,8 +211,11 @@ Full list of customization attributes
        code.
 
 
+Developer Howto
+===============
+
 How to use it in a WYSIWYG editor
-=================================
+---------------------------------
 
 The more easy way is creating a specific view, because you will often need to
 override the javascript method to select objects, and because each editor has
@@ -220,6 +223,22 @@ its specific negociations with the browser.
 
 See ``collective.ckeditor`` package as example.
 
+
+Uploadding in custom folderish type
+-----------------------------------
+
+If you want to let the plone finder users upload files in your custom or third
+party folderish content types, you need to mark these types with the
+``IFinderUploadCapable`` marker interface. As in this self-speaking ZCML
+sample::
+
+  <class class="my.content.folderish.MyFolderish">
+    <implements
+       interface="collective.plonefinder.browser.interfaces.IFinderUploadCapable" />
+  </class>
+
+Out of the box, ``collective.plonefinder`` enables upload in the Plone site
+itself as well as in ``ATFolder`` and ``ATBTreeFolder``.
 
 Todo
 ====

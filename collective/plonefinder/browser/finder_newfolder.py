@@ -45,6 +45,7 @@ class FinderNewFolder(BrowserView):
         request = self.request
         session = request.get('SESSION', None)
 
+        # FIXME: hardcoded content type, should be in config.py
         portal_type = session.get('typefolder', request.get('typefolder', 'Folder'))
 
         title = request.get('folder-title', '')

@@ -96,47 +96,69 @@ class Finder(BrowserView):
         self.portal_url = portal_url()
         self.portalpath = '/'.join(portal.getPhysicalPath())
         self.breadcrumbs = []
-        # all these properties could be overloaded
-        # in a Finder's inherited class
+        # All these properties could be overloaded in a Finder's inherited class
         self.findername = 'plone_finder'
+        #: Visible breadcrumbs in finder
         self.showbreadcrumbs = True
         self.scopetitle = ''
         self.scopetype = ''
         self.scopeiconclass = 'divicon'
+        #: Select multiple elements
         self.multiselect = True
+        #: Closes the finder on selecting an item
         self.forcecloseoninsert = 0
+        #: Browsing root path
         self.rootpath = ''
         self.browsedpath = ''
         self.parentpath = ''
         self.types = []
+        #: View of types in content panel of finder. 'file', 'image' or 'selection'
         self.typeview = 'file'
         self.typecss = 'list'
+        #: Enable browsing
         self.browse = True
         self.sort_on = 'getObjPositionInParent'
         self.sort_order = ''
         self.sort_inverse = 'ascending'
         self.sort_request = False
         self.sort_withcatalog = True
+        #: ???
         self.displaywithoutquery = True
+        #: uids of items to be hidden (thus not selectable)
         self.blacklist = []
         self.addtoblacklist = []
         self.removefromblacklist = []
+        #: Mapping of catalog query keyword arguments or None
         self.query = None
-        # FIXME: We should use an interface here
+        # FIXME: We should use an interface instead (IATImage ?)
+        #: Portal types that may show image vignetes
         self.imagestypes = ('Image', 'News Item')
-        # FIXME: We should use an interface here
+        # FIXME: We should use an interface instead (IIcon ?)
+        #: Portal types that may have specific icons
         self.filestypes = ('File',)
+        #: Type of returned value, may be 'uid' or 'url'
         self.selectiontype = 'uid'
+        #: Do we enable selecting specific image size variants of IATImage items?
         self.allowimagesizeselection = True
+        #: Id of the field that has this finder widget
         self.fieldid = 'demofield'
+        #: Name of the field that has this finder widget
         self.fieldname = 'demofield'
+        #: Type of the field that has this finder widget (FIXME: seems useless)
         self.fieldtype = 'list'
+        #: True to show the finder in browser popup, Flase for an Ajax style overlay
         self.ispopup = True
+        #: True to show anyway blacklisted items (but these are not selectable)
         self.showblacklisted = True
+        #: True to display search results
         self.searchsubmit = False
+        #: True to allow file upload through the finder
         self.allowupload = False
+        #: True to allow creating new folders through the finder
         self.allowaddfolder = False
+        #: Portal type built to hold object upload through finder UI
         self.typeupload = ''
+        #: Portal type built when creating folder through finder UI
         self.typefolder = ''
         # Change this property
         # to define your own methods (overload selectItem as example)
@@ -146,49 +168,33 @@ class Finder(BrowserView):
 
 
     def __call__(self):
-
+        """Called on view being published
+        """
         context = aq_inner(self.context)
         request = aq_inner(self.request)
         session = request.get('SESSION', {})
 
         pleaseDontCache(context, request)
 
-        # Use self.rootpath or rootpath in request or session to change browser
-        # root
-        self.rootpath = request.get('rootpath', self.rootpath)
+        # Updating attributes from request values
+        for name in (
+            'rootpath', 'browse', 'showbreadcrumbs', 'multiselect',
+            'forcecloseoninsert', 'types', 'typeupload', 'typefolder',
+            'typeview', 'displaywithoutquery', 'query', 'imagestypes',
+            'filestypes', 'selectiontype', 'allowimagesizeselection', 'fieldid',
+            'fieldname', 'fieldtype', 'ispopup', 'showblacklisted',
+            'searchsubmit', 'allowupload', 'allowaddfolder'
+            ):
+            setattr(self, name, request.get(name, getattr(self, name))
 
-        # Use self.browse=False (or browse=False in request) to disallow
-        # browsing globally
-        self.browse = request.get('browse', self.browse)
-        self.showbreadcrumbs =  request.get('showbreadcrumbs', self.showbreadcrumbs)
         if not self.browse:
             self.showbreadcrumbs = False
 
         self.setScopeInfos(context, request, self.showbreadcrumbs)
 
-        # Use self.multiselect = False (or multiselect = False in request) when
-        # multiselect is False window is closed on insert
-        self.multiselect = request.get('multiselect', self.multiselect)
-        # To force close on insert even in multiselect mode
-        self.forcecloseoninsert = request.get('forcecloseoninsert',
-                                              self.forcecloseoninsert)
-
         if not self.multiselect:
              self.forcecloseoninsert = 1
 
-        # Use self.types (or types in request) to specify portal_types in catalog request
-        self.types = request.get('types', self.types)
-
-        # Use self.typeupload (or typeupload in request) to specify portal_type for upload
-        self.typeupload = request.get('typeupload', self.typeupload)
-
-        # Use self.typefolder (or typefolder in request) to specify portal_type
-        # used to create folder
-        self.typefolder = request.get('typefolder', self.typefolder)
-
-        # Use self.typeview (or typeview in request) to specify typeview ('file'
-        # or 'image' for now, 'selection' in future)
-        self.typeview = request.get('typeview', self.typeview)
         if self.typeview == 'image':
             self.typecss = 'float'
 
@@ -204,10 +210,6 @@ class Finder(BrowserView):
             self.sort_request = True
             if self.sort_on not in self.data['catalog'].indexes():
                 self.sort_withcatalog = False
-
-        # Use self.displaywithoutquery = False if necessary
-        self.displaywithoutquery = request.get('displaywithoutquery',
-                                               self.displaywithoutquery)
 
         # Use self.blacklist (or blacklist in session or request) to remove some
         # uids from results
@@ -233,49 +235,12 @@ class Finder(BrowserView):
                 self.blacklist.remove(k)
 
         # Put new blacklist in session
-        if request.get('emptyblacklist', False):
-            if session:
+        # FIXME: KISS
+        if session:
+            request.get('emptyblacklist', False):
                 session.set('blacklist', [])
-        else:
-            if session:
+            else:
                 session.set('blacklist', self.blacklist)
-
-        # Use self.query (or query in request) to overload entire query
-        self.query = request.get('query', self.query)
-
-        # Imagestypes used to show or not thumbs in browser
-        self.imagestypes = request.get('imagestypes', self.imagestypes)
-
-        # Filestypes used to show mime-type icons in browser
-        self.filestypes = request.get('filestypes', self.filestypes)
-
-        # Use self.selectiontype or selectiontype in request to overload
-        # selectiontype could be 'uid' or 'url'
-        self.selectiontype =  request.get('selectiontype', self.selectiontype)
-
-        # Set it to False to disallow sizes menu
-        self.allowimagesizeselection = request.get('allowimagesizeselection',
-                                                   self.allowimagesizeselection)
-
-        # Field id which will receive the selection
-        self.fieldid = request.get('fieldid', self.fieldid)
-
-        # TODO field name which will receive the selection
-        self.fieldname = request.get('fieldname', self.fieldname)
-
-        # TODO could be string
-        self.fieldtype = request.get('fieldtype', self.fieldtype)
-
-        # Set self.ispopup = False or ispopup = False in request for calling view in ajax
-        self.ispopup = request.get('ispopup', self.ispopup)
-
-        # Set self.showblacklisted = True or showblacklisted in request to show
-        # blacklist
-        self.showblacklisted = request.get('showblacklisted', self.showblacklisted)
-
-        # Use self.self.searchsubmit = True (or searchsubmit = True in request)
-        # to display search results
-        self.searchsubmit = request.get('searchsubmit', self.searchsubmit)
 
         firstpassresults = self.finderResults()
         if self.sort_request and not self.sort_withcatalog:
@@ -290,7 +255,7 @@ class Finder(BrowserView):
             for r in firstpassresults:
                 if r['uid'] not in self.blacklist or self.typeview=='selection':
                     results.append(r)
-                elif  self.showblacklisted:
+                elif self.showblacklisted:
                     r['blacklisted'] = True
                     results.append(r)
 
@@ -305,7 +270,6 @@ class Finder(BrowserView):
                 self.rootfolders = self.finderNavBrowsingResults()
 
         self.cleanrequest = self.cleanRequest()
-        self.allowupload = request.get('allowupload', self.allowupload)
 
         # Upload disallowed if user do not have permission to Add portal content
         # on main window context
@@ -316,11 +280,10 @@ class Finder(BrowserView):
             if not IFinderUploadCapable.providedBy(self.data['scope']):
                 self.allowupload = False
 
-        self.allowaddfolder = request.get('allowaddfolder', self.allowaddfolder)
-
         # Allowaddfolder disallowed if user do not have permission to add portal
         # content on context disallowed also when context is not
         # IFinderUploadCapable
+        # FIXME: This should require allowupload otherwise this has no sense
         if self.allowaddfolder:
             tool = getToolByName(context, "portal_membership")
             if not(tool.checkPermission('Add portal content', self.data['scope'])):

@@ -1,3 +1,5 @@
+# FIXME: This module seems to be of no use
+
 # This module was directly based on z3c.widget.flashupload.ticket.
 # Unfortunately we needed more information, like the username that the ticket
 # belongs to so that content can be created with the correct ownership.  And
