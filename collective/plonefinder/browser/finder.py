@@ -185,7 +185,7 @@ class Finder(BrowserView):
             'fieldname', 'fieldtype', 'ispopup', 'showblacklisted',
             'searchsubmit', 'allowupload', 'allowaddfolder'
             ):
-            setattr(self, name, request.get(name, getattr(self, name))
+            setattr(self, name, request.get(name, getattr(self, name)))
 
         if not self.browse:
             self.showbreadcrumbs = False
@@ -237,7 +237,7 @@ class Finder(BrowserView):
         # Put new blacklist in session
         # FIXME: KISS
         if session:
-            request.get('emptyblacklist', False):
+            if request.get('emptyblacklist', False):
                 session.set('blacklist', [])
             else:
                 session.set('blacklist', self.blacklist)
