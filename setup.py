@@ -5,7 +5,7 @@ This module contains the tool of collective.plonefinder
 import os
 from setuptools import setup, find_packages
 
-version = '1.0.2'
+version = '1.0.3dev'
 
 setup(name='collective.plonefinder',
       version=version,
