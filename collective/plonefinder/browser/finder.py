@@ -350,7 +350,7 @@ class Finder(BrowserView):
                 self.data['root'] = root
                 self.rootpath = '/'.join(root.getPhysicalPath())
         # find scope if undefined
-        # by default scope = browsedpath or first parent folderish 
+        # by default scope = browsedpath or first parent folderish
         # or context if context is a folder
         scope = self.data['scope']
         if scope is None:
@@ -387,7 +387,8 @@ class Finder(BrowserView):
                 crumb = {}
                 crumb['path'] = itempath
                 crumb['title'] = item.title_or_id()
-                crumb['show_link'] = portal_membership.checkPermission('View', item)
+                crumb['show_link'] = portal_membership.checkPermission(
+                        'View', item)
                 crumbs.append(crumb)
                 item = aq_inner(item.aq_parent)
                 itempath = '/'.join(item.getPhysicalPath())
