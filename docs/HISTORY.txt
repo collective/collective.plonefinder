@@ -1,139 +1,146 @@
 Changelog
 =========
 
+1.0.2 (unreleased)
+------------------
+
+- in breadcrumbs, avoid links to folders where the user does not have View
+  permission
+  [spereverde, yulka, gotcha]
+
 1.0.1
 -----
 
-* Css IE7 fixes
+- Css IE7 fixes
   macadames - 2010/09/22
 
-* finder.pt : template fix
+- finder.pt : template fix
   doctype was missing
   macadames - 2010/09/22
 
-* finder.pt : Remove lang attribute on html tag- we don't need it 
+- finder.pt : Remove lang attribute on html tag- we don't need it 
   and it's difficult to maintain between Plone3 / Plone4
   macadames - 2010/09/26
 
 1.0.0
 -----
 
-* use Plone Quick Upload as upload tool - new dependency to
+- use Plone Quick Upload as upload tool - new dependency to
   collective.quickupload added
   macadames - 2010/09
 
 1.0.0-b2
 --------
 
-* fix unauthorized error in edit forms using FinderSelectWidget when user
+- fix unauthorized error in edit forms using FinderSelectWidget when user
   don't have the permission to access some referenced contents. In this case
   object is not removed from list, but a message is displayed in place of object title :
   '%s : %s ' %(_(u"You don't have permission to access this object"),uid)
 
-* added : close window when self.multiselect = False or self.forcecloseonsinsert = False
+- added : close window when self.multiselect = False or self.forcecloseonsinsert = False
 
-* fix selectItem when there were quotes in titles
+- fix selectItem when there were quotes in titles
 
-* added a base attribute to reference widget used for finder opening folder.
+- added a base attribute to reference widget used for finder opening folder.
  
-* use unicode chars for up and down arrows in reference widget.
+- use unicode chars for up and down arrows in reference widget.
 
-* allow change imagetypes using request and referencewidget 
+- allow change imagetypes using request and referencewidget 
 
-* added a generated css for plone3 content-types icons
+- added a generated css for plone3 content-types icons
 
-* added new property self.filestypes in browser
+- added new property self.filestypes in browser
 
-* added mime-type icons for filestypes in finder
+- added mime-type icons for filestypes in finder
 
-* FinderSelectWidget : do not raise an error anymore when object is not found 
+- FinderSelectWidget : do not raise an error anymore when object is not found 
   but just returns a message in place of title (object with uid doesn't exist)
 
-* Fix regression on allowupload (was never allowed)
+- Fix regression on allowupload (was never allowed)
   macadames - 2010/07/21
 
-* Fix enable/disable browsing using request or self.browse = False
+- Fix enable/disable browsing using request or self.browse = False
   macadames - 2010/07/22
 
-* no search on another path, when browsing is disable
+- no search on another path, when browsing is disable
   macadames - 2010/07/22
 
-* title fields added to multiple upload using jquery.uploadify
+- title fields added to multiple upload using jquery.uploadify
   macadames - 2010/07/24
 
-* authentication for flash upload is done using cookie
+- authentication for flash upload is done using cookie
   when possible (same method as collective.uploadify)
   otherwise using a ticket (method PloneFlashUpload)
   macadames - 2010/07/28
 
-* use standard archetypes method "invokeFactory", to
+- use standard archetypes method "invokeFactory", to
   create new objects using uploaded files, to respect
   the complete plone createObject process.
   macadames - 2010/07/28
 
-* added new mediaupload key in request to set content-type
+- added new mediaupload key in request to set content-type
   for upload (very useful with jquery.uploadify)
   macadames - 2010/07/28
 
-* improve jquery.uploadify process with errors handling
+- improve jquery.uploadify process with errors handling
   macadames - 2010/07/29
 
-* added new css class required to show icons on plone4
+- added new css class required to show icons on plone4
   'icons-on'
   macadames - 2010/07/31
 
-* fix upload buttons styles on plone4
+- fix upload buttons styles on plone4
   macadames - 2010/07/31
 
-* fix some css styles on Plone3 or Plone4 + classic Theme
+- fix some css styles on Plone3 or Plone4 + classic Theme
   macadames - 2010/07/31
 
-* design improvements  
+- design improvements  
   macadames - 2010/07/31
 
-* french translation in progress
+- french translation in progress
   macadames - 2010/07/31
 
-* use InavigationRoot for the finder root no more IPloneSiteRot
+- use InavigationRoot for the finder root no more IPloneSiteRot
   macadames - 2010/08/01
 
-* design improvements
+- design improvements
   blue is the new color
   macadames - 2010/08/01
 
-* added new view attributes root and rootpath
+- added new view attributes root and rootpath
   used to change the browser root
   macadames - 2010/08/02
 
-* Added a real left navigation tree
+- Added a real left navigation tree
   macadames - 2010/08/02
 
-* replace persistent objects in attribute views
+- replace persistent objects in attribute views
   by a data dict ie self.data['root'] in place of self.root
   macadames - 2010/08/04
 
-* use topic queryCatalog when the scope is a topic
+- use topic queryCatalog when the scope is a topic
   macadames - 2010/08/04
 
-* added support for z3c.autoinclude
+- added support for z3c.autoinclude
   macadames - 2010/08/20
 
 1.0.0-b
 -------
 
-* images sizes displayed in finder are taken from portal properties
+- images sizes displayed in finder are taken from portal properties
   imaging properties when exists
 
-* choose image sizes : contextual menus added
+- choose image sizes : contextual menus added
 
-* many IE fixes and cosmetic changes
+- many IE fixes and cosmetic changes
 
-* plone4 icons style used also under plone3
+- plone4 icons style used also under plone3
 
-* reference objects widget added for zope3 forms (can be used in portlets) 
+- reference objects widget added for zope3 forms (can be used in portlets) 
 
 1.0.0-a
 -------
 
-* Initial release
+- Initial release
 

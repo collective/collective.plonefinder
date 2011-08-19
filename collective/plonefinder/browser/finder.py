@@ -378,6 +378,7 @@ class Finder(BrowserView):
 
         # set breadcrumbs
         # TODO : use self.data['catalog']
+        portal_membership = getToolByName(context, "portal_membership")
         if showbreadcrumbs:
             crumbs = []
             item = scope
@@ -386,6 +387,7 @@ class Finder(BrowserView):
                 crumb = {}
                 crumb['path'] = itempath
                 crumb['title'] = item.title_or_id()
+                crumb['show_link'] = portal_membership.checkPermission('View', item)
                 crumbs.append(crumb)
                 item = aq_inner(item.aq_parent)
                 itempath = '/'.join(item.getPhysicalPath())

@@ -174,7 +174,7 @@
                             dir="ltr">
                           <tal:last tal:define="is_last repeat/crumb/end">
                               <a href="javascript: void(0);"
-                                 tal:omit-tag="not: crumb/path"
+                                 tal:omit-tag="not:crumb/show_link"
                                  tal:attributes="onclick string:Browser.update('${crumb/path}', '');; return false;"
                                  tal:content="crumb/title"
                                  tal:on-error="crumb">
