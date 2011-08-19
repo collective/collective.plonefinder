@@ -4,8 +4,11 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
-- in breadcrumbs, avoid links to folders where the user does not have View
-  permission
+- Always show full site structure in navigation column.
+  [spereverde, yulka, gotcha]
+
+- In breadcrumbs, avoid links to folders where the user does not have View
+  permission.
   [spereverde, yulka, gotcha]
 
 1.0.1

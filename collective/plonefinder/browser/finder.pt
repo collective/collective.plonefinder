@@ -195,30 +195,6 @@
                      tal:condition="view/browse">
                 <div id="plone-browser-navigation"
                      class="finder_panel">
-                  <div class="listContainer folder"
-                       tal:define="path view/browsedpath;
-                                   title view/scopetitle">
-                     <a tal:condition="parentpath"
-                        class="folderUp"
-                        href="javascript: void(0);"
-                        title="Go to parent"
-                        tal:attributes="onclick string:Browser.update('${parentpath}', '');; return false;"
-                        title="parent folder"
-                        i18n:attributes="title label_goto_parent">&nbsp;               
-                     </a>                 
-                     <div class="title scopetitle"
-                          tal:condition="parentpath"
-                          i18n:translate="label_goto_parent">Go to parent</div>                           
-                     <a href="javascript: void(0);"
-                        tal:condition="not:parentpath"
-                        tal:attributes="onclick string:Browser.update('${path}', '');; return false;">
-                        <div tal:attributes="class string:${typeview}Folder scopeIcon">
-                          <div tal:attributes="class view/scopeiconclass">&nbsp;</div>
-                        </div>
-                        <div class="title scopetitle"
-                             tal:content="title">sample Folder 1</div>
-                     </a>                
-                  </div>
                   <metal:block define-macro="finder-navigation-recurse">
                       <div class="retrait">
                         <tal:folders repeat="f rootfolders">

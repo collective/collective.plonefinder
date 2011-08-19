@@ -7,7 +7,6 @@ from Acquisition import aq_base, aq_inner
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
-from plone.app.layout.navigation.interfaces import INavigationRoot
 from Products.ATContentTypes.interface import IATTopic
 
 from collective.plonefinder.interfaces import IFinder
@@ -340,14 +339,9 @@ class Finder(BrowserView):
         portal = self.data['portal']
         # find browser root and rootpath if undefined
         if self.data['root'] is None:
-            if self.rootpath:
-                self.data['root'] = aq_inner(portal.restrictedTraverse(
-                    self.rootpath))
-            else:
-                root = aq_inner(context)
-                while not INavigationRoot.providedBy(root):
-                    root = aq_inner(root.aq_parent)
-                self.data['root'] = root
+            self.data['root'] = root = aq_inner(portal.restrictedTraverse(
+                self.rootpath))
+            if not self.rootpath:
                 self.rootpath = '/'.join(root.getPhysicalPath())
         # find scope if undefined
         # by default scope = browsedpath or first parent folderish
