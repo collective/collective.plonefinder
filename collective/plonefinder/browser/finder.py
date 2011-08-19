@@ -350,9 +350,8 @@ class Finder(BrowserView):
                 self.data['root'] = root
                 self.rootpath = '/'.join(root.getPhysicalPath())
         # find scope if undefined
-        # by default scope = browsedpath or first parent folderish or
-        # context if context is a folder
-
+        # by default scope = browsedpath or first parent folderish 
+        # or context if context is a folder
         scope = self.data['scope']
         if scope is None:
             if browsedpath:
