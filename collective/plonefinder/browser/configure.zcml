@@ -74,7 +74,7 @@
   <!-- Finder Upload View Just for backward compliance -->
 
   <browser:page
-      for="collective.quickupload.browser.interfaces.IQuickUploadCapable"
+      for="collective.quickupload.interfaces.IQuickUploadCapable"
       name="finder_upload"
       class="collective.quickupload.browser.quick_upload.QuickUploadView"
       permission="cmf.AddPortalContent"/>
