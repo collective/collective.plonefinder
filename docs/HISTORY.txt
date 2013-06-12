@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.0.3 (unreleased)
+1.0.3 (2013-06-12)
 ------------------
 
-- Nothing changed yet.
+- Compatibility with Plone 4.3
+  [toutpt]
 
 
 1.0.2 (2011-08-19)
