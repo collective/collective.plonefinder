@@ -5,7 +5,7 @@ This module contains the tool of collective.plonefinder
 import os
 from setuptools import setup, find_packages
 
-version = '1.0.3dev'
+version = '1.0.3'
 
 setup(name='collective.plonefinder',
       version=version,
@@ -14,7 +14,10 @@ setup(name='collective.plonefinder',
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
         'Framework :: Plone',
+        'Framework :: Plone :: 4.3',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'License :: OSI Approved :: GNU General Public License (GPL)',
