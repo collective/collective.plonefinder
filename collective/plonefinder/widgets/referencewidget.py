@@ -6,7 +6,7 @@ from zope.schema.interfaces import InvalidValue
 from ZTUtils import make_query
 from zope.app.form.browser import OrderedMultiSelectWidget
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from zope.app.component.hooks import getSite
+from zope.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 
 from collective.plonefinder import siteMessageFactory as _
