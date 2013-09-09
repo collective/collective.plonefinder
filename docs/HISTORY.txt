@@ -4,7 +4,8 @@ Changelog
 1.0.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix: with ckeditor, link to News item does not link to its image anymore.
+  [gotcha]
 
 
 1.0.3 (2013-06-12)
