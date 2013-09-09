@@ -132,7 +132,7 @@ class Finder(BrowserView):
         self.query = None
         # FIXME: We should use an interface instead (IATImage ?)
         #: Portal types that may show image vignetes
-        self.imagestypes = ('Image', 'News Item')
+        self.imagestypes = ('Image', )
         # FIXME: We should use an interface instead (IIcon ?)
         #: Portal types that may have specific icons
         self.filestypes = ('File',)
@@ -193,7 +193,7 @@ class Finder(BrowserView):
         self.setScopeInfos(context, request, self.showbreadcrumbs)
 
         if not self.multiselect:
-             self.forcecloseoninsert = 1
+            self.forcecloseoninsert = 1
 
         if self.typeview == 'image':
             self.typecss = 'float'
@@ -345,12 +345,12 @@ class Finder(BrowserView):
             item = scope
             itempath = self.browsedpath
             while itempath != self.rootpath:
-                 crumb = {}
-                 crumb['path'] = itempath
-                 crumb['title'] = item.title_or_id()
-                 crumbs.append(crumb)
-                 item = aq_inner(item.aq_parent)
-                 itempath = '/'.join(item.getPhysicalPath())
+                crumb = {}
+                crumb['path'] = itempath
+                crumb['title'] = item.title_or_id()
+                crumbs.append(crumb)
+                item = aq_inner(item.aq_parent)
+                itempath = '/'.join(item.getPhysicalPath())
             crumbs.reverse()
             self.breadcrumbs = crumbs
 
