@@ -616,13 +616,13 @@ class Finder(BrowserView):
         # FIXME: This should be a function, not a method
         """
         field = image_obj.getField('image')
-        if field.type == "image":
+        if field.type in ("blob", "file", "image"):
             im_width, im_height = field.getSize(image_obj)
         elif field.type == "reference":
             im_width, im_height = field.get(image_obj).getSize()
         else:
             raise ValueError("image field type unknown")
-        im_width, im_height = field.getSize(image_obj)
+
         if im_height >= im_width:
             orientation = 'portrait'
         else:
