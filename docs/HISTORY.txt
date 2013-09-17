@@ -1,8 +1,8 @@
 Changelog
 =========
 
-SVN trunk
----------
+1.0.2dev (unreleased)
+---------------------
 
 * Lots of code simplifications (yet not finished, grep for "FIXME:")
   [glenfant]
