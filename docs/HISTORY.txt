@@ -19,6 +19,9 @@ Changelog
 * Commented obscure features in the code
   [glenfant]
 
+* Fix case where 'image' field is of the type 'reference'
+  [toutpt]
+
 1.0.1
 -----
 
