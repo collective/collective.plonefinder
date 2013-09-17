@@ -35,7 +35,8 @@ jQuery code) and Jean-Mat Grimaldi (everything else) for PloneArticle product.
 Requirements
 ============
 
-* Plone3 and more (tested with Plone 3.3.5 and Plone 4)
+* Plone (tested with Plone 3.3.5 and Plone 4)
+* collective.quickupload
 
 Installation
 ============
@@ -299,7 +300,7 @@ Jean-mat Grimaldi - Alter Way Solutions
 Code repository
 ===============
 
-https://svn.plone.org/svn/collective/collective.plonefinder/trunk
+https://github.com/collective/collective.plonefinder
 
 Support
 =======
