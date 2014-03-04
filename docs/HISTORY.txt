@@ -4,6 +4,10 @@ Changelog
 1.0.2dev (unreleased)
 ---------------------
 
+* Fix scope container when a object is created. Container is first 
+  non portal_factory object.
+  [bsuttor]
+
 * Lots of code simplifications (yet not finished, grep for "FIXME:")
   [glenfant]
 

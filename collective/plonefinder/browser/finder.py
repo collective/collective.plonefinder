@@ -323,6 +323,8 @@ class Finder(BrowserView):
                 folder = aq_inner(context)
                 if not bool(getattr(aq_base(folder), 'isPrincipiaFolderish', False)):
                     folder = aq_inner(folder.aq_parent)
+                    while "portal_factory" in folder.getPhysicalPath():
+                        folder = aq_inner(folder.aq_parent)
                 self.data['scope'] = scope = folder
 
         self.scopetitle = scope.pretty_title_or_id()
