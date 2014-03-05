@@ -10,7 +10,7 @@ def read(*names):
     path = os.path.join(here, *names)
     return open(path, 'r').read().strip()
 
-version = "1.0.2dev"
+version = "1.0.4dev"
 
 setup(name='collective.plonefinder',
       version=version,

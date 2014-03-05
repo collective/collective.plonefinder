@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.2dev (unreleased)
+1.0.4dev (unreleased)
 ---------------------
 
 * Fix scope container when a object is created. Container is first 
@@ -25,6 +25,22 @@ Changelog
 
 * Fix case where 'image' field is of the type 'reference'
   [toutpt]
+
+
+1.0.3 (2013-06-12)
+------------------
+* Compatibility with Plone 4.3 
+  [toutpt]
+
+
+1.0.2 (2011-08-19)
+------------------
+* Always show full site structure in navigation column. 
+  [spereverde, yulka, gotcha]
+
+* In breadcrumbs, avoid links to folders where the user does not have View permission. 
+  [spereverde, yulka, gotcha]
+
 
 1.0.1
 -----
