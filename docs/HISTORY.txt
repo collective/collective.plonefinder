@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0.4dev (unreleased)
+1.0.5dev (unreleased)
 ---------------------
 
 * Fix scope container when a object is created. Container is first 
@@ -25,6 +25,12 @@ Changelog
 
 * Fix case where 'image' field is of the type 'reference'
   [toutpt]
+
+
+1.0.4 (2013-09-09)
+------------------
+* Fix: with ckeditor, link to News item does not link to its image anymore.
+  [gotcha]
 
 
 1.0.3 (2013-06-12)
