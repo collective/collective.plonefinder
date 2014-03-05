@@ -74,3 +74,8 @@ parts
 develop-eggs
 var
 
+# Virtualenv #
+##############
+include
+lib
+local
