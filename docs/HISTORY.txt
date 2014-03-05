@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0.5dev (unreleased)
----------------------
+1.0.5 (2014-03-05)
+------------------
 
 * Fix scope container when a object is created. Container is first 
   non portal_factory object.
