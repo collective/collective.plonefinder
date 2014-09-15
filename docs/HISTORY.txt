@@ -1,10 +1,11 @@
 Changelog
 =========
 
-1.0.7 (unreleased)
+1.0.7 (2014-09-15)
 ------------------
 
 - Fix: with ckeditor, link to News item does not link to its image anymore.
+  Fix from 1.0.4 was lost in 1.0.5.
   [gotcha]
 
 
