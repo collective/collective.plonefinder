@@ -20,6 +20,12 @@ from collective.plonefinder import siteMessageFactory as _
 from collective.plonefinder.utils import pleaseDontCache
 
 
+try:
+    from plone.app.contenttypes.interfaces import IImage
+    HAS_PAC = True
+except ImportError:
+    HAS_PAC = False
+
 def _quotestring(s):
     return '"%s"' % s
 
@@ -610,6 +616,20 @@ class Finder(BrowserView):
             ('large', 768, 768, '%s : 768px*768px' % _('Large'), '/image_large')
             ]
 
+    def getImageSize(self, image_obj):
+        if HAS_PAC:
+            if (
+                IImage.providedBy(image_obj) or IImage.providedBy(image_obj)
+            ):
+                return image_obj.image.getImageSize()
+        field = image_obj.getField('image')
+        if field.type in ("blob", "file", "image"):
+            return field.getSize(image_obj)
+        elif field.type == "reference":
+            return field.get(image_obj).getSize()
+        else:
+            raise ValueError("image field type unknown")
+
 
     def getImageInfos(self, image_obj):
         """Return orientation width and height
@@ -617,14 +637,7 @@ class Finder(BrowserView):
         We should proceed with adapters
         # FIXME: This should be a function, not a method
         """
-        field = image_obj.getField('image')
-        if field.type in ("blob", "file", "image"):
-            im_width, im_height = field.getSize(image_obj)
-        elif field.type == "reference":
-            im_width, im_height = field.get(image_obj).getSize()
-        else:
-            raise ValueError("image field type unknown")
-
+        im_width, im_height = self.getImageSize(image_obj)
         if im_height >= im_width:
             orientation = 'portrait'
         else:

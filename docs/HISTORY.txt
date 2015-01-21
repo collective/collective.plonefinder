@@ -4,7 +4,8 @@ Changelog
 1.0.8 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- basic support for plone.app.contenttypes images
+  [kiorky]
 
 
 1.0.7 (2014-09-15)
@@ -25,7 +26,7 @@ Changelog
 1.0.5 (2014-03-05)
 ------------------
 
-* Fix scope container when a object is created. Container is first 
+* Fix scope container when a object is created. Container is first
   non portal_factory object.
   [bsuttor]
 
@@ -56,16 +57,16 @@ Changelog
 
 1.0.3 (2013-06-12)
 ------------------
-* Compatibility with Plone 4.3 
+* Compatibility with Plone 4.3
   [toutpt]
 
 
 1.0.2 (2011-08-19)
 ------------------
-* Always show full site structure in navigation column. 
+* Always show full site structure in navigation column.
   [spereverde, yulka, gotcha]
 
-* In breadcrumbs, avoid links to folders where the user does not have View permission. 
+* In breadcrumbs, avoid links to folders where the user does not have View permission.
   [spereverde, yulka, gotcha]
 
 
