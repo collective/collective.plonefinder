@@ -4,6 +4,9 @@ Changelog
 1.0.8 (unreleased)
 ------------------
 
+- Add implmentation of plone.app.contenttypes.content.Folder by IFinderUploadCapable.
+  [bsuttor]
+
 - basic support for plone.app.contenttypes images
   [kiorky]
 
