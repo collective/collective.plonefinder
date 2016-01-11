@@ -516,15 +516,15 @@ class Finder(BrowserView):
                     preview = '%s/image?isImage=1' % r['url']
                     for ts in thumb_sizes:
                         if ts[1] >= width and ts[2] >= height:
-                            thumb = '%s/image_%s' % (r['url'], ts[0])
+                            thumb = '%s/@@images/image/%s' % (r['url'], ts[0])
                             break
                     for ts in thumb_sizes:
                         if ts[1] >= 16 and ts[2] >= 16:
-                            icon = '%s/image_%s' % (r['url'], ts[0])
+                            icon = '%s/@@images/image/%s' % (r['url'], ts[0])
                             break
                     for ts in thumb_sizes:
                         if ts[1] >= 400 and ts[2] >= 400:
-                            preview = '%s/image_%s?isImage=1' % (r['url'], ts[0])
+                            preview = '%s/@@images/image/%s?isImage=1' % (r['url'], ts[0])
                             break
                     # images sizes actions menu
                     thumb_sizes.extend([('full',width ,height ,_('Full size'), '/image')])
@@ -600,20 +600,20 @@ class Finder(BrowserView):
                 thumb_height = int(propInfo[1].split(':')[1])
                 thumb_label = "%s : %ipx*%ipx" % (_(thumb_name.capitalize()), thumb_width,
                                                   thumb_height)
-                thumb_extension = "/image_%s" % thumb_name
+                thumb_extension = "/@@images/image/%s" % thumb_name
                 thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label,
                                     thumb_extension))
             thumb_sizes.sort(key=lambda ts: ts[1])
             return thumb_sizes
 
         return [
-            ('listing', 16, 16, '%s : 16px*16px' % _('Listing'), '/image_listing'),
-            ('icon', 32, 32, '%s : 32px*32px' % _('Icon'), '/image_icon'),
-            ('tile', 64, 64, '%s : 64px*64px' % _('Tile'), '/image_tile'),
-            ('thumb', 128, 128, '%s : 128px*128px' % _('Thumb'), '/image_thumb'),
-            ('mini', 200, 200, '%s : 200px*200px' % _('Mini'), '/image_mini'),
-            ('preview', 400, 400, '%s : 400px*400px' % _('Preview'), '/image_preview'),
-            ('large', 768, 768, '%s : 768px*768px' % _('Large'), '/image_large')
+            ('listing', 16, 16, '%s : 16px*16px' % _('Listing'), '/@@images/image/listing'),
+            ('icon', 32, 32, '%s : 32px*32px' % _('Icon'), '/@@images/image/icon'),
+            ('tile', 64, 64, '%s : 64px*64px' % _('Tile'), '/@@images/image/tile'),
+            ('thumb', 128, 128, '%s : 128px*128px' % _('Thumb'), '/@@images/image/thumb'),
+            ('mini', 200, 200, '%s : 200px*200px' % _('Mini'), '/@@images/image/mini'),
+            ('preview', 400, 400, '%s : 400px*400px' % _('Preview'), '/@@images/image/preview'),
+            ('large', 768, 768, '%s : 768px*768px' % _('Large'), '/@@images/image/large')
             ]
 
     def getImageSize(self, image_obj):
