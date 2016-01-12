@@ -40,10 +40,6 @@
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
 
-  <class zcml:condition="installed plone.app.multilingual"
-         class="plone.app.multilingual.interfaces.ILanguageIndependentFolder>
-    <implements interface=".interfaces.IFinderUploadCapable" />
-  </class>
 
   <browser:page
       for="*"
