@@ -30,16 +30,10 @@
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
 
-  <class zcml:condition="installed plone.app.contenttypes"
-         class="plone.app.contenttypes.content.Folder">
+  <class zcml:condition="installed plone.dexterity"
+         class="plone.dexterity.content.Container">
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
-
-  <class zcml:condition="installed plone.app.multilingual"
-         class="plone.app.multilingual.interfaces.ILanguageRootFolder">
-    <implements interface=".interfaces.IFinderUploadCapable" />
-  </class>
-
 
   <browser:page
       for="*"
