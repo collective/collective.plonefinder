@@ -2,6 +2,7 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.plonefinder">
 
   <!-- $Id$ -->
@@ -26,6 +27,11 @@
   </class>
 
   <class class="Products.CMFPlone.Portal.PloneSite">
+    <implements interface=".interfaces.IFinderUploadCapable" />
+  </class>
+
+  <class zcml:condition="installed plone.dexterity"
+         class="plone.dexterity.content.Container">
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
 

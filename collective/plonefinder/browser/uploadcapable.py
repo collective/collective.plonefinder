@@ -19,6 +19,7 @@ from interfaces import IFinderUploadCapable
 
 upload_lock = allocate_lock()
 
+
 class FinderCreateFolderCapableFactory(object):
     interface.implements(IDirectoryFactory)
     component.adapts(IFinderUploadCapable)
@@ -29,7 +30,7 @@ class FinderCreateFolderCapableFactory(object):
     def __call__(self, title, description, portal_type):
         context = aq_inner(self.context)
         charset = context.getCharset()
-        title= title.decode(charset)
+        title = title.decode(charset)
         description = description.decode("utf8")
         normalizer = component.getUtility(IIDNormalizer)
         chooser = INameChooser(self.context)

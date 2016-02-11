@@ -11,6 +11,7 @@ from Products.CMFCore.utils import getToolByName
 
 from collective.plonefinder import siteMessageFactory as _
 
+
 class FinderSelectWidget(OrderedMultiSelectWidget):
     """A base widget with a plone_finder link for a Sequence field (tuple or
     list) that could reference any kind of value from browsed objects By defaut

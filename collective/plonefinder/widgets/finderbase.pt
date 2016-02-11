@@ -6,7 +6,7 @@ $Id$
 
 finderSelectItem = function(selector, title, image_preview, fieldid) {
     image_preview = (typeof image_preview != "undefined") ? image_preview : false;
-    if (image_preview) selector = selector + '/image_preview' ;
+    if (image_preview) selector = selector + '/@@images/image/preview' ;
     addItem(selector, title, fieldid);
     copyDataForSubmit(fieldid);
 }

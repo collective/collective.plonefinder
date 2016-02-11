@@ -4,6 +4,12 @@ Changelog
 1.0.8 (unreleased)
 ------------------
 
+- Use new way to get images. Call '/@@images/image/preview' instead of '/image_preview'.
+  [bsuttor]
+
+- Add implmentation of plone.app.contenttypes.content.Folder by IFinderUploadCapable.
+  [bsuttor]
+
 - basic support for plone.app.contenttypes images
   [kiorky]
 
