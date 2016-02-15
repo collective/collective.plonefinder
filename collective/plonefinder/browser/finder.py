@@ -310,13 +310,10 @@ class Finder(BrowserView):
 
         # Find browser root and rootpath if undefined
         if self.data['root'] is None:
-            if self.rootpath:
-                self.data['root'] = aq_inner(portal.restrictedTraverse(self.rootpath))
-            else:
-                root = aq_inner(context)
-                while not INavigationRoot.providedBy(root):
-                    root = aq_inner(root.aq_parent)
-                self.data['root'] = root
+            self.data['root'] = root = aq_inner(
+                portal.restrictedTraverse(self.rootpath)
+            )
+            if not self.rootpath:
                 self.rootpath = '/'.join(root.getPhysicalPath())
 
         # Find scope if undefined. By default scope = browsedpath or first
@@ -346,6 +343,7 @@ class Finder(BrowserView):
 
         # set breadcrumbs
         # TODO: use self.data['catalog']
+        portal_membership = getToolByName(context, "portal_membership")
         if showbreadcrumbs:
             crumbs = []
             item = scope
@@ -354,6 +352,7 @@ class Finder(BrowserView):
                 crumb = {}
                 crumb['path'] = itempath
                 crumb['title'] = item.title_or_id()
+                crumb['show_link'] = portal_membership.checkPermission('View', item)
                 crumbs.append(crumb)
                 item = aq_inner(item.aq_parent)
                 itempath = '/'.join(item.getPhysicalPath())
