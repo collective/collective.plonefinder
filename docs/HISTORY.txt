@@ -1,7 +1,13 @@
 Changelog
 =========
 
-1.0.8 (unreleased)
+1.1.1 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+1.1.0 (2016-02-16)
 ------------------
 
 - Use new way to get images. Call '/@@images/image/preview' instead of '/image_preview'.
