@@ -4,15 +4,13 @@ Changelog
 1.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Reapply fixes from 1.0.2 that were lost
+  maybe in the migration to github
+  [gotcha]
 
 
 1.1.0 (2016-02-16)
 ------------------
-
-- Reapply fixes from 1.0.2 that were lost
-  maybe in the migration to github
-  [gotcha]
 
 - Use new way to get images. Call '/@@images/image/preview' instead of '/image_preview'.
   [bsuttor]
