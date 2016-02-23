@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1.1 (unreleased)
+1.1.1 (2016-02-23)
 ------------------
 
 - Reapply fixes from 1.0.2 that were lost
