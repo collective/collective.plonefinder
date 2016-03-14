@@ -156,6 +156,8 @@ class Finder(BrowserView):
         self.ispopup = True
         #: True to show anyway blacklisted items (but these are not selectable)
         self.showblacklisted = True
+        #: True to display the search box
+        self.showsearchbox = True
         #: True to display search results
         self.searchsubmit = False
         #: True to allow file upload through the finder

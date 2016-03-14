@@ -4,7 +4,8 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added option 'showsearchbox' to be able to display/hide the search box easily.
+  [gbastien]
 
 
 1.1.1 (2016-02-23)
