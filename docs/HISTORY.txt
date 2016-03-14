@@ -4,7 +4,7 @@ Changelog
 1.1.2 (unreleased)
 ------------------
 
-- Added option 'allowsearch' to be able to display/hide the search box easily.
+- Added option 'showsearchbox' to be able to display/hide the search box easily.
   [gbastien]
 
 

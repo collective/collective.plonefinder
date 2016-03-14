@@ -73,7 +73,7 @@
                onclick="Browser.maximize(); return false;">
             </a>
             <div id="searchBrowserBox"
-                 tal:condition="view/allowsearch">
+                 tal:condition="view/showsearchbox">
               <form id="finderSearchForm">
                 <input type="hidden"
                        name="searchsubmit:int"
