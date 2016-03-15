@@ -187,6 +187,9 @@ Full list of customization attributes
      - ``'uid'``
      - Selected items are returned to the application (form) as UIDs. Other
        possible value is ``'url'``.
+   * - ``showsearchbox``
+     - ``True``
+     - Do we show the searchbox?
    * - ``allowupload``
      - ``False``
      - Do we enable upload files through our widget if the user has appropriate
