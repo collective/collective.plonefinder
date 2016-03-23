@@ -138,6 +138,13 @@
                  title="upload"
                  href="javascript: void(0);"
                  onclick="Browser.openUploader();return false">
+                 <tal:openUploaderDefault condition="view/openuploadwidgetdefault">
+                  <script type="text/javascript">
+                   jQuery(document).ready(function($) {
+                   Browser.openUploader();
+                   });
+                  </script>
+                 </tal:openUploaderDefault>
                  <span i18n:translate="label_files_quick__upload">Files quick upload</span>
               </a>
               <a class="addFolderView"

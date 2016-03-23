@@ -194,6 +194,9 @@ Full list of customization attributes
      - ``False``
      - Do we enable upload files through our widget if the user has appropriate
        permission? See `Uploadding in custom folderish type`_
+   * - ``openuploadwidgetdefault``
+     - ``False``
+     - Do we display the upload widget by default?
    * - ``allowaddfolder``
      - ``False``
      - Do we enable adding new folders through our widget if the user has
