@@ -4,7 +4,10 @@ Changelog
 1.1.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added option 'openuploadwidgetdefault' to be able to specify if we want
+  the upload widget to be opened by default without having to click on the
+  'Files quick upload' button.
+  [gbastien]
 
 
 1.1.2 (2016-03-15)
