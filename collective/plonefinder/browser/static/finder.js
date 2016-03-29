@@ -179,7 +179,7 @@ function getQueryObject(query) {
         var KeyVal = Pairs[i].split('=');
         if (! KeyVal || KeyVal.length != 2) continue;
         var key = KeyVal[0];
-        var kvalue = unescape(KeyVal[1]);
+        var kvalue = decodeURI(KeyVal[1]);
         if (isInString(':list', key)) {
             if (typeof listDatas[key] != 'undefined') {
                 // trop nul le javascript
