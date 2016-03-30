@@ -1,16 +1,20 @@
 Changelog
 =========
 
-1.1.3 (unreleased)
+1.1.4 (unreleased)
+------------------
+
+- Fix bug in finder's query form serialization with special characters.
+  [pgrunewald]
+
+
+1.1.3 (2016-03-24)
 ------------------
 
 - Added option 'openuploadwidgetdefault' to be able to specify if we want
   the upload widget to be opened by default without having to click on the
   'Files quick upload' button.
   [gbastien]
-
-- Fix bug in finder's query form serialization with special characters.
-  [pgrunewald]
 
 
 1.1.2 (2016-03-15)
