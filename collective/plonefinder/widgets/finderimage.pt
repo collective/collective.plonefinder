@@ -1,16 +1,4 @@
-<script type="text/javascript">
-finderSelectItem = function(selector, title, image_preview, fieldid) {
-    image_preview = (typeof image_preview != "undefined") ? image_preview : false;
-    if (image_preview) selector = selector + '/@@images/image/preview' ;
-    jQuery('#'+fieldid+' input').val(selector);
-    jQuery('#'+fieldid+' img').attr('src', portal_url+'/resolveuid/'+selector);
-}
 
-function openFinder(url) {
-    var finder_window = window.open(url,"plone_finder","menubar=no, status=no, scrollbars=no, menubar=no, width=980, height=650, left=20, top=20");
-    finder_window.focus();
-}
-</script>
 <div tal:attributes="id view/htmlid">
 <input
     class="textType"
@@ -20,12 +8,42 @@ function openFinder(url) {
                    id view/name;
                    value view/value;
                    ">
-
-<img tal:attributes="src view/image_url" />
-</div>
 <div class="finderlink">
   <a tal:attributes="href string:javascript:${view/finderlink}"
      tal:content="view/finderlabel">
     Browse for content
   </a>
+  <div id="imagewidget"></div>
+</div>
+<script tal:attributes="src string:${view/portal_url}/++resource++plonefinder_static/imagewidget.js"></script>
+<script type="text/javascript" tal:content="string:var initial_widget_url='${view/value}';" />
+<script type="text/javascript" tal:content="string:var initial_fieldid='${view/htmlid}';" />
+<script type="text/javascript">
+var node = document.getElementById('imagewidget');
+var elmapp = Elm.ImageWidget.embed(node, [initial_fieldid, initial_widget_url]);
+elmapp.ports.reset.subscribe(function(fieldid) {
+    storeImageUrl(fieldid, '');
+});
+
+finderSelectItem = function(selector, title, image_preview, fieldid) {
+    image_preview = (typeof image_preview != "undefined") ? image_preview : false;
+    if (image_preview) selector = selector + '/@@images/image/preview' ;
+    storeImageUrl(fieldid, selector);
+}
+
+storeImageUrl = function(fieldid, selector) {
+    if (selector === '') {
+      var image_url = '';
+    } else {
+      var image_url = portal_url + '/resolveuid/' + selector;
+    }
+    jQuery('#'+fieldid+' input').val(image_url);
+    elmapp.ports.imageurl.send(image_url);
+}
+
+function openFinder(url) {
+    var finder_window = window.open(url,"plone_finder","menubar=no, status=no, scrollbars=no, menubar=no, width=980, height=650, left=20, top=20");
+    finder_window.focus();
+}
+</script>
 </div>

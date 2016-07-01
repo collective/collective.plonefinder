@@ -50,6 +50,12 @@ class FinderImageWidget(TextWidget):
     def htmlid(self):
         return self.name.replace('.', '_')
 
+    def portal_url(self):
+        content = self.context.context
+        portal_state = content.restrictedTraverse('@@plone_portal_state')
+        portal_url = portal_state.portal_url()
+        return portal_url
+
     def image_url(self):
         return absolute_image_url(self.context.context, self.value)
 
