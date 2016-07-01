@@ -5,12 +5,72 @@
 from zope.schema.interfaces import InvalidValue
 from ZTUtils import make_query
 from zope.app.form.browser import OrderedMultiSelectWidget
+from zope.formlib.widgets import TextWidget
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component.hooks import getSite
 from Products.CMFCore.utils import getToolByName
 
 from collective.plonefinder import siteMessageFactory as _
 
+
+def absolute_image_url(context, value):
+    portal_state = context.restrictedTraverse('@@plone_portal_state')
+    portal_url = portal_state.portal_url()
+    return portal_url + '/resolveuid/' + value
+
+
+class FinderImageWidget(TextWidget):
+    """A base widget with a plone_finder link for a Sequence field (tuple or
+    list) that could reference any kind of value from browsed objects By defaut
+    uid is used as value
+    """
+    template = ViewPageTemplateFile('finderimage.pt')
+    finderlabel = _(u'Browse for image')
+    types = ['Image']
+    typeview = 'image'
+    imagestypes = ('Image',)
+    query = None
+    selectiontype = 'uid'
+    allowupload = False
+    allowaddfolder = False
+    allowimagesizeselection = True
+    forcecloseoninsert = True
+    base = None
+
+    def __call__(self):
+        self.value = self._getFormValue()
+        if self.value is None or self.value == self.context.missing_value:
+            self.value = ''
+        return self.template()
+
+    def _getBaseUrl(self):
+        base = getSite()
+        return base.absolute_url()
+
+    def htmlid(self):
+        return self.name.replace('.', '_')
+
+    def image_url(self):
+        return absolute_image_url(self.context.context, self.value)
+
+    def finderlink(self):
+        """JS link that opens the finder
+        """
+        base_url = self._getBaseUrl()
+        # TODO: put all these queryString pairs in session (see finder.py)
+        values = {
+            'fieldid': self.htmlid(),
+            'fieldname': self.htmlid(),
+            'typeview': self.typeview,
+            'selectiontype': self.selectiontype,
+            'allowupload': int(self.allowupload),
+            'allowaddfolder': int(self.allowaddfolder),
+            'allowimagesizeselection': int(self.allowimagesizeselection),
+            'forcecloseoninsert': int(self.forcecloseoninsert),
+            'types': list(self.types),
+            'imagestypes': list(self.imagestypes)
+            }
+        return "openFinder('%s/@@plone_finder?%s')" % (base_url, make_query(values))
 
 class FinderSelectWidget(OrderedMultiSelectWidget):
     """A base widget with a plone_finder link for a Sequence field (tuple or
@@ -83,7 +143,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
             'allowimagesizeselection': int(self.allowimagesizeselection),
             'forcecloseoninsert': int(self.forcecloseoninsert),
             'types': list(self.types),
-            'imagestypes': list(self.imagetypes)
+            'imagestypes': list(self.imagestypes)
             }
         return "openFinder('%s/@@plone_finder?%s')" % (base_url, make_query(values))
 
