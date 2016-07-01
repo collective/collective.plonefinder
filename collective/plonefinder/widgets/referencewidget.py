@@ -83,7 +83,7 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
             'allowimagesizeselection': int(self.allowimagesizeselection),
             'forcecloseoninsert': int(self.forcecloseoninsert),
             'types': list(self.types),
-            'imagestypes': list(self.imagetypes)
+            'imagestypes': list(self.imagestypes)
             }
         return "openFinder('%s/@@plone_finder?%s')" % (base_url, make_query(values))
 
