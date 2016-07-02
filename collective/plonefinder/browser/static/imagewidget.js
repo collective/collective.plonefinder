@@ -7663,42 +7663,74 @@ var _user$project$ImageWidget$Model = F3(
 	function (a, b, c) {
 		return {fieldid: a, hasImage: b, url: c};
 	});
+var _user$project$ImageWidget$FieldId = function (a) {
+	return {ctor: 'FieldId', _0: a};
+};
+var _user$project$ImageWidget$Url = function (a) {
+	return {ctor: 'Url', _0: a};
+};
+var _user$project$ImageWidget$make = F2(
+	function (_p1, _p0) {
+		var _p2 = _p1;
+		var _p5 = _p2._0;
+		var _p3 = _p0;
+		var _p4 = _p3._0;
+		return _elm_lang$core$Native_Utils.eq(_p4, '') ? A3(
+			_user$project$ImageWidget$Model,
+			_user$project$ImageWidget$FieldId(_p5),
+			false,
+			_user$project$ImageWidget$Url('')) : A3(
+			_user$project$ImageWidget$Model,
+			_user$project$ImageWidget$FieldId(_p5),
+			true,
+			_user$project$ImageWidget$Url(_p4));
+	});
 var _user$project$ImageWidget$init = function (flags) {
-	var _p0 = flags;
-	var fieldid = _p0._0;
-	var url = _p0._1;
-	return _elm_lang$core$Native_Utils.eq(url, '') ? {
+	var _p6 = flags;
+	var fieldid = _p6._0;
+	var url = _p6._1;
+	return {
 		ctor: '_Tuple2',
-		_0: A3(_user$project$ImageWidget$Model, fieldid, false, ''),
-		_1: _elm_lang$core$Platform_Cmd$none
-	} : {
-		ctor: '_Tuple2',
-		_0: A3(_user$project$ImageWidget$Model, fieldid, true, url),
+		_0: A2(
+			_user$project$ImageWidget$make,
+			_user$project$ImageWidget$FieldId(fieldid),
+			_user$project$ImageWidget$Url(url)),
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
 };
 var _user$project$ImageWidget$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		if (_p1.ctor === 'ResetImage') {
+		var _p7 = model.fieldid;
+		var fieldid = _p7._0;
+		var _p8 = msg;
+		if (_p8.ctor === 'ResetImage') {
 			return {
 				ctor: '_Tuple2',
 				_0: model,
-				_1: _user$project$ImageWidget$reset(model.fieldid)
+				_1: _user$project$ImageWidget$reset(fieldid)
 			};
 		} else {
-			return _user$project$ImageWidget$init(
-				{ctor: '_Tuple2', _0: model.fieldid, _1: _p1._0});
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_user$project$ImageWidget$make, model.fieldid, _p8._0),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
 		}
 	});
 var _user$project$ImageWidget$SetUrl = function (a) {
 	return {ctor: 'SetUrl', _0: a};
 };
 var _user$project$ImageWidget$subscriptions = function (model) {
-	return _user$project$ImageWidget$imageurl(_user$project$ImageWidget$SetUrl);
+	return _user$project$ImageWidget$imageurl(
+		function (url) {
+			return _user$project$ImageWidget$SetUrl(
+				_user$project$ImageWidget$Url(url));
+		});
 };
 var _user$project$ImageWidget$ResetImage = {ctor: 'ResetImage'};
 var _user$project$ImageWidget$imageview = function (model) {
+	var _p9 = model.url;
+	var url = _p9._0;
 	return model.hasImage ? _elm_lang$core$Native_List.fromArray(
 		[
 			A2(
@@ -7715,7 +7747,7 @@ var _user$project$ImageWidget$imageview = function (model) {
 			_elm_lang$html$Html$img,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html_Attributes$src(model.url)
+					_elm_lang$html$Html_Attributes$src(url)
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]))
