@@ -33,7 +33,6 @@ type alias Flags =
 
 type alias Model =
     { fieldid : FieldId
-    , hasImage : Bool
     , url : Url
     }
 
@@ -44,15 +43,19 @@ init flags =
         ( fieldid, url ) =
             flags
     in
-        ( make (FieldId fieldid) (Url url), Cmd.none )
+        ( Model (FieldId fieldid) (Url url), Cmd.none )
 
 
-make : FieldId -> Url -> Model
-make (FieldId fieldid) (Url url) =
-    if url == "" then
-        Model (FieldId fieldid) False (Url "")
-    else
-        Model (FieldId fieldid) True (Url url)
+hasImage : Model -> Bool
+hasImage model =
+    let
+        (Url url) =
+            model.url
+    in
+        if url == "" then
+            False
+        else
+            True
 
 
 
@@ -78,7 +81,7 @@ update msg model =
                 ( model, reset fieldid )
 
             SetUrl url ->
-                ( make model.fieldid url, Cmd.none )
+                ( Model model.fieldid url, Cmd.none )
 
 
 
@@ -108,7 +111,7 @@ imageview model =
         (Url url) =
             model.url
     in
-        if model.hasImage then
+        if hasImage model then
             [ div [ onClick ResetImage ] [ text "Reset" ]
             , img [ src url ] []
             ]
