@@ -59,7 +59,7 @@ class FinderImageWidget(TextWidget):
     def image_url(self):
         return absolute_image_url(self.context.context, self.value)
 
-    def finderlink(self):
+    def finder_url(self):
         """JS link that opens the finder
         """
         base_url = self._getBaseUrl()
@@ -76,7 +76,8 @@ class FinderImageWidget(TextWidget):
             'types': list(self.types),
             'imagestypes': list(self.imagestypes)
             }
-        return "openFinder('%s/@@plone_finder?%s')" % (base_url, make_query(values))
+        return '%s/@@plone_finder?%s' % (base_url, make_query(values))
+
 
 class FinderSelectWidget(OrderedMultiSelectWidget):
     """A base widget with a plone_finder link for a Sequence field (tuple or

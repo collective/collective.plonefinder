@@ -8,21 +8,20 @@
                    id view/name;
                    value view/value;
                    ">
-<div class="finderlink">
-  <a tal:attributes="href string:javascript:${view/finderlink}"
-     tal:content="view/finderlabel">
-    Browse for content
-  </a>
-  <div id="imagewidget"></div>
-</div>
+<div class="finderlink" id="imagewidget"></div>
 <script tal:attributes="src string:${view/portal_url}/++resource++plonefinder_static/imagewidget.js"></script>
+<script type="text/javascript" tal:content="string:var finder_url='${view/finder_url}';" />
 <script type="text/javascript" tal:content="string:var initial_widget_url='${view/value}';" />
 <script type="text/javascript" tal:content="string:var initial_fieldid='${view/htmlid}';" />
 <script type="text/javascript">
 var node = document.getElementById('imagewidget');
 var elmapp = Elm.ImageWidget.embed(node, [initial_fieldid, initial_widget_url]);
-elmapp.ports.reset.subscribe(function(fieldid) {
+elmapp.ports.remove.subscribe(function(fieldid) {
     storeImageUrl(fieldid, '');
+});
+
+elmapp.ports.openfinder.subscribe(function(fieldid) {
+    openFinder(finder_url);
 });
 
 finderSelectItem = function(selector, title, image_preview, fieldid) {
@@ -38,7 +37,7 @@ storeImageUrl = function(fieldid, selector) {
       var image_url = portal_url + '/resolveuid/' + selector;
     }
     jQuery('#'+fieldid+' input').val(image_url);
-    elmapp.ports.imageurl.send(image_url);
+    elmapp.ports.url.send(image_url);
 }
 
 function openFinder(url) {

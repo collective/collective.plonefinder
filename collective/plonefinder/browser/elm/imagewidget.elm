@@ -27,23 +27,25 @@ type Url
     = Url String
 
 
-type alias Flags =
-    ( String, String )
-
-
 type alias Model =
     { fieldid : FieldId
     , url : Url
     }
 
 
-init : Flags -> ( Model, Cmd Msg )
+init : ( String, String ) -> ( Model, Cmd Msg )
 init flags =
     let
-        ( fieldid, url ) =
+        ( fieldid_s, url_s ) =
             flags
+
+        fieldid =
+            FieldId fieldid_s
+
+        url =
+            Url url_s
     in
-        ( Model (FieldId fieldid) (Url url), Cmd.none )
+        ( Model fieldid url, Cmd.none )
 
 
 hasImage : Model -> Bool
@@ -63,11 +65,15 @@ hasImage model =
 
 
 type Msg
-    = ResetImage
+    = RemoveImage
     | SetUrl Url
+    | OpenFinder
 
 
-port reset : String -> Cmd msg
+port remove : String -> Cmd msg
+
+
+port openfinder : String -> Cmd msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -77,23 +83,26 @@ update msg model =
             model.fieldid
     in
         case msg of
-            ResetImage ->
-                ( model, reset fieldid )
+            RemoveImage ->
+                ( model, remove fieldid )
+
+            OpenFinder ->
+                ( model, openfinder fieldid )
 
             SetUrl url ->
-                ( Model model.fieldid url, Cmd.none )
+                ( { model | url = url }, Cmd.none )
 
 
 
 -- SUBSCRIPTIONS
 
 
-port imageurl : (String -> msg) -> Sub msg
+port url : (String -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    imageurl (\url -> SetUrl (Url url))
+    url (\url -> SetUrl (Url url))
 
 
 
@@ -103,16 +112,18 @@ subscriptions model =
 view : Model -> Html.Html Msg
 view model =
     div []
-        (imageview model)
+        (div [ onClick OpenFinder ] [ text "Browse server" ]
+            :: image_view model
+        )
 
 
-imageview model =
+image_view model =
     let
         (Url url) =
             model.url
     in
         if hasImage model then
-            [ div [ onClick ResetImage ] [ text "Reset" ]
+            [ div [ onClick RemoveImage ] [ text "Remove" ]
             , img [ src url ] []
             ]
         else
