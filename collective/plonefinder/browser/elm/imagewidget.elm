@@ -1,10 +1,10 @@
 port module ImageWidget exposing (..)
 
-import Html exposing (div, text, img, button, Attribute)
+import Html exposing (div, text, img, button, input, Attribute)
 import Html.App as Html
 import Json.Decode as Json
 import Html.Events exposing (onWithOptions, Options, defaultOptions)
-import Html.Attributes exposing (type', src)
+import Html.Attributes exposing (type', src, name, id, value)
 
 
 main =
@@ -20,8 +20,12 @@ main =
 -- MODEL
 
 
-type FieldId
-    = FieldId String
+type WidgetId
+    = WidgetId String
+
+
+type InputId
+    = InputId String
 
 
 type Url
@@ -29,24 +33,28 @@ type Url
 
 
 type alias Model =
-    { fieldid : FieldId
+    { widget_id : WidgetId
+    , input_id : InputId
     , url : Url
     }
 
 
-init : ( String, String ) -> ( Model, Cmd Msg )
+init : ( String, String, String ) -> ( Model, Cmd Msg )
 init flags =
     let
-        ( fieldid_s, url_s ) =
+        ( widget_id_s, input_id_s, url_s ) =
             flags
 
-        fieldid =
-            FieldId fieldid_s
+        widget_id =
+            WidgetId widget_id_s
+
+        input_id =
+            InputId input_id_s
 
         url =
             Url url_s
     in
-        ( Model fieldid url, Cmd.none )
+        ( Model widget_id input_id url, Cmd.none )
 
 
 hasImage : Model -> Bool
@@ -80,15 +88,15 @@ port openfinder : String -> Cmd msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     let
-        (FieldId fieldid) =
-            model.fieldid
+        (WidgetId widget_id) =
+            model.widget_id
     in
         case msg of
             RemoveImage ->
-                ( model, remove fieldid )
+                ( model, remove widget_id )
 
             OpenFinder ->
-                ( model, openfinder fieldid )
+                ( model, openfinder widget_id )
 
             SetUrl url ->
                 ( { model | url = url }, Cmd.none )
@@ -123,7 +131,18 @@ noSubmitOptions =
 view : Model -> Html.Html Msg
 view model =
     div []
-        [ buttons model, image model ]
+        [ field model, buttons model, image model ]
+
+
+field model =
+    let
+        (InputId input_id) =
+            model.input_id
+
+        (Url url) =
+            model.url
+    in
+        input [ type' "hidden", id input_id, name input_id, value url ] []
 
 
 buttons model =

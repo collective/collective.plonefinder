@@ -7653,6 +7653,23 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$ImageWidget$field = function (model) {
+	var _p0 = model.url;
+	var url = _p0._0;
+	var _p1 = model.input_id;
+	var input_id = _p1._0;
+	return A2(
+		_elm_lang$html$Html$input,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$type$('hidden'),
+				_elm_lang$html$Html_Attributes$id(input_id),
+				_elm_lang$html$Html_Attributes$name(input_id),
+				_elm_lang$html$Html_Attributes$value(url)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
 var _user$project$ImageWidget$noSubmitOptions = _elm_lang$core$Native_Utils.update(
 	_elm_lang$html$Html_Events$defaultOptions,
 	{preventDefault: true});
@@ -7664,13 +7681,13 @@ var _user$project$ImageWidget$onClickPreventDefault = function (message) {
 		_elm_lang$core$Json_Decode$succeed(message));
 };
 var _user$project$ImageWidget$hasImage = function (model) {
-	var _p0 = model.url;
-	var url = _p0._0;
+	var _p2 = model.url;
+	var url = _p2._0;
 	return _elm_lang$core$Native_Utils.eq(url, '') ? false : true;
 };
 var _user$project$ImageWidget$image = function (model) {
-	var _p1 = model.url;
-	var url = _p1._0;
+	var _p3 = model.url;
+	var url = _p3._0;
 	return _user$project$ImageWidget$hasImage(model) ? A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -7706,52 +7723,57 @@ var _user$project$ImageWidget$openfinder = _elm_lang$core$Native_Platform.outgoi
 	});
 var _user$project$ImageWidget$update = F2(
 	function (msg, model) {
-		var _p2 = model.fieldid;
-		var fieldid = _p2._0;
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p4 = model.widget_id;
+		var widget_id = _p4._0;
+		var _p5 = msg;
+		switch (_p5.ctor) {
 			case 'RemoveImage':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$ImageWidget$remove(fieldid)
+					_1: _user$project$ImageWidget$remove(widget_id)
 				};
 			case 'OpenFinder':
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: _user$project$ImageWidget$openfinder(fieldid)
+					_1: _user$project$ImageWidget$openfinder(widget_id)
 				};
 			default:
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{url: _p3._0}),
+						{url: _p5._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
 	});
 var _user$project$ImageWidget$url = _elm_lang$core$Native_Platform.incomingPort('url', _elm_lang$core$Json_Decode$string);
-var _user$project$ImageWidget$Model = F2(
-	function (a, b) {
-		return {fieldid: a, url: b};
+var _user$project$ImageWidget$Model = F3(
+	function (a, b, c) {
+		return {widget_id: a, input_id: b, url: c};
 	});
-var _user$project$ImageWidget$FieldId = function (a) {
-	return {ctor: 'FieldId', _0: a};
+var _user$project$ImageWidget$WidgetId = function (a) {
+	return {ctor: 'WidgetId', _0: a};
+};
+var _user$project$ImageWidget$InputId = function (a) {
+	return {ctor: 'InputId', _0: a};
 };
 var _user$project$ImageWidget$Url = function (a) {
 	return {ctor: 'Url', _0: a};
 };
 var _user$project$ImageWidget$init = function (flags) {
-	var _p4 = flags;
-	var fieldid_s = _p4._0;
-	var url_s = _p4._1;
-	var fieldid = _user$project$ImageWidget$FieldId(fieldid_s);
+	var _p6 = flags;
+	var widget_id_s = _p6._0;
+	var input_id_s = _p6._1;
+	var url_s = _p6._2;
+	var widget_id = _user$project$ImageWidget$WidgetId(widget_id_s);
+	var input_id = _user$project$ImageWidget$InputId(input_id_s);
 	var url = _user$project$ImageWidget$Url(url_s);
 	return {
 		ctor: '_Tuple2',
-		_0: A2(_user$project$ImageWidget$Model, fieldid, url),
+		_0: A3(_user$project$ImageWidget$Model, widget_id, input_id, url),
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
 };
@@ -7809,6 +7831,7 @@ var _user$project$ImageWidget$view = function (model) {
 			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
+				_user$project$ImageWidget$field(model),
 				_user$project$ImageWidget$buttons(model),
 				_user$project$ImageWidget$image(model)
 			]));
@@ -7816,12 +7839,13 @@ var _user$project$ImageWidget$view = function (model) {
 var _user$project$ImageWidget$main = {
 	main: _elm_lang$html$Html_App$programWithFlags(
 		{init: _user$project$ImageWidget$init, view: _user$project$ImageWidget$view, update: _user$project$ImageWidget$update, subscriptions: _user$project$ImageWidget$subscriptions}),
-	flags: A3(
-		_elm_lang$core$Json_Decode$tuple2,
-		F2(
-			function (x1, x2) {
-				return {ctor: '_Tuple2', _0: x1, _1: x2};
+	flags: A4(
+		_elm_lang$core$Json_Decode$tuple3,
+		F3(
+			function (x1, x2, x3) {
+				return {ctor: '_Tuple3', _0: x1, _1: x2, _2: x3};
 			}),
+		_elm_lang$core$Json_Decode$string,
 		_elm_lang$core$Json_Decode$string,
 		_elm_lang$core$Json_Decode$string)
 };

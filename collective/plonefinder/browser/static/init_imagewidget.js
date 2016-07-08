@@ -2,32 +2,31 @@ if (! ("elmapps" in window)) {
     elmapps = {};
 } 
 
-initializeImageWidget = function(finder_url, initial_image_url, field_htmlid) {
-    var node = document.querySelector('#'+field_htmlid+' .imagewidget');
-    elmapps[field_htmlid] = Elm.ImageWidget.embed(node, [field_htmlid, initial_image_url]);
-    elmapps[field_htmlid].ports.remove.subscribe(function(field_htmlid) {
-        storeImageUrl(field_htmlid, '');
+initializeImageWidget = function(finder_url, initial_image_url, widget_id, input_id) {
+    var node = document.querySelector('#'+widget_id+' .imagewidget');
+    elmapps[widget_id] = Elm.ImageWidget.embed(node, [widget_id, input_id, initial_image_url]);
+    elmapps[widget_id].ports.remove.subscribe(function(widget_id) {
+        storeImageUrl(widget_id, '');
     });
 
-    elmapps[field_htmlid].ports.openfinder.subscribe(function(field_htmlid) {
+    elmapps[widget_id].ports.openfinder.subscribe(function(widget_id) {
         openFinder(finder_url);
     });
 }
 
-finderSelectItem = function(selector, title, image_preview, field_htmlid) {
+finderSelectItem = function(selector, title, image_preview, widget_id) {
     image_preview = (typeof image_preview != "undefined") ? image_preview : false;
     if (image_preview) selector = selector + '/@@images/image/preview' ;
-    storeImageUrl(field_htmlid, selector);
+    storeImageUrl(widget_id, selector);
 }
 
-storeImageUrl = function(field_htmlid, selector) {
+storeImageUrl = function(widget_id, selector) {
     if (selector === '') {
       var image_url = '';
     } else {
       var image_url = portal_url + '/resolveuid/' + selector;
     }
-    jQuery('#'+field_htmlid+' input').val(image_url);
-    elmapps[field_htmlid].ports.url.send(image_url);
+    elmapps[widget_id].ports.url.send(image_url);
 }
 
 openFinder = function(url) {

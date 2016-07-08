@@ -1,12 +1,4 @@
 <div tal:attributes="id view/htmlid">
-    <input
-        class="textType"
-        size="20"
-        type="hidden"
-        tal:attributes="name view/name;
-                       id view/name;
-                       value view/value;
-                       ">
     <div class="imagewidget"></div>
 </div>
-<script type="text/javascript" tal:content="string:initializeImageWidget('${view/finder_url}','${view/value}','${view/htmlid}');" />
+<script type="text/javascript" tal:content="string:initializeImageWidget('${view/finder_url}','${view/value}','${view/htmlid}', '${view/name}');" />
