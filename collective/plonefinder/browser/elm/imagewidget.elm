@@ -1,8 +1,9 @@
 port module ImageWidget exposing (..)
 
-import Html exposing (div, text, img, a)
+import Html exposing (div, text, img, button, Attribute)
 import Html.App as Html
-import Html.Events exposing (onClick)
+import Json.Decode as Json
+import Html.Events exposing (onWithOptions, Options, defaultOptions)
 import Html.Attributes exposing (type', src)
 
 
@@ -109,22 +110,46 @@ subscriptions model =
 -- VIEW
 
 
+onClickPreventDefault : msg -> Attribute msg
+onClickPreventDefault message =
+    onWithOptions "click" noSubmitOptions (Json.succeed message)
+
+
+noSubmitOptions : Options
+noSubmitOptions =
+    { defaultOptions | preventDefault = True }
+
+
 view : Model -> Html.Html Msg
 view model =
     div []
-        (div [ onClick OpenFinder ] [ text "Browse server" ]
-            :: image_view model
-        )
+        [ buttons model, image model ]
 
 
-image_view model =
+buttons model =
+    div []
+        [ browse_button model, remove_button model ]
+
+
+browse_button model =
+    button [ onClickPreventDefault OpenFinder ] [ text "Browse server" ]
+
+
+remove_button model =
+    if hasImage model then
+        button [ onClickPreventDefault RemoveImage ] [ text "Remove" ]
+    else
+        text ""
+
+
+image model =
     let
         (Url url) =
             model.url
     in
         if hasImage model then
-            [ div [ onClick RemoveImage ] [ text "Remove" ]
-            , img [ src url ] []
-            ]
+            div []
+                [ img [ src url ] [] ]
         else
-            [ text "No Image" ]
+            div []
+                [ text "No Image" ]

@@ -7653,10 +7653,46 @@ var _elm_lang$html$Html_Events$Options = F2(
 		return {stopPropagation: a, preventDefault: b};
 	});
 
+var _user$project$ImageWidget$noSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _user$project$ImageWidget$onClickPreventDefault = function (message) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'click',
+		_user$project$ImageWidget$noSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(message));
+};
 var _user$project$ImageWidget$hasImage = function (model) {
 	var _p0 = model.url;
 	var url = _p0._0;
 	return _elm_lang$core$Native_Utils.eq(url, '') ? false : true;
+};
+var _user$project$ImageWidget$image = function (model) {
+	var _p1 = model.url;
+	var url = _p1._0;
+	return _user$project$ImageWidget$hasImage(model) ? A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$img,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$src(url)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[]))
+			])) : A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('No Image')
+			]));
 };
 var _user$project$ImageWidget$remove = _elm_lang$core$Native_Platform.outgoingPort(
 	'remove',
@@ -7670,10 +7706,10 @@ var _user$project$ImageWidget$openfinder = _elm_lang$core$Native_Platform.outgoi
 	});
 var _user$project$ImageWidget$update = F2(
 	function (msg, model) {
-		var _p1 = model.fieldid;
-		var fieldid = _p1._0;
-		var _p2 = msg;
-		switch (_p2.ctor) {
+		var _p2 = model.fieldid;
+		var fieldid = _p2._0;
+		var _p3 = msg;
+		switch (_p3.ctor) {
 			case 'RemoveImage':
 				return {
 					ctor: '_Tuple2',
@@ -7691,7 +7727,7 @@ var _user$project$ImageWidget$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{url: _p2._0}),
+						{url: _p3._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 		}
@@ -7708,9 +7744,9 @@ var _user$project$ImageWidget$Url = function (a) {
 	return {ctor: 'Url', _0: a};
 };
 var _user$project$ImageWidget$init = function (flags) {
-	var _p3 = flags;
-	var fieldid_s = _p3._0;
-	var url_s = _p3._1;
+	var _p4 = flags;
+	var fieldid_s = _p4._0;
+	var url_s = _p4._1;
 	var fieldid = _user$project$ImageWidget$FieldId(fieldid_s);
 	var url = _user$project$ImageWidget$Url(url_s);
 	return {
@@ -7720,6 +7756,18 @@ var _user$project$ImageWidget$init = function (flags) {
 	};
 };
 var _user$project$ImageWidget$OpenFinder = {ctor: 'OpenFinder'};
+var _user$project$ImageWidget$browse_button = function (model) {
+	return A2(
+		_elm_lang$html$Html$button,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$ImageWidget$onClickPreventDefault(_user$project$ImageWidget$OpenFinder)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Browse server')
+			]));
+};
 var _user$project$ImageWidget$SetUrl = function (a) {
 	return {ctor: 'SetUrl', _0: a};
 };
@@ -7731,52 +7779,39 @@ var _user$project$ImageWidget$subscriptions = function (model) {
 		});
 };
 var _user$project$ImageWidget$RemoveImage = {ctor: 'RemoveImage'};
-var _user$project$ImageWidget$image_view = function (model) {
-	var _p4 = model.url;
-	var url = _p4._0;
-	return _user$project$ImageWidget$hasImage(model) ? _elm_lang$core$Native_List.fromArray(
-		[
-			A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Events$onClick(_user$project$ImageWidget$RemoveImage)
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text('Remove')
-				])),
-			A2(
-			_elm_lang$html$Html$img,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html_Attributes$src(url)
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]))
-		]) : _elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$html$Html$text('No Image')
-		]);
+var _user$project$ImageWidget$remove_button = function (model) {
+	return _user$project$ImageWidget$hasImage(model) ? A2(
+		_elm_lang$html$Html$button,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$ImageWidget$onClickPreventDefault(_user$project$ImageWidget$RemoveImage)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text('Remove')
+			])) : _elm_lang$html$Html$text('');
+};
+var _user$project$ImageWidget$buttons = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$ImageWidget$browse_button(model),
+				_user$project$ImageWidget$remove_button(model)
+			]));
 };
 var _user$project$ImageWidget$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
-		A2(
-			_elm_lang$core$List_ops['::'],
-			A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$ImageWidget$OpenFinder)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Browse server')
-					])),
-			_user$project$ImageWidget$image_view(model)));
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$ImageWidget$buttons(model),
+				_user$project$ImageWidget$image(model)
+			]));
 };
 var _user$project$ImageWidget$main = {
 	main: _elm_lang$html$Html_App$programWithFlags(
