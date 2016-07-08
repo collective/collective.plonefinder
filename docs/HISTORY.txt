@@ -4,7 +4,16 @@ Changelog
 1.1.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add formlib FinderImageWidget; use with ::
+
+    
+    # in interface class
+    picture = schema.TextLine(title=_(u'Picture'),
+                               description=_(u'Optional picture'),
+                               required=False)
+    # in form class
+    form_fields['picture'].custom_widget = FinderImageWidget
+
 
 
 1.1.4 (2016-03-30)
