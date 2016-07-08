@@ -24,4 +24,17 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+  <genericsetup:upgradeSteps
+      source="1.1.4"
+      destination="1200"
+      profile="collective.plonefinder:default"
+      >
+ 
+      <genericsetup:upgradeDepends
+           title="add image Widget JS"
+           import_steps="jsregistry"
+           />
+
+  </genericsetup:upgradeSteps>
+
 </configure>

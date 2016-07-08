@@ -1,48 +1,12 @@
-
 <div tal:attributes="id view/htmlid">
-<input
-    class="textType"
-    size="20"
-    type="hidden"
-    tal:attributes="name view/name;
-                   id view/name;
-                   value view/value;
-                   ">
-<div class="finderlink" id="imagewidget"></div>
-<script tal:attributes="src string:${view/portal_url}/++resource++plonefinder_static/imagewidget.js"></script>
-<script type="text/javascript" tal:content="string:var finder_url='${view/finder_url}';" />
-<script type="text/javascript" tal:content="string:var initial_widget_url='${view/value}';" />
-<script type="text/javascript" tal:content="string:var initial_fieldid='${view/htmlid}';" />
-<script type="text/javascript">
-var node = document.getElementById('imagewidget');
-var elmapp = Elm.ImageWidget.embed(node, [initial_fieldid, initial_widget_url]);
-elmapp.ports.remove.subscribe(function(fieldid) {
-    storeImageUrl(fieldid, '');
-});
-
-elmapp.ports.openfinder.subscribe(function(fieldid) {
-    openFinder(finder_url);
-});
-
-finderSelectItem = function(selector, title, image_preview, fieldid) {
-    image_preview = (typeof image_preview != "undefined") ? image_preview : false;
-    if (image_preview) selector = selector + '/@@images/image/preview' ;
-    storeImageUrl(fieldid, selector);
-}
-
-storeImageUrl = function(fieldid, selector) {
-    if (selector === '') {
-      var image_url = '';
-    } else {
-      var image_url = portal_url + '/resolveuid/' + selector;
-    }
-    jQuery('#'+fieldid+' input').val(image_url);
-    elmapp.ports.url.send(image_url);
-}
-
-function openFinder(url) {
-    var finder_window = window.open(url,"plone_finder","menubar=no, status=no, scrollbars=no, menubar=no, width=980, height=650, left=20, top=20");
-    finder_window.focus();
-}
-</script>
+    <input
+        class="textType"
+        size="20"
+        type="hidden"
+        tal:attributes="name view/name;
+                       id view/name;
+                       value view/value;
+                       ">
+    <div class="imagewidget"></div>
 </div>
+<script type="text/javascript" tal:content="string:initializeImageWidget('${view/finder_url}','${view/value}','${view/htmlid}');" />
