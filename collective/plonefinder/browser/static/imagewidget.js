@@ -7711,43 +7711,10 @@ var _user$project$ImageWidget$image = function (model) {
 				_elm_lang$html$Html$text('No Image')
 			]));
 };
-var _user$project$ImageWidget$remove = _elm_lang$core$Native_Platform.outgoingPort(
-	'remove',
-	function (v) {
-		return v;
-	});
 var _user$project$ImageWidget$openfinder = _elm_lang$core$Native_Platform.outgoingPort(
 	'openfinder',
 	function (v) {
 		return v;
-	});
-var _user$project$ImageWidget$update = F2(
-	function (msg, model) {
-		var _p4 = model.widget_id;
-		var widget_id = _p4._0;
-		var _p5 = msg;
-		switch (_p5.ctor) {
-			case 'RemoveImage':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ImageWidget$remove(widget_id)
-				};
-			case 'OpenFinder':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: _user$project$ImageWidget$openfinder(widget_id)
-				};
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{url: _p5._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
 	});
 var _user$project$ImageWidget$url = _elm_lang$core$Native_Platform.incomingPort('url', _elm_lang$core$Json_Decode$string);
 var _user$project$ImageWidget$Model = F3(
@@ -7764,10 +7731,10 @@ var _user$project$ImageWidget$Url = function (a) {
 	return {ctor: 'Url', _0: a};
 };
 var _user$project$ImageWidget$init = function (flags) {
-	var _p6 = flags;
-	var widget_id_s = _p6._0;
-	var input_id_s = _p6._1;
-	var url_s = _p6._2;
+	var _p4 = flags;
+	var widget_id_s = _p4._0;
+	var input_id_s = _p4._1;
+	var url_s = _p4._2;
 	var widget_id = _user$project$ImageWidget$WidgetId(widget_id_s);
 	var input_id = _user$project$ImageWidget$InputId(input_id_s);
 	var url = _user$project$ImageWidget$Url(url_s);
@@ -7777,6 +7744,38 @@ var _user$project$ImageWidget$init = function (flags) {
 		_1: _elm_lang$core$Platform_Cmd$none
 	};
 };
+var _user$project$ImageWidget$update = F2(
+	function (msg, model) {
+		var _p5 = model.widget_id;
+		var widget_id = _p5._0;
+		var _p6 = msg;
+		switch (_p6.ctor) {
+			case 'RemoveImage':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							url: _user$project$ImageWidget$Url('')
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'OpenFinder':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: _user$project$ImageWidget$openfinder(widget_id)
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{url: _p6._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
 var _user$project$ImageWidget$OpenFinder = {ctor: 'OpenFinder'};
 var _user$project$ImageWidget$browse_button = function (model) {
 	return A2(

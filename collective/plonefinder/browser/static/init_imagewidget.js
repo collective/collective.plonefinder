@@ -5,9 +5,6 @@ if (! ("elmapps" in window)) {
 initializeImageWidget = function(finder_url, initial_image_url, widget_id, input_id) {
     var node = document.querySelector('#'+widget_id+' .imagewidget');
     elmapps[widget_id] = Elm.ImageWidget.embed(node, [widget_id, input_id, initial_image_url]);
-    elmapps[widget_id].ports.remove.subscribe(function(widget_id) {
-        storeImageUrl(widget_id, '');
-    });
 
     elmapps[widget_id].ports.openfinder.subscribe(function(widget_id) {
         openFinder(finder_url);

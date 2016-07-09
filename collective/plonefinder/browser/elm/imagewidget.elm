@@ -79,9 +79,6 @@ type Msg
     | OpenFinder
 
 
-port remove : String -> Cmd msg
-
-
 port openfinder : String -> Cmd msg
 
 
@@ -93,7 +90,7 @@ update msg model =
     in
         case msg of
             RemoveImage ->
-                ( model, remove widget_id )
+                ( { model | url = (Url "") }, Cmd.none )
 
             OpenFinder ->
                 ( model, openfinder widget_id )
