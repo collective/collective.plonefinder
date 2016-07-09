@@ -3,9 +3,9 @@ if (! ("elmapps" in window)) {
 } 
 
 initializeImageWidget = function(finder_url, initial_image_url, widget_id, input_id) {
-    var node = document.querySelector('#'+widget_id+' .imagewidget');
-    elmapps[widget_id] = Elm.ImageWidget.embed(node, [widget_id, input_id, initial_image_url]);
-
+    var node = document.querySelector('#'+widget_id);
+    var parent = node.parentNode;
+    elmapps[widget_id] = Elm.ImageWidget.embed(parent, [widget_id, input_id, initial_image_url]);    parent.removeChild(node);
     elmapps[widget_id].ports.openfinder.subscribe(function(widget_id) {
         openFinder(finder_url);
     });
