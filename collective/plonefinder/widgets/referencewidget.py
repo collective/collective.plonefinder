@@ -16,7 +16,10 @@ from collective.plonefinder import siteMessageFactory as _
 def absolute_image_url(context, value):
     portal_state = context.restrictedTraverse('@@plone_portal_state')
     portal_url = portal_state.portal_url()
-    return portal_url + '/resolveuid/' + value
+    if value is not None:
+        return portal_url + '/resolveuid/' + value
+    else:
+        return ''
 
 
 class FinderImageWidget(TextWidget):
@@ -28,7 +31,7 @@ class FinderImageWidget(TextWidget):
     finderlabel = _(u'Browse for image')
     types = ['Image']
     typeview = 'image'
-    imagestypes = ('Image',)
+    imagestypes = ('Image', )
     query = None
     selectiontype = 'uid'
     allowupload = False
@@ -74,8 +77,7 @@ class FinderImageWidget(TextWidget):
             'allowimagesizeselection': int(self.allowimagesizeselection),
             'forcecloseoninsert': int(self.forcecloseoninsert),
             'types': list(self.types),
-            'imagestypes': list(self.imagestypes)
-            }
+            'imagestypes': list(self.imagestypes)}
         return '%s/@@plone_finder?%s' % (base_url, make_query(values))
 
 
@@ -100,7 +102,6 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
     forcecloseoninsert = False
     base = None
 
-
     def __init__(self, field, request):
         """TODO: set some plone_finder attributes in session for a smaller
         querystring. The most important improvement can be the plone_finder
@@ -115,10 +116,8 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
             self.base = getSite()
         super(FinderSelectWidget, self).__init__(field, voc, request)
 
-
     def _getBaseUrl(self):
         return self.base.absolute_url()
-
 
     def getTitleFromValue(self, value):
         reference_tool = getToolByName(self.base, 'reference_catalog')
@@ -130,10 +129,11 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
         if obj is not None:
             if pm.checkPermission('View', obj):
                 return obj.pretty_title_or_id()
-            return '%s : %s ' %(_(u"You don't have permission to access this object"),uid)
+            return '%s : %s ' %(
+                _(u"You don't have permission to access this object"), uid)
         else:
-            return '%s : %s ' %(_(u"Object not found with uid"),uid)
-
+            return '%s : %s ' %(
+                _(u"Object not found with uid"), uid)
 
     def finderlink(self):
         """JS link that opens the finder
@@ -150,10 +150,9 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
             'allowimagesizeselection': int(self.allowimagesizeselection),
             'forcecloseoninsert': int(self.forcecloseoninsert),
             'types': list(self.types),
-            'imagestypes': list(self.imagestypes)
-            }
-        return "openFinder('%s/@@plone_finder?%s')" % (base_url, make_query(values))
-
+            'imagestypes': list(self.imagestypes)}
+        return "openFinder('%s/@@plone_finder?%s')" % (
+            base_url, make_query(values))
 
     def convertTokensToValues(self, tokens):
         """Convert term tokens to the terms themselves.
@@ -171,7 +170,6 @@ class FinderSelectWidget(OrderedMultiSelectWidget):
             else:
                 values.append(token)
         return values
-
 
     def selected(self):
         """Return a list of tuples (text, value) that are selected
@@ -222,4 +220,3 @@ class FinderSelectImageWidget(FinderSelectWidget):
     allowupload = 1
     allowaddfolder = 1
     allowimagesizeselection = 1
-
