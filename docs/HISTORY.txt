@@ -39,7 +39,7 @@ Changelog
 1.1.3 (2016-03-24)
 ------------------
 
-- Added option 'openuploadwidgetdefault' to be able to specify if we want
+- Added option ``openuploadwidgetdefault`` to be able to specify if we want
   the upload widget to be opened by default without having to click on the
   'Files quick upload' button.
   [gbastien]
@@ -48,7 +48,7 @@ Changelog
 1.1.2 (2016-03-15)
 ------------------
 
-- Added option 'showsearchbox' to be able to display/hide the search box easily.
+- Added option ``showsearchbox`` to be able to display/hide the search box easily.
   [gbastien]
 
 
@@ -63,7 +63,7 @@ Changelog
 1.1.0 (2016-02-16)
 ------------------
 
-- Use new way to get images. Call '/@@images/image/preview' instead of '/image_preview'.
+- Use new way to get images. Call ``/@@images/image/preview`` instead of ``/image_preview``.
   [bsuttor]
 
 - Add implmentation of plone.app.contenttypes.content.Folder by IFinderUploadCapable.
@@ -110,7 +110,7 @@ Changelog
 * Commented obscure features in the code
   [glenfant]
 
-* Fix case where 'image' field is of the type 'reference'
+* Fix case where ``image`` field is of the type ``reference``
   [toutpt]
 
 
