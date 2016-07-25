@@ -11,12 +11,12 @@ initializeImageWidget = function(finder_url, initial_image_url, widget_id, input
         // it is baked in finder_url
         openFinder(finder_url);
     });
-}
+};
 
 openFinder = function(url) {
     var finder_window = window.open(url,"plone_finder","menubar=no, status=no, scrollbars=no, menubar=no, width=980, height=650, left=20, top=20");
     finder_window.focus();
-}
+};
 
 finderSelectItem = function(selector, title, image_preview, widget_id) {
     image_preview = (typeof image_preview != "undefined") ? image_preview : false;
@@ -25,5 +25,5 @@ finderSelectItem = function(selector, title, image_preview, widget_id) {
     // compute absolute_url to be stored
     var image_url = portal_url + '/resolveuid/' + selector;
     elmapps[widget_id].ports.url.send(image_url);
-}
+};
 
