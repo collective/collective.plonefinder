@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.1 (unreleased)
+1.2.1 (2016-07-25)
 ------------------
 
 - Add missing semicolons to avoid JS issue when ``portal_javascript`` is in prod mode.
