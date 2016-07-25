@@ -4,7 +4,7 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Add check for when value is None (when you remove image after adding it).
 
 
 1.2.0 (2016-07-08)
