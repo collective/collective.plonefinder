@@ -4,13 +4,20 @@ Changelog
 1.2.1 (unreleased)
 ------------------
 
+- Add missing semicolons to avoid JS issue when ``portal_javascript`` is in prod mode.
+  [gotcha]
+
 - Add check for when value is None (when you remove image after adding it).
+  [spereverde]
+
+- Some refactoring for cleaner HTML in ``FinderImageWidget``. 
+  [gotcha]
 
 
 1.2.0 (2016-07-08)
 ------------------
 
-- Add formlib FinderImageWidget; use with ::
+- Add formlib ``FinderImageWidget``; use with ::
 
     
     # in interface class
@@ -20,7 +27,7 @@ Changelog
     # in form class
     form_fields['picture'].custom_widget = FinderImageWidget
 
-
+  [gotcha]
 
 1.1.4 (2016-03-30)
 ------------------
