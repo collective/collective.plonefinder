@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2.2 (unreleased)
+1.2.2 (2016-08-15)
 ------------------
 
 - ``FinderImageWidget`` : store selector instead of absolute_url
