@@ -28,21 +28,26 @@ type InputId
     = InputId String
 
 
-type Url
-    = Url String
+type RelativeUrl
+    = RelativeUrl String
+
+
+type PortalUrl
+    = PortalUrl String
 
 
 type alias Model =
     { widget_id : WidgetId
     , input_id : InputId
-    , url : Url
+    , relative_url : RelativeUrl
+    , portal_url : PortalUrl
     }
 
 
-init : ( String, String, String ) -> ( Model, Cmd Msg )
+init : ( String, String, String, String ) -> ( Model, Cmd Msg )
 init flags =
     let
-        ( widget_id_s, input_id_s, url_s ) =
+        ( widget_id_s, input_id_s, relative_url_s, portal_url_s ) =
             flags
 
         widget_id =
@@ -51,22 +56,37 @@ init flags =
         input_id =
             InputId input_id_s
 
-        url =
-            Url url_s
+        relative_url =
+            RelativeUrl relative_url_s
+
+        portal_url =
+            PortalUrl portal_url_s
     in
-        ( Model widget_id input_id url, Cmd.none )
+        ( Model widget_id input_id relative_url portal_url, Cmd.none )
 
 
 hasImage : Model -> Bool
 hasImage model =
     let
-        (Url url) =
-            model.url
+        (RelativeUrl relative_url) =
+            model.relative_url
     in
-        if url == "" then
+        if relative_url == "" then
             False
         else
             True
+
+
+absolute_image_url : Model -> String
+absolute_image_url model =
+    let
+        (RelativeUrl relative_url) =
+            model.relative_url
+
+        (PortalUrl portal_url) =
+            model.portal_url
+    in
+        portal_url ++ "/resolveuid/" ++ relative_url
 
 
 
@@ -75,7 +95,7 @@ hasImage model =
 
 type Msg
     = RemoveImage
-    | SetUrl Url
+    | SetRelativeUrl RelativeUrl
     | OpenFinder
 
 
@@ -90,25 +110,25 @@ update msg model =
     in
         case msg of
             RemoveImage ->
-                ( { model | url = (Url "") }, Cmd.none )
+                ( { model | relative_url = (RelativeUrl "") }, Cmd.none )
 
             OpenFinder ->
                 ( model, openfinder widget_id )
 
-            SetUrl url ->
-                ( { model | url = url }, Cmd.none )
+            SetRelativeUrl relative_url ->
+                ( { model | relative_url = relative_url }, Cmd.none )
 
 
 
 -- SUBSCRIPTIONS
 
 
-port url : (String -> msg) -> Sub msg
+port relative_url : (String -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    url (\url -> SetUrl (Url url))
+    relative_url (\relative_url -> SetRelativeUrl (RelativeUrl relative_url))
 
 
 
@@ -136,10 +156,10 @@ field model =
         (InputId input_id) =
             model.input_id
 
-        (Url url) =
-            model.url
+        (RelativeUrl relative_url) =
+            model.relative_url
     in
-        input [ type' "hidden", id input_id, name input_id, value url ] []
+        input [ type' "hidden", id input_id, name input_id, value relative_url ] []
 
 
 buttons model =
@@ -160,12 +180,12 @@ remove_button model =
 
 image model =
     let
-        (Url url) =
-            model.url
+        image_url =
+            absolute_image_url model
     in
         if hasImage model then
             div []
-                [ img [ src url ] [] ]
+                [ img [ src image_url ] [] ]
         else
             div []
                 [ text "No Image" ]
