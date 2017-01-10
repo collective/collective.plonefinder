@@ -34,7 +34,7 @@ class FinderImageWidget(TextWidget):
     imagestypes = ('Image', )
     query = None
     selectiontype = 'uid'
-    allowupload = False
+    allowupload = True
     allowaddfolder = False
     allowimagesizeselection = True
     forcecloseoninsert = True

@@ -4,7 +4,8 @@ Changelog
 1.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ``FinderImageWidget`` : enable quickupload
+  [gotcha]
 
 
 1.2.2 (2016-08-15)
