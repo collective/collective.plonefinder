@@ -8,12 +8,12 @@
 # authentification problems with flash upload form
 
 from Acquisition import aq_inner
-from zope.filerepresentation.interfaces import IDirectoryFactory
+from collective.plonefinder import logger
+from collective.plonefinder.utils import pleaseDontCache
+from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
-from collective.plonefinder import logger
-from collective.plonefinder.utils import pleaseDontCache
 
 class FinderNewFolderView(BrowserView):
     """Create folder form
@@ -51,11 +51,15 @@ class FinderNewFolder(BrowserView):
         title = request.get('folder-title', '')
         description = request.get('folder-description', '')
 
-        factory = IDirectoryFactory(context)
-        logger.info("creating folder: title=%s, description=%s, portal_type=%s",
+        logger.info('creating folder: title=%s, description=%s, portal_type=%s',
                     title, description, portal_type)
 
-        f = factory(title, description, portal_type)
+        f = api.content.create(
+            type=portal_type,
+            container=context,
+            title=title,
+            description=description)
+
         logger.info("folder url: %s" % f.absolute_url())
 
         return f.absolute_url()
