@@ -48,6 +48,7 @@ setup(name='collective.plonefinder',
           'setuptools',
           # -*- Extra requirements: -*-
           'collective.quickupload',
+          'plone.api',
           ],
       entry_points="""
       # -*- Entry points: -*-

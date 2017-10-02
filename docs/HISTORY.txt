@@ -4,7 +4,8 @@ Changelog
 1.2.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use plone.api instead of IDirectoryFactory to create Folder, it's prevent dexterity creation Folder error.
+  [bsuttor]
 
 
 1.2.3 (2017-01-10)
