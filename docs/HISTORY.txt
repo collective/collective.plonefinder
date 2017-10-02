@@ -5,6 +5,7 @@ Changelog
 ------------------
 
 - Use plone.api instead of IDirectoryFactory to create Folder, it's prevent dexterity creation Folder error.
+  DEPENDENCY ADDED: plone.api.
   [bsuttor]
 
 
