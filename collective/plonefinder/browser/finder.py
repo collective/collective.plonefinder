@@ -530,7 +530,7 @@ class Finder(BrowserView):
                             preview = '%s/@@images/image/%s?isImage=1' % (r['url'], ts[0])
                             break
                     # images sizes actions menu
-                    thumb_sizes.extend([('full',width ,height ,_('Full size'), '/image')])
+                    thumb_sizes.extend([('full', width, height, _('Full size'), '/@@images/image')])
                     if self.allowimagesizeselection:
                         r['actions_menu']['choose_image_size'] = {
                             'label': _(u'Choose image size'),
@@ -671,4 +671,3 @@ class Finder(BrowserView):
         """Make a query_string with clean Request
         """
         return make_query(self.cleanrequest)
-
