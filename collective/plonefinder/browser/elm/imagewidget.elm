@@ -1,14 +1,14 @@
-port module ImageWidget exposing (..)
+port module ImageWidget exposing (main)
 
-import Html exposing (div, text, img, button, input, Attribute)
-import Html.App as Html
+import Browser exposing (element)
+import Html exposing (Attribute, button, div, img, input, text)
+import Html.Attributes exposing (id, name, src, type_, value)
+import Html.Events exposing (preventDefaultOn)
 import Json.Decode as Json
-import Html.Events exposing (onWithOptions, Options, defaultOptions)
-import Html.Attributes exposing (type', src, name, id, value)
 
 
 main =
-    Html.programWithFlags
+    element
         { init = init
         , view = view
         , update = update
@@ -44,49 +44,53 @@ type alias Model =
     }
 
 
-init : ( String, String, String, String ) -> ( Model, Cmd Msg )
+init :
+    { widget_id_s : String
+    , input_id_s : String
+    , relative_url_s : String
+    , portal_url_s : String
+    }
+    -> ( Model, Cmd Msg )
 init flags =
     let
-        ( widget_id_s, input_id_s, relative_url_s, portal_url_s ) =
-            flags
-
         widget_id =
-            WidgetId widget_id_s
+            WidgetId flags.widget_id_s
 
         input_id =
-            InputId input_id_s
+            InputId flags.input_id_s
 
         relative_url =
-            RelativeUrl relative_url_s
+            RelativeUrl flags.relative_url_s
 
         portal_url =
-            PortalUrl portal_url_s
+            PortalUrl flags.portal_url_s
     in
-        ( Model widget_id input_id relative_url portal_url, Cmd.none )
+    ( Model widget_id input_id relative_url portal_url, Cmd.none )
 
 
 hasImage : Model -> Bool
 hasImage model =
     let
-        (RelativeUrl relative_url) =
+        (RelativeUrl url) =
             model.relative_url
     in
-        if relative_url == "" then
-            False
-        else
-            True
+    if url == "" then
+        False
+
+    else
+        True
 
 
 absolute_image_url : Model -> String
 absolute_image_url model =
     let
-        (RelativeUrl relative_url) =
+        (RelativeUrl r_url) =
             model.relative_url
 
-        (PortalUrl portal_url) =
+        (PortalUrl p_url) =
             model.portal_url
     in
-        portal_url ++ "/resolveuid/" ++ relative_url
+    p_url ++ "/resolveuid/" ++ r_url
 
 
 
@@ -108,27 +112,27 @@ update msg model =
         (WidgetId widget_id) =
             model.widget_id
     in
-        case msg of
-            RemoveImage ->
-                ( { model | relative_url = (RelativeUrl "") }, Cmd.none )
+    case msg of
+        RemoveImage ->
+            ( { model | relative_url = RelativeUrl "" }, Cmd.none )
 
-            OpenFinder ->
-                ( model, openfinder widget_id )
+        OpenFinder ->
+            ( model, openfinder widget_id )
 
-            SetRelativeUrl relative_url ->
-                ( { model | relative_url = relative_url }, Cmd.none )
+        SetRelativeUrl relative_url ->
+            ( { model | relative_url = relative_url }, Cmd.none )
 
 
 
 -- SUBSCRIPTIONS
 
 
-port relative_url : (String -> msg) -> Sub msg
+port relative_url_port : (String -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    relative_url (\relative_url -> SetRelativeUrl (RelativeUrl relative_url))
+    relative_url_port (\r_url -> SetRelativeUrl (RelativeUrl r_url))
 
 
 
@@ -136,13 +140,13 @@ subscriptions model =
 
 
 onClickPreventDefault : msg -> Attribute msg
-onClickPreventDefault message =
-    onWithOptions "click" noSubmitOptions (Json.succeed message)
+onClickPreventDefault msg =
+    preventDefaultOn "click" (Json.map alwaysPreventDefault (Json.succeed msg))
 
 
-noSubmitOptions : Options
-noSubmitOptions =
-    { defaultOptions | preventDefault = True }
+alwaysPreventDefault : msg -> ( msg, Bool )
+alwaysPreventDefault msg =
+    ( msg, True )
 
 
 view : Model -> Html.Html Msg
@@ -156,10 +160,10 @@ field model =
         (InputId input_id) =
             model.input_id
 
-        (RelativeUrl relative_url) =
+        (RelativeUrl r_url) =
             model.relative_url
     in
-        input [ type' "hidden", id input_id, name input_id, value relative_url ] []
+    input [ type_ "hidden", id input_id, name input_id, value r_url ] []
 
 
 buttons model =
@@ -174,6 +178,7 @@ browse_button model =
 remove_button model =
     if hasImage model then
         button [ onClickPreventDefault RemoveImage ] [ text "Remove" ]
+
     else
         text ""
 
@@ -183,9 +188,10 @@ image model =
         image_url =
             absolute_image_url model
     in
-        if hasImage model then
-            div []
-                [ img [ src image_url ] [] ]
-        else
-            div []
-                [ text "No Image" ]
+    if hasImage model then
+        div []
+            [ img [ src image_url ] [] ]
+
+    else
+        div []
+            [ text "No Image" ]

@@ -6,7 +6,11 @@ initializeImageWidget = function(finder_url, initial_image_url, widget_id, input
     var node = document.querySelector('#'+widget_id);
     var parent = node.parentNode;
     parent.removeChild(node);
-    elmapps[widget_id] = Elm.ImageWidget.embed(parent, [widget_id, input_id, initial_image_url, portal_url]);
+    elmapps[widget_id] = Elm.ImageWidget.init(
+        {node: parent,
+        flags:
+        {widget_id_s: widget_id, input_id_s:input_id, 
+        relative_url_s: initial_image_url, portal_url_s: portal_url}});
     elmapps[widget_id].ports.openfinder.subscribe(function(widget_id) {
         // widget_id is unused
         // it is baked in finder_url
@@ -22,6 +26,6 @@ openFinder = function(url) {
 finderSelectItem = function(selector, title, image_preview, widget_id) {
     image_preview = (typeof image_preview != "undefined") ? image_preview : false;
     if (image_preview) selector = selector + '/@@images/image/preview' ;
-    elmapps[widget_id].ports.relative_url.send(selector);
+    elmapps[widget_id].ports.relative_url_port.send(selector);
 };
 

@@ -1,2 +1,2 @@
 #!/bin/bash
-elm-make --output=../static/imagewidget.js imagewidget.elm
+elm make --optimize --output=../static/imagewidget.js imagewidget.elm
