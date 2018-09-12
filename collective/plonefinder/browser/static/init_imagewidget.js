@@ -8,9 +8,8 @@ initializeImageWidget = function(finder_url, initial_image_url, widget_id, input
     parent.removeChild(node);
     elmapps[widget_id] = Elm.ImageWidget.init(
         {node: parent,
-        flags:
-        {widgetId: widget_id, inputId:input_id, 
-        relativeUrl: initial_image_url, portalUrl: portal_url}});
+        // portal_url is global variable set by Plone
+        flags: {widgetId: widget_id, inputId:input_id, relativeUrl: initial_image_url, portalUrl: portal_url}});
     elmapps[widget_id].ports.openfinder.subscribe(function(widget_id) {
         // widget_id is unused
         // it is baked in finder_url
@@ -23,6 +22,7 @@ openFinder = function(url) {
     finder_window.focus();
 };
 
+// finderSelectItem is called by plone_finder window when selecting an item
 finderSelectItem = function(selector, title, image_preview, widget_id) {
     image_preview = (typeof image_preview != "undefined") ? image_preview : false;
     if (image_preview) selector = selector + '/@@images/image/preview' ;
