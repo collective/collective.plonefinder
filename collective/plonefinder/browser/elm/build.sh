@@ -1,4 +1,8 @@
 #!/bin/bash
+
+#elm make --output=../static/imagewidget.js imagewidget.elm
+#exit
+
 elm make --optimize --output=imagewidget.js imagewidget.elm
 uglifyjs imagewidget.js \
    --compress \

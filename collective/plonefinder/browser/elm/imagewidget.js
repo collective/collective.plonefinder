@@ -770,11 +770,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.M.B === region.R.B)
+	if (region.P.B === region.U.B)
 	{
-		return 'on line ' + region.M.B;
+		return 'on line ' + region.P.B;
 	}
-	return 'on lines ' + region.M.B + ' through ' + region.R.B;
+	return 'on lines ' + region.P.B + ' through ' + region.U.B;
 }
 
 
@@ -1841,9 +1841,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aw,
+		impl.aE,
+		impl.aC,
 		function() { return function() {} }
 	);
 });
@@ -2644,8 +2644,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		k: func(record.k),
-		N: record.N,
-		L: record.L
+		Q: record.Q,
+		O: record.O
 	}
 });
 
@@ -2914,10 +2914,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.k;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.N;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Q;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.L) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.O) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3863,11 +3863,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aw,
+		impl.aE,
+		impl.aC,
 		function(sendToApp, initialModel) {
-			var view = impl.aK;
+			var view = impl.aG;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3899,12 +3899,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aA,
-		impl.aI,
-		impl.aG,
+		impl.aw,
+		impl.aE,
+		impl.aC,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.C && impl.C(sendToApp)
-			var view = impl.aK;
+			var view = impl.aG;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3912,12 +3912,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.at);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ap);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aH) && (_VirtualDom_doc.title = title = doc.aH);
+				(title !== doc.aD) && (_VirtualDom_doc.title = title = doc.aD);
 			});
 		}
 	);
@@ -3968,8 +3968,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aC;
-	var onUrlRequest = impl.aD;
+	var onUrlChange = impl.ay;
+	var onUrlRequest = impl.az;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -3989,9 +3989,9 @@ function _Browser_application(impl)
 					var next = elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ag === next.ag
-							&& curr.U === next.U
-							&& curr.ab.a === next.ab.a
+							&& curr.af === next.af
+							&& curr.X === next.X
+							&& curr.ac.a === next.ac.a
 						)
 							? elm$browser$Browser$Internal(next)
 							: elm$browser$Browser$External(href)
@@ -3999,13 +3999,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aA: function(flags)
+		aw: function(flags)
 		{
-			return A3(impl.aA, flags, _Browser_getUrl(), key);
+			return A3(impl.aw, flags, _Browser_getUrl(), key);
 		},
-		aK: impl.aK,
-		aI: impl.aI,
-		aG: impl.aG
+		aG: impl.aG,
+		aE: impl.aE,
+		aC: impl.aC
 	});
 }
 
@@ -4071,17 +4071,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ay: 'hidden', A: 'visibilitychange' }
+		? { au: 'hidden', A: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ay: 'mozHidden', A: 'mozvisibilitychange' }
+		? { au: 'mozHidden', A: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ay: 'msHidden', A: 'msvisibilitychange' }
+		? { au: 'msHidden', A: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ay: 'webkitHidden', A: 'webkitvisibilitychange' }
-		: { ay: 'hidden', A: 'visibilitychange' };
+		? { au: 'webkitHidden', A: 'webkitvisibilitychange' }
+		: { au: 'hidden', A: 'visibilitychange' };
 }
 
 
@@ -4162,12 +4162,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		al: _Browser_getScene(),
-		ao: {
-			H: _Browser_window.pageXOffset,
-			I: _Browser_window.pageYOffset,
+		aj: _Browser_getScene(),
+		am: {
+			K: _Browser_window.pageXOffset,
+			L: _Browser_window.pageYOffset,
 			y: _Browser_doc.documentElement.clientWidth,
-			s: _Browser_doc.documentElement.clientHeight
+			t: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4178,7 +4178,7 @@ function _Browser_getScene()
 	var elem = _Browser_doc.documentElement;
 	return {
 		y: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		s: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		t: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4201,15 +4201,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			al: {
+			aj: {
 				y: node.scrollWidth,
-				s: node.scrollHeight
+				t: node.scrollHeight
 			},
-			ao: {
-				H: node.scrollLeft,
-				I: node.scrollTop,
+			am: {
+				K: node.scrollLeft,
+				L: node.scrollTop,
 				y: node.clientWidth,
-				s: node.clientHeight
+				t: node.clientHeight
 			}
 		};
 	});
@@ -4239,18 +4239,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			al: _Browser_getScene(),
-			ao: {
-				H: x,
-				I: y,
+			aj: _Browser_getScene(),
+			am: {
+				K: x,
+				L: y,
 				y: _Browser_doc.documentElement.clientWidth,
-				s: _Browser_doc.documentElement.clientHeight
+				t: _Browser_doc.documentElement.clientHeight
 			},
-			av: {
-				H: x + rect.left,
-				I: y + rect.top,
+			ar: {
+				K: x + rect.left,
+				L: y + rect.top,
 				y: rect.width,
-				s: rect.height
+				t: rect.height
 			}
 		};
 	});
@@ -4287,8 +4287,8 @@ function _Browser_load(url)
 }
 var author$project$ImageWidget$InputId = elm$core$Basics$identity;
 var author$project$ImageWidget$Model = F4(
-	function (widget_id, input_id, relative_url, portal_url) {
-		return {V: input_id, ac: portal_url, v: relative_url, ap: widget_id};
+	function (widgetId, inputId, relativeUrl, portalUrl) {
+		return {H: inputId, I: portalUrl, m: relativeUrl, J: widgetId};
 	});
 var author$project$ImageWidget$PortalUrl = elm$core$Basics$identity;
 var author$project$ImageWidget$RelativeUrl = elm$core$Basics$identity;
@@ -4774,48 +4774,48 @@ var elm$json$Json$Decode$errorToStringHelp = F2(
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
 var author$project$ImageWidget$init = function (flags) {
-	var widget_id = flags.aq;
-	var relative_url = flags.ai;
-	var portal_url = flags.ad;
-	var input_id = flags.W;
+	var widgetId = flags.J;
+	var relativeUrl = flags.m;
+	var portalUrl = flags.I;
+	var inputId = flags.H;
 	return _Utils_Tuple2(
-		A4(author$project$ImageWidget$Model, widget_id, input_id, relative_url, portal_url),
+		A4(author$project$ImageWidget$Model, widgetId, inputId, relativeUrl, portalUrl),
 		elm$core$Platform$Cmd$none);
 };
 var author$project$ImageWidget$SetRelativeUrl = function (a) {
 	return {$: 1, a: a};
 };
 var elm$json$Json$Decode$string = _Json_decodeString;
-var author$project$ImageWidget$relative_url_port = _Platform_incomingPort('relative_url_port', elm$json$Json$Decode$string);
+var author$project$ImageWidget$relativeUrlPort = _Platform_incomingPort('relativeUrlPort', elm$json$Json$Decode$string);
 var author$project$ImageWidget$subscriptions = function (model) {
-	return author$project$ImageWidget$relative_url_port(
-		function (r_url) {
-			return author$project$ImageWidget$SetRelativeUrl(r_url);
+	return author$project$ImageWidget$relativeUrlPort(
+		function (relativeUrl) {
+			return author$project$ImageWidget$SetRelativeUrl(relativeUrl);
 		});
 };
 var elm$json$Json$Encode$string = _Json_wrap;
 var author$project$ImageWidget$openfinder = _Platform_outgoingPort('openfinder', elm$json$Json$Encode$string);
 var author$project$ImageWidget$update = F2(
 	function (msg, model) {
-		var _n0 = model.ap;
-		var widget_id = _n0;
+		var _n0 = model.J;
+		var widgetId = _n0;
 		switch (msg.$) {
 			case 0:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{v: ''}),
+						{m: ''}),
 					elm$core$Platform$Cmd$none);
 			case 2:
 				return _Utils_Tuple2(
 					model,
-					author$project$ImageWidget$openfinder(widget_id));
+					author$project$ImageWidget$openfinder(widgetId));
 			default:
-				var relative_url = msg.a;
+				var relativeUrl = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{v: relative_url}),
+						{m: relativeUrl}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -4861,7 +4861,7 @@ var author$project$ImageWidget$onClickPreventDefault = function (msg) {
 var elm$html$Html$button = _VirtualDom_node('button');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
-var author$project$ImageWidget$browse_button = function (model) {
+var author$project$ImageWidget$browseButton = function (model) {
 	return A2(
 		elm$html$Html$button,
 		_List_fromArray(
@@ -4875,11 +4875,11 @@ var author$project$ImageWidget$browse_button = function (model) {
 };
 var author$project$ImageWidget$RemoveImage = {$: 0};
 var author$project$ImageWidget$hasImage = function (model) {
-	var _n0 = model.v;
+	var _n0 = model.m;
 	var url = _n0;
 	return (url === '') ? false : true;
 };
-var author$project$ImageWidget$remove_button = function (model) {
+var author$project$ImageWidget$removeButton = function (model) {
 	return author$project$ImageWidget$hasImage(model) ? A2(
 		elm$html$Html$button,
 		_List_fromArray(
@@ -4898,8 +4898,8 @@ var author$project$ImageWidget$buttons = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				author$project$ImageWidget$browse_button(model),
-				author$project$ImageWidget$remove_button(model)
+				author$project$ImageWidget$browseButton(model),
+				author$project$ImageWidget$removeButton(model)
 			]));
 };
 var elm$html$Html$input = _VirtualDom_node('input');
@@ -4915,27 +4915,27 @@ var elm$html$Html$Attributes$name = elm$html$Html$Attributes$stringProperty('nam
 var elm$html$Html$Attributes$type_ = elm$html$Html$Attributes$stringProperty('type');
 var elm$html$Html$Attributes$value = elm$html$Html$Attributes$stringProperty('value');
 var author$project$ImageWidget$field = function (model) {
-	var _n0 = model.v;
-	var r_url = _n0;
-	var _n1 = model.V;
-	var input_id = _n1;
+	var _n0 = model.m;
+	var relativeUrl = _n0;
+	var _n1 = model.H;
+	var inputId = _n1;
 	return A2(
 		elm$html$Html$input,
 		_List_fromArray(
 			[
 				elm$html$Html$Attributes$type_('hidden'),
-				elm$html$Html$Attributes$id(input_id),
-				elm$html$Html$Attributes$name(input_id),
-				elm$html$Html$Attributes$value(r_url)
+				elm$html$Html$Attributes$id(inputId),
+				elm$html$Html$Attributes$name(inputId),
+				elm$html$Html$Attributes$value(relativeUrl)
 			]),
 		_List_Nil);
 };
-var author$project$ImageWidget$absolute_image_url = function (model) {
-	var _n0 = model.v;
-	var r_url = _n0;
-	var _n1 = model.ac;
-	var p_url = _n1;
-	return p_url + ('/resolveuid/' + r_url);
+var author$project$ImageWidget$absoluteImageUrl = function (model) {
+	var _n0 = model.m;
+	var relativeUrl = _n0;
+	var _n1 = model.I;
+	var portalUrl = _n1;
+	return portalUrl + ('/resolveuid/' + relativeUrl);
 };
 var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$Attributes$src = function (url) {
@@ -4945,7 +4945,7 @@ var elm$html$Html$Attributes$src = function (url) {
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
 var author$project$ImageWidget$image = function (model) {
-	var image_url = author$project$ImageWidget$absolute_image_url(model);
+	var imageUrl = author$project$ImageWidget$absoluteImageUrl(model);
 	return author$project$ImageWidget$hasImage(model) ? A2(
 		elm$html$Html$div,
 		_List_Nil,
@@ -4955,7 +4955,7 @@ var author$project$ImageWidget$image = function (model) {
 				elm$html$Html$img,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$src(image_url)
+						elm$html$Html$Attributes$src(imageUrl)
 					]),
 				_List_Nil)
 			])) : A2(
@@ -5162,7 +5162,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {T: fragment, U: host, _: path, ab: port_, ag: protocol, ah: query};
+		return {W: fragment, X: host, aa: path, ac: port_, af: protocol, ag: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -5270,27 +5270,27 @@ var elm$browser$Browser$element = _Browser_element;
 var elm$json$Json$Decode$andThen = _Json_andThen;
 var elm$json$Json$Decode$field = _Json_decodeField;
 var author$project$ImageWidget$main = elm$browser$Browser$element(
-	{aA: author$project$ImageWidget$init, aG: author$project$ImageWidget$subscriptions, aI: author$project$ImageWidget$update, aK: author$project$ImageWidget$view});
+	{aw: author$project$ImageWidget$init, aC: author$project$ImageWidget$subscriptions, aE: author$project$ImageWidget$update, aG: author$project$ImageWidget$view});
 _Platform_export({'ImageWidget':{'init':author$project$ImageWidget$main(
 	A2(
 		elm$json$Json$Decode$andThen,
-		function (widget_id_s) {
+		function (widgetId) {
 			return A2(
 				elm$json$Json$Decode$andThen,
-				function (relative_url_s) {
+				function (relativeUrl) {
 					return A2(
 						elm$json$Json$Decode$andThen,
-						function (portal_url_s) {
+						function (portalUrl) {
 							return A2(
 								elm$json$Json$Decode$andThen,
-								function (input_id_s) {
+								function (inputId) {
 									return elm$json$Json$Decode$succeed(
-										{W: input_id_s, ad: portal_url_s, ai: relative_url_s, aq: widget_id_s});
+										{H: inputId, I: portalUrl, m: relativeUrl, J: widgetId});
 								},
-								A2(elm$json$Json$Decode$field, 'input_id_s', elm$json$Json$Decode$string));
+								A2(elm$json$Json$Decode$field, 'inputId', elm$json$Json$Decode$string));
 						},
-						A2(elm$json$Json$Decode$field, 'portal_url_s', elm$json$Json$Decode$string));
+						A2(elm$json$Json$Decode$field, 'portalUrl', elm$json$Json$Decode$string));
 				},
-				A2(elm$json$Json$Decode$field, 'relative_url_s', elm$json$Json$Decode$string));
+				A2(elm$json$Json$Decode$field, 'relativeUrl', elm$json$Json$Decode$string));
 		},
-		A2(elm$json$Json$Decode$field, 'widget_id_s', elm$json$Json$Decode$string)))(0)}});}(this));
+		A2(elm$json$Json$Decode$field, 'widgetId', elm$json$Json$Decode$string)))(0)}});}(this));
