@@ -411,9 +411,7 @@
 
       <tal:block replace="structure provider:plone.htmlhead" />
 
-      <script
-              tal:attributes="src string:$portal_url/++plone++production/++unique++2021-08-12T12:29:18.520969/default.js">
-      </script>
+      <tal:block replace="structure provider:plone.scripts" />
 
         <script type="text/javascript"
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/finder.js">

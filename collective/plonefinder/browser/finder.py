@@ -12,7 +12,11 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import getFSVersionTuple
 from plone.app.layout.navigation.interfaces import INavigationRoot
-from Products.ATContentTypes.interface import IATTopic
+try:
+    from Products.ATContentTypes.interface import IATTopic
+    HAS_AT = True
+except ImportError:
+    HAS_AT = False
 
 from collective.plonefinder.interfaces import IFinder
 from interfaces import IFinderUploadCapable
@@ -462,7 +466,7 @@ class Finder(BrowserView):
         """
         cat = self.data['catalog']
         scope = self.data['scope']
-        if IATTopic.providedBy(scope):
+        if HAS_AT and IATTopic.providedBy(scope):
             supQuery = self.finderQuery()
             if supQuery.has_key('path'):
                 del supQuery['path']

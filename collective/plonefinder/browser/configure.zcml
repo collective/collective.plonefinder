@@ -9,22 +9,19 @@
 
   <include package="collective.quickupload" />
 
-  <browser:page
-      for="*"
-      class=".typescss.TypesCssProperties"
-      name="finder-content-types-3.x.css"
-      permission="zope.Public"
-      />
-
   <adapter factory=".uploadcapable.FinderCreateFolderCapableFactory" />
 
-  <class class="Products.ATContentTypes.content.folder.ATFolder">
+  <class zcml:condition="installed Products.Archetypes"
+         class="Products.ATContentTypes.content.folder.ATFolder">
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
 
-  <class class="Products.ATContentTypes.content.folder.ATBTreeFolder">
+  <class zcml:condition="installed Products.Archetypes"
+         class="Products.ATContentTypes.content.folder.ATBTreeFolder">
     <implements interface=".interfaces.IFinderUploadCapable" />
   </class>
+
+  <!-- TODO enable on PAC ? -->
 
   <class class="Products.CMFPlone.Portal.PloneSite">
     <implements interface=".interfaces.IFinderUploadCapable" />
