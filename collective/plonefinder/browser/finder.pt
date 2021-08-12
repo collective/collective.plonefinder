@@ -1,4 +1,4 @@
-<metal:block use-macro="context/global_defines/macros/defines" />
+
 
 <metal:block tal:define="typeview view/typeview;
                          fieldName view/fieldname;
@@ -411,7 +411,11 @@
 
       <tal:block replace="structure provider:plone.htmlhead" />
 
-      <script type="text/javascript"
+      <script
+              tal:attributes="src string:$portal_url/++plone++production/++unique++2021-08-12T12:29:18.520969/default.js">
+      </script>
+
+        <script type="text/javascript"
               tal:attributes="src string:$portal_url/++resource++plonefinder_static/finder.js">
       </script>
 

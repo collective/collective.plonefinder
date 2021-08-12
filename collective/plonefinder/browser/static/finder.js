@@ -5,23 +5,25 @@
 
 var ua = navigator.userAgent;
 var isIE8 = (ua.match(/MSIE 8\.0/));
-var isIE = jQuery.browser.msie;
+
+
+var isIE = false;
 var isOldIE = (isIE && ! isIE8)?true:false;
 
-jQuery.fn.changeClass = function(c1,c2) {
+$.fn.changeClass = function(c1,c2) {
     return this.each(function() {
-        this_class = jQuery(this).attr('class');
+        this_class = $(this).attr('class');
         if (this_class){
           if (this_class.indexOf(c1) >= 0) {
-              jQuery(this).removeClass(c1);
-              jQuery(this).addClass(c2);
+              $(this).removeClass(c1);
+              $(this).addClass(c2);
           }
         }
     });
 };
 
 
-jQuery.fn.center = function() {
+$.fn.center = function() {
     return this.each(function() {
         var content = this;
         hh = window.innerHeight || document.documentElement.clientHeight;
@@ -32,16 +34,16 @@ jQuery.fn.center = function() {
             var top = 50;
         else
             var top = (hscroll + (hh / 2) - (content.offsetHeight / 2));
-        jQuery(content).css({
+        $(content).css({
             top: top  + "px",
             left: (wscroll + (ww / 2) - (content.offsetWidth / 2)) + "px",
             position: 'absolute'
           });
-          /* jQuery(window).resize(function() {jQuery(this).center();});*/
+          /* $(window).resize(function() {$(this).center();});*/
         });
 }
 
-jQuery.fn.fullsize = function() {
+$.fn.fullsize = function() {
     /* Give an element the full page dimension */
     return this.each (function() {
         var content = this;
@@ -57,17 +59,17 @@ jQuery.fn.fullsize = function() {
         maxY = findPosY(corner);
         if (maxX > w) w = maxX + 30 ;
         if (maxY > h) h = maxY + 30 ;
-        jQuery(content).css({
+        $(content).css({
             width:  w  + "px",
             height: h + "px"
         });
     });
 }
 
-jQuery.fn.popup = function() {
+$.fn.popup = function() {
     return this.each(function() {
         var popup = this;
-        jQuery('> .window', popup).center();
+        $('> .window', popup).center();
     });
 }
 
@@ -196,7 +198,7 @@ function getQueryObject(query) {
         }
         Params[key] = val;
         keyznothere = true;
-        jQuery.each(ParamsList, function() {
+        $.each(ParamsList, function() {
             if (this==key) {
                 keyznothere = false;
                 return false;
@@ -254,8 +256,8 @@ absolutizeBlockPosition = function(block, width, height) {
     block.css(offsetpos);
     postop = offsetpos.top;
     posleft = offsetpos.left;
-    wwidth = jQuery(window).width();
-    wheight = jQuery(window).height();
+    wwidth = $(window).width();
+    wheight = $(window).height();
     if (posleft+bwidth > wwidth) block.css({'left': wwidth-bwidth-5});
     if (postop+bheight > wheight) block.css({'top': wheight-bheight-5});
 }
@@ -286,12 +288,12 @@ var Browser = {
 
 Browser.fixHeight = function() {
     return Browser.fixedHeight || (Browser.fixedHeight = (
-        jQuery('#plone-browser-body')[0].offsetTop
-            + parseInt(jQuery('#plone-browser-body').css('marginBottom'))
-            + parseInt(jQuery('#plone-browser-body').css('marginTop'))
-            + parseInt(jQuery('.statusBar', Browser.window).css('height'))
-            + parseInt(jQuery('#plone-browser-body').css('borderTopWidth'))
-            + parseInt(jQuery('#plone-browser-body').css('borderBottomWidth'))
+        $('#plone-browser-body')[0].offsetTop
+            + parseInt($('#plone-browser-body').css('marginBottom'))
+            + parseInt($('#plone-browser-body').css('marginTop'))
+            + parseInt($('.statusBar', Browser.window).css('height'))
+            + parseInt($('#plone-browser-body').css('borderTopWidth'))
+            + parseInt($('#plone-browser-body').css('borderBottomWidth'))
             + 15
     ));
 }
@@ -301,9 +303,9 @@ Browser.close = function() {
         top.window.close();
     }
     else {
-        jQuery('#plone-browser').remove();
+        $('#plone-browser').remove();
         Browser.window = null;
-        jQuery(window).unbind('resize');
+        $(window).unbind('resize');
     }
 }
 
@@ -350,9 +352,9 @@ Browser.size = function(top, left, width, height) {
         var bodyHeight = Browser.height;
         bodyHeight -= Browser.fixHeight();
         bodyHeight -= 8;
-        jQuery('#plone-browser-body').height(bodyHeight + 'px');
+        $('#plone-browser-body').height(bodyHeight + 'px');
     }
-    jQuery('#plone-browser .overlay').fullsize();
+    $('#plone-browser .overlay').fullsize();
 };
 
 Browser.setView = function(typeview) {
@@ -362,38 +364,38 @@ Browser.setView = function(typeview) {
     /* Browser.update('', Browser.formData); */
 
     if (typeview == 'file') {
-        jQuery('#plone-browser-body #sortheaders').css('display','block');
-        jQuery('#plone-browser-body .floatContainer')
+        $('#plone-browser-body #sortheaders').css('display','block');
+        $('#plone-browser-body .floatContainer')
             .changeClass('floatContainer','listContainer')
             .changeClass('portrait','portrait_icon')
             .changeClass('landscape','landscape_icon');
-        jQuery('#plone-browser-body img').each (function() {
+        $('#plone-browser-body img').each (function() {
             src = this.src;
             this.src = src.replace(/\/image_thumb/gi, '/image_listing');
-            if (jQuery.browser.msie) {
-                oldstyle = jQuery(this).attr('style');
-                jQuery(this).attr('style', oldstyle.replace(/px !important/gi, 'px'));
+            if ($.browser.msie) {
+                oldstyle = $(this).attr('style');
+                $(this).attr('style', oldstyle.replace(/px !important/gi, 'px'));
             }
         })
             }
     else {
-        jQuery('#plone-browser-body #sortheaders').css('display', 'none');
-        jQuery('#plone-browser-body .listContainer')
+        $('#plone-browser-body #sortheaders').css('display', 'none');
+        $('#plone-browser-body .listContainer')
             .changeClass('listContainer', 'floatContainer')
             .changeClass('portrait_icon', 'portrait')
             .changeClass('landscape_icon', 'landscape');
-        jQuery('#plone-browser-body img').each (function() {
+        $('#plone-browser-body img').each (function() {
             src = this.src;
             this.src = src.replace(/\/image_listing/gi, '/image_thumb');
-            if (jQuery.browser.msie) {
-                oldstyle = jQuery(this).attr('style');
-                jQuery(this).attr('style', oldstyle.replace(/px/gi, 'px !important'));
+            if ($.browser.msie) {
+                oldstyle = $(this).attr('style');
+                $(this).attr('style', oldstyle.replace(/px/gi, 'px !important'));
             }
         });
     }
 
-    jQuery('#menuViews a').removeClass('selected');
-    jQuery('#menuViews a.' + typeview + 'View').addClass('selected');
+    $('#menuViews a').removeClass('selected');
+    $('#menuViews a.' + typeview + 'View').addClass('selected');
 
 };
 
@@ -404,32 +406,32 @@ Browser.open = function(browsedpath) {
         browsedpath: encodeURI(browsedpath),
         typeview: Browser.typeview
     };
-    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
-    jQuery.post(aUrl, data, function(html) {
+    $('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+    $.post(aUrl, data, function(html) {
         Browser.close();
-        jQuery(document.body).append(html);
-        jQuery('#plone-browser').popup();
-        Browser.window = jQuery('#plone-browser > .window');
-        jQuery('#plone-browser-tab').mousedown(Browser.setMovable);
-        jQuery('#plone-browser-corner-resize').mousedown(Browser.setResizable);
+        $(document.body).append(html);
+        $('#plone-browser').popup();
+        Browser.window = $('#plone-browser > .window');
+        $('#plone-browser-tab').mousedown(Browser.setMovable);
+        $('#plone-browser-corner-resize').mousedown(Browser.setResizable);
         if (Browser.maximized)
             Browser.maximize();
         else
             Browser.size(Browser.top, Browser.left, Browser.width, Browser.height);
-        jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').hide();
+        $('.statusBar > div', Browser.window).hide().filter('#msg-loading').hide();
         TB_unlaunch();
         TB_launch();
-        jQuery(window).resize(function() {Browser.maximize();});
+        $(window).resize(function() {Browser.maximize();});
         Browser.batch();
     });
 };
 
 Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, nocompil) {
-    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+    $('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
     var aUrl = Browser.finderUrl;
     var size = Browser.size();
-    var bodyHeight = jQuery('#plone-browser-body')[0].offsetHeight;
-    Browser.formData = jQuery('#nextQuery').val();
+    var bodyHeight = $('#plone-browser-body')[0].offsetHeight;
+    Browser.formData = $('#nextQuery').val();
     if (typeof formData == "undefined" || !formData) {
         formData = Browser.formData;
     }
@@ -439,8 +441,8 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
         if (typeof b_start != "undefined") formData = compileData('b_start:int', b_start, formData);
         if (typeof sort_on != "undefined") {
             formData = compileData('finder_sort_on', sort_on, formData);
-            if (jQuery('#previousSearch').length) {
-                formData = compileData('SearchableText', jQuery('#previousSearch').val(), formData);
+            if ($('#previousSearch').length) {
+                formData = compileData('SearchableText', $('#previousSearch').val(), formData);
                 formData = compileData('searchsubmit:int', '1', formData);
             }
         }
@@ -448,63 +450,63 @@ Browser.update = function(browsedpath, formData, b_start, sort_on, sort_order, n
         formData = compileData('field_name', Browser.field_name, formData);
         formData = compileData('onlybody', 'true', formData);
     }
-    jQuery.ajax({
+    $.ajax({
         type: 'GET',
         url: aUrl,
         data: formData,
         dataType: 'html',
         contentType: "text/html; charset=utf-8",
         success: function(html) {
-            jQuery('#browser-crumbs, #browser-columns, #plone-browser-menu, #plone-browser-navigation, .listingBar').remove();
-            jQuery('#start-refresh').after(html);
+            $('#browser-crumbs, #browser-columns, #plone-browser-menu, #plone-browser-navigation, .listingBar').remove();
+            $('#start-refresh').after(html);
             /*if (Browser.maximized)
               Browser.maximize();
               else
               Browser.size(size);*/
             if (! isOldIE) {
-                jQuery('.finder_panel').height(bodyHeight - 12 + 'px');
+                $('.finder_panel').height(bodyHeight - 12 + 'px');
             }
             else {
-                jQuery('.finder_panel').height(bodyHeight + 'px');
+                $('.finder_panel').height(bodyHeight + 'px');
             }
-            jQuery('#plone-browser-body').css('visibility', 'visible');
-            jQuery('#plone-browser-navigation').css('visibility', 'visible');
-            jQuery('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
-            jQuery('#msg-done').fadeOut(5000);
+            $('#plone-browser-body').css('visibility', 'visible');
+            $('#plone-browser-navigation').css('visibility', 'visible');
+            $('.statusBar > div', Browser.window).hide().filter('#msg-done').show();
+            $('#msg-done').fadeOut(5000);
             TB_unlaunch();
             TB_launch();
-            Browser.url = jQuery('#browsed_url').val();
+            Browser.url = $('#browsed_url').val();
             Browser.batch();
             Browser.displayactionmenus();
         } });
 }
 
 Browser.openRightPanel = function() {
-    rightpanel = jQuery('#right-panel');
+    rightpanel = $('#right-panel');
     rightpanel.empty();
-    jQuery(rightpanel.parent()).show();
+    $(rightpanel.parent()).show();
 }
 
 Browser.closeRightPanel = function() {
-    rightpanel = jQuery('#right-panel');
+    rightpanel = $('#right-panel');
     rightpanel.empty();
-    jQuery(rightpanel.parent()).hide();
+    $(rightpanel.parent()).hide();
     Browser.unselectActions ();
 }
 
 Browser.unselectActions = function() {
-    jQuery('#menuActions a').removeClass('selected');
+    $('#menuActions a').removeClass('selected');
 }
 
 Browser.openUploader = function() {
-    var uploadButton = jQuery('#menuActions .uploadView');
-    var uploadContainer = jQuery('#right-panel');
+    var uploadButton = $('#menuActions .uploadView');
+    var uploadContainer = $('#right-panel');
     if (! uploadButton.hasClass('selected')) {
         Browser.unselectActions ();
         var uploadUrl = Browser.url + '/@@finder_upload';
         Browser.openRightPanel();
         uploadButton.addClass('selected');
-        jQuery.ajax({
+        $.ajax({
             type: 'GET',
             url: uploadUrl,
             data: '',
@@ -525,19 +527,19 @@ Browser.onUploadComplete = function() {
     // remove upload form
     Browser.closeRightPanel();
     // update to the last batched page (TODO > update with the last page)
-    var b_start = jQuery('#start_after_upload').val();
+    var b_start = $('#start_after_upload').val();
     Browser.update('', '', b_start);
 }
 
 Browser.openAddFolderForm = function() {
-    var addFolderButton = jQuery('#menuActions .addFolderView');
-    var addFolderContainer = jQuery('#right-panel');
+    var addFolderButton = $('#menuActions .addFolderView');
+    var addFolderContainer = $('#right-panel');
     if (! addFolderButton.hasClass('selected')) {
         Browser.unselectActions ();
         var addFolderUrl = Browser.url + '/@@finder_add_folder';
         Browser.openRightPanel();
         addFolderButton.addClass('selected');
-        jQuery.ajax({
+        $.ajax({
             type: 'GET',
             url: addFolderUrl,
             data: '',
@@ -555,11 +557,11 @@ Browser.openAddFolderForm = function() {
 }
 
 Browser.createFolder = function() {
-    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+    $('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
     createFolderUrl = Browser.url + '/@@finder_create_folder';
-    var folderForm = jQuery('#create-new-folder');
-    var formData = jQuery('input:not([type=button]), textarea', folderForm).serialize();
-    jQuery.ajax({
+    var folderForm = $('#create-new-folder');
+    var formData = $('input:not([type=button]), textarea', folderForm).serialize();
+    $.ajax({
         type: 'GET',
         url: createFolderUrl,
         data: formData,
@@ -578,7 +580,7 @@ Browser.setResizable = function(e) {
     Browser.start_width -= e.clientX + document.documentElement.scrollLeft;
     Browser.start_height -= e.clientY + document.documentElement.scrollTop;
     document.body.style.cursor = 'se-resize';
-    jQuery(document.body).mousemove(Browser.resize).mouseup(Browser.drop);
+    $(document.body).mousemove(Browser.resize).mouseup(Browser.drop);
     return false;
 };
 
@@ -599,7 +601,7 @@ Browser.setMovable = function(e) {
     Browser.start_y = Browser.size().top;
     Browser.start_x -= e.clientX + document.documentElement.scrollLeft;
     Browser.start_y -= e.clientY + document.documentElement.scrollTop;
-    jQuery(document.body).mousemove(Browser.move).mouseup(Browser.drop);
+    $(document.body).mousemove(Browser.move).mouseup(Browser.drop);
     return false;
 };
 
@@ -614,7 +616,7 @@ Browser.move = function(e) {
 
 Browser.drop = function(e) {
     document.body.style.cursor = '';
-    jQuery(document.body)
+    $(document.body)
         .unbind('mousemove', Browser.resize)
         .unbind('mousemove', Browser.move)
         .unbind('mouseup', Browser.drop);
@@ -625,11 +627,11 @@ Browser.drop = function(e) {
 };
 
 Browser.search = function() {
-    // var SearchableText = jQuery('#SearchableText').val();
-    var searchform = jQuery('#finderSearchForm');
-    Browser.formData = jQuery('#nextQuery').val();
-    var formData = jQuery('input:not([type=submit]), textarea, select', searchform).serialize() + '&' + Browser.formData;
-    var browsedpath = jQuery('#browsedpath').val();
+    // var SearchableText = $('#SearchableText').val();
+    var searchform = $('#finderSearchForm');
+    Browser.formData = $('#nextQuery').val();
+    var formData = $('input:not([type=submit]), textarea, select', searchform).serialize() + '&' + Browser.formData;
+    var browsedpath = $('#browsedpath').val();
     Browser.update(browsedpath, formData);
 };
 
@@ -641,7 +643,7 @@ Browser.sorton = function(sort_on, sort_order) {
    just create a finderSelectItem function in your window.opener  */
 
 Browser.selectItem = function (UID, title, image_preview) {
-    jQuery('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
+    $('.statusBar > div', Browser.window).hide().filter('#msg-loading').show();
     var fieldid = getBrowserData(Browser.formData, 'fieldid');
     if (typeof window.opener.finderSelectItem !='undefined') window.opener.finderSelectItem(UID, title, image_preview, fieldid);
     else {
@@ -650,14 +652,14 @@ Browser.selectItem = function (UID, title, image_preview) {
     }
     if (Browser.forcecloseoninsert) Browser.close();
     else {
-        jQuery('.statusBar > div', Browser.window).hide('10000').filter('#msg-done').show();
-        jQuery('#msg-done').fadeOut(10000);
+        $('.statusBar > div', Browser.window).hide('10000').filter('#msg-done').show();
+        $('#msg-done').fadeOut(10000);
     }
 };
 
 
 Browser.batch = function() {
-    jQuery('#plone-browser .listingBar a').click(
+    $('#plone-browser .listingBar a').click(
         function(){
             var batchUrl = this.href;
             var queryString = batchUrl.replace(/^[^\?]+\??/,'');
@@ -669,59 +671,59 @@ Browser.batch = function() {
 }
 
 Browser.displayactionmenus = function() {
-    jQuery('a.actionMenusButton').click(function(){
-        jQuery(this).addClass('selected');
-        rel = jQuery(this).parent();
-        menu = jQuery('.finderActionMenuContainer', rel);
-        if (jQuery(this).parents('.floatContainer').length) {
-            absolutizeBlockPosition(jQuery(rel),menu.width(),menu.height());
+    $('a.actionMenusButton').click(function(){
+        $(this).addClass('selected');
+        rel = $(this).parent();
+        menu = $('.finderActionMenuContainer', rel);
+        if ($(this).parents('.floatContainer').length) {
+            absolutizeBlockPosition($(rel),menu.width(),menu.height());
         }
         menu.show();
         menu.mouseleave(function(){
-            rel = jQuery(this).parent();
-            jQuery(rel).removeAttr('style');
-            jQuery('a.actionMenusButton', rel).removeClass('selected');
-            jQuery(this).hide();
+            rel = $(this).parent();
+            $(rel).removeAttr('style');
+            $('a.actionMenusButton', rel).removeClass('selected');
+            $(this).hide();
         });
     });
 }
 
 Browser.batchresize = function() {
-    var b_size = jQuery('#b_size').val();
-    formData = compileData('b_size:int', b_size, jQuery('#b_size_query').val());
+    var b_size = $('#b_size').val();
+    formData = compileData('b_size:int', b_size, $('#b_size_query').val());
     Browser.update('', formData);
 }
 
 Browser.Popup_init = function() {
-    jQuery('body').css('overflow', 'hidden');
-    Browser.window = jQuery('#plone-browser > .window');
+    $('body').css('overflow', 'hidden');
+    Browser.window = $('#plone-browser > .window');
     arrayPageSize = getPageSize();
     if (! isOldIE) {
-        jQuery('.popup .finder_panel').height(arrayPageSize[3] -130);
+        $('.popup .finder_panel').height(arrayPageSize[3] -130);
     }
     else {
-        jQuery('.popup .finder_panel').height(arrayPageSize[3] - 115);
+        $('.popup .finder_panel').height(arrayPageSize[3] - 115);
     }
-    jQuery('.popup #plone-browser-body').css('visibility','visible');
-    jQuery('.popup #plone-browser-navigation').css('visibility', 'visible');
+    $('.popup #plone-browser-body').css('visibility','visible');
+    $('.popup #plone-browser-navigation').css('visibility', 'visible');
     Browser.displayactionmenus();
     Browser.batch();
 
 };
 
 Browser.init = function() {
-    Browser.typeview = jQuery('#typeview').val();
-    Browser.formData = jQuery('#nextQuery').val();
-    Browser.url = jQuery('#browsed_url').val();
-    Browser.finderUrl = '@@' + jQuery('#finderName').val();
-    Browser.forcecloseoninsert = parseInt(jQuery('#forcecloseoninsert').val()) ;
-    if (jQuery('#plone-browser.popup')) {
+    Browser.typeview = $('#typeview').val();
+    Browser.formData = $('#nextQuery').val();
+    Browser.url = $('#browsed_url').val();
+    Browser.finderUrl = '@@' + $('#finderName').val();
+    Browser.forcecloseoninsert = parseInt($('#forcecloseoninsert').val()) ;
+    if ($('#plone-browser.popup')) {
         Browser.ispopup =true;
         Browser.Popup_init();
-        jQuery(window).bind('resize', Browser.Popup_init);
+        $(window).bind('resize', Browser.Popup_init);
     }
 }
 
-jQuery(document).ready(function(){
+$(document).ready(function(){
     Browser.init();
 })
