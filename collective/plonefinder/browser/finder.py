@@ -161,7 +161,7 @@ class Finder(BrowserView):
         #: True to display search results
         self.searchsubmit = False
         #: True to allow file upload through the finder
-        self.allowupload = False
+        self.allowupload = True
         #: True to display upload widget by default, only relevant if self.allowupload = True
         self.openuploadwidgetdefault = False
         #: True to allow creating new folders through the finder

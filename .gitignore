@@ -80,3 +80,7 @@ include
 lib
 local
 share
+
+.idea
+pyvenv.cfg
+src
