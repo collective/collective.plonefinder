@@ -409,7 +409,7 @@
                script/style tags. -->
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-      <tal:block replace="structure provider:plone.htmlhead" />
+      <tal:block replace="structure provider:plone.htmlhead.links" />
 
       <tal:block replace="structure provider:plone.scripts" />
 
