@@ -3,25 +3,23 @@
 __author__ = 'Ramon Bartl <ramon.bartl@inquant.de>'
 __docformat__ = 'plaintext'
 
+from _thread import allocate_lock
+
 import transaction
-from thread import allocate_lock
 from Acquisition import aq_inner
-from zope import interface
-from zope import component
-from zope.filerepresentation.interfaces import IDirectoryFactory
-from zope.container.interfaces import INameChooser
-
-from plone.i18n.normalizer.interfaces import IIDNormalizer
-
 from Products.CMFPlone import utils as ploneutils
-
-from interfaces import IFinderUploadCapable
+from collective.plonefinder.browser.interfaces import IFinderUploadCapable
+from plone.i18n.normalizer.interfaces import IIDNormalizer
+from zope import component
+from zope.container.interfaces import INameChooser
+from zope.filerepresentation.interfaces import IDirectoryFactory
+from zope.interface import implementer
 
 upload_lock = allocate_lock()
 
 
+@implementer(IDirectoryFactory)
 class FinderCreateFolderCapableFactory(object):
-    interface.implements(IDirectoryFactory)
     component.adapts(IFinderUploadCapable)
 
     def __init__(self, context):
