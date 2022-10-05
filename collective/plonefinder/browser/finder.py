@@ -11,7 +11,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import getFSVersionTuple
-from plone.app.layout.navigation.interfaces import INavigationRoot
+from plone.app.imaging.utils import getAllowedSizes
 try:
     from Products.ATContentTypes.interface import IATTopic
     HAS_AT = True
@@ -586,33 +586,22 @@ class Finder(BrowserView):
 
         return results
 
-
     def getThumbSizes(self):
-        """Return an ordered list of thumb sizes taken from portal properties
-        imaging properties when exists list of tuples [(label, width, height,
-        thumb_label, thumb_extension), ...]
-        FIXME: This is too much associated with standard ATImage. We should proceed
-        with views/adapters
+        """Return an ordered list of thumb sizes taken from portal imaging settings
+        (if existing) as list of tuples [(name, width, height,
+        label, url_appendix), ...]
         """
-        context = aq_inner(self.context)
-        pprops = getToolByName(context, 'portal_properties')
-        if hasattr(pprops, 'imaging_properties'):
-            imaging_properties = pprops.imaging_properties
-            thumb_sizes_props = imaging_properties.getProperty('allowed_sizes')
-            thumb_sizes = []
-            for prop in thumb_sizes_props:
-                propInfo = prop.split(' ')
-                thumb_name = propInfo[0]
-                thumb_width = int(propInfo[1].split(':')[0])
-                thumb_height = int(propInfo[1].split(':')[1])
-                thumb_label = "%s : %ipx*%ipx" % (_(thumb_name.capitalize()), thumb_width,
-                                                  thumb_height)
-                thumb_extension = "/@@images/image/%s" % thumb_name
-                thumb_sizes.append((thumb_name, thumb_width, thumb_height, thumb_label,
-                                    thumb_extension))
-            thumb_sizes.sort(key=lambda ts: ts[1])
-            return thumb_sizes
+        # use util from plone.app.imaging to retrieve the sizes (dict of size tuples)
+        image_sizes = getAllowedSizes()
+        thumb_sizes = []
+        for name in image_sizes:
+            width, height = image_sizes[name]
+            label = "%s : %ipx*%ipx" % (_(name.capitalize()), width, height)
+            url_appendix = "/@@images/image/%s" % name
+            thumb_sizes.append((name, width, height, label, url_appendix))
+        return sorted(thumb_sizes, key=lambda ts: ts[1])
 
+        # a default
         return [
             ('listing', 16, 16, '%s : 16px*16px' % _('Listing'), '/@@images/image/listing'),
             ('icon', 32, 32, '%s : 32px*32px' % _('Icon'), '/@@images/image/icon'),
