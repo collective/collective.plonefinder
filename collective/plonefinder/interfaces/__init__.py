@@ -2,5 +2,5 @@
 # $Id$
 """Public interfaces"""
 
-from finder import IFinder
+from collective.plonefinder.interfaces.finder import IFinder
 
