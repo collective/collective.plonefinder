@@ -3,7 +3,7 @@
 """Finder pop up control"""
 
 from ZTUtils import make_query
-from zope.interface import implements
+from zope.interface import implementer
 
 from Products.Five import BrowserView
 from Acquisition import aq_base, aq_inner
@@ -19,7 +19,7 @@ except ImportError:
     HAS_AT = False
 
 from collective.plonefinder.interfaces import IFinder
-from interfaces import IFinderUploadCapable
+from collective.plonefinder.browser.interfaces import IFinderUploadCapable
 from collective.plonefinder import siteMessageFactory as _
 from collective.plonefinder.utils import pleaseDontCache
 
@@ -84,10 +84,10 @@ def finderTopicsQueryCatalog(scope, catalog,  **kw):
 FORM_PARAMS = ('SearchableText',)
 
 
+@implementer(IFinder)
 class Finder(BrowserView):
     """Class for Plone Finder View
     """
-    implements(IFinder)
 
     template = ViewPageTemplateFile('finder.pt')
 
