@@ -593,13 +593,14 @@ class Finder(BrowserView):
         """
         # use util from plone.app.imaging to retrieve the sizes (dict of size tuples)
         image_sizes = getAllowedSizes()
-        thumb_sizes = []
-        for name in image_sizes:
-            width, height = image_sizes[name]
-            label = "%s : %ipx*%ipx" % (_(name.capitalize()), width, height)
-            url_appendix = "/@@images/image/%s" % name
-            thumb_sizes.append((name, width, height, label, url_appendix))
-        return sorted(thumb_sizes, key=lambda ts: ts[1])
+        if image_sizes:
+            thumb_sizes = []
+            for name in image_sizes:
+                width, height = image_sizes[name]
+                label = "%s : %ipx*%ipx" % (_(name.capitalize()), width, height)
+                url_appendix = "/@@images/image/%s" % name
+                thumb_sizes.append((name, width, height, label, url_appendix))
+            return sorted(thumb_sizes, key=lambda ts: ts[1])
 
         # a default
         return [
