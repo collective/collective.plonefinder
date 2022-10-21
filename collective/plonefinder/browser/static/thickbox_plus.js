@@ -1,8 +1,8 @@
 /* Thickbox Plus - One resizing box to rule them all.
  * ==================================================
  * $Id$
- * Based on original Thickbox script by Cody Lindley (http://www.codylindley.com)
- * Modified by Christian Montoya (http://www.christianmontoya.com)
+ * Based on original Thickbox script by Cody Lindley (https://www.codylindley.com)
+ * Modified by Christian Montoya (https://www.christianmontoya.com)
  * For information, visit http://lab.christianmontoya.com/thickbox-plus/
  * Under an Attribution, Share Alike License
  * Thickbox is built on top of the very light weight jquery library.
