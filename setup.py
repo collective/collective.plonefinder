@@ -18,7 +18,7 @@ setup(name='collective.plonefinder',
       long_description=(read("README.rst")
                         + "\n\n"
                         +read("docs", "HISTORY.txt")),
-      # Get more strings from http://www.python.org/pypi?%3Aaction=list_classifiers
+      # Get more strings from https://pypi.org/pypi?%3Aaction=list_classifiers
       classifiers=[
         "Environment :: Web Environment",
         "License :: OSI Approved :: GNU General Public License (GPL)",
