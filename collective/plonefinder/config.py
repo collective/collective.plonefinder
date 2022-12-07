@@ -4,4 +4,4 @@
 """
 
 PROJECTNAME = 'collective.plonefinder'
-
+CONTENT_TYPE = 'Folder'

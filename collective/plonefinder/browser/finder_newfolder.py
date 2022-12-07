@@ -13,6 +13,7 @@ from collective.plonefinder.utils import pleaseDontCache
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from collective.plonefinder.config import CONTENT_TYPE
 
 
 class FinderNewFolderView(BrowserView):
@@ -43,10 +44,8 @@ class FinderNewFolder(BrowserView):
         """
         context = aq_inner(self.context)
         request = self.request
-        session = request.get('SESSION', None)
 
-        # FIXME: hardcoded content type, should be in config.py
-        portal_type = session.get('typefolder', request.get('typefolder', 'Folder'))
+        portal_type = request.get('typefolder', CONTENT_TYPE)
 
         title = request.get('folder-title', '')
         description = request.get('folder-description', '')

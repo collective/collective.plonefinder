@@ -228,7 +228,10 @@ class Finder(BrowserView):
         # Use self.blacklist (or blacklist in session or request) to remove some
         # uids from results
         rblacklist = request.get('blacklist', self.blacklist)
-        sblacklist = session.get('blacklist', rblacklist)
+        if session:
+            sblacklist = session.get('blacklist', rblacklist)
+        else:
+            sblacklist = []
         if sblacklist and not rblacklist and not request.get('newsession', False):
             self.blacklist = sblacklist
         else:
