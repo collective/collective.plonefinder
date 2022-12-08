@@ -565,7 +565,7 @@ Browser.createFolder = function() {
         type: 'GET',
         url: createFolderUrl,
         data: formData,
-        dataType: formData,
+        dataType: "text",
         contentType: "text/html; charset=utf-8",
         success: function(html) {
             Browser.update();
