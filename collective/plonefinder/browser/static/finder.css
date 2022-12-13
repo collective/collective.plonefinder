@@ -710,7 +710,6 @@ a.addFolderView {
 .popup .browserStatic {
    position: static;
    height: 100%;
-   background-color: #e0e4ff;
 }
 
 .popup .listContainer a {
