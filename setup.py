@@ -10,7 +10,7 @@ def read(*names):
     path = os.path.join(here, *names)
     return open(path, 'r').read().strip()
 
-version = '1.3.2.dev0'
+version = '2.0.0a1'
 
 tests_require = [
     'plone.app.testing',
