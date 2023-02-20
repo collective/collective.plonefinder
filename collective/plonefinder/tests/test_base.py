@@ -9,5 +9,9 @@ class TestPlonefinder(unittest.TestCase):
 
     layer = COLLECTIVE_PLONEFINDER_INTEGRATION
 
-    def test_dummy(self):
-        self.assertTrue(True)
+    def test_view_basic(self):
+        portal = self.layer['portal']
+        view = portal.restrictedTraverse('@@plone_finder')
+        contents = view()
+        self.assertTrue('plone-browser' in contents)
+
