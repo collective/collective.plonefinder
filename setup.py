@@ -12,6 +12,10 @@ def read(*names):
 
 version = '1.3.2.dev0'
 
+tests_require = [
+    'plone.app.testing',
+    ]
+
 setup(name='collective.plonefinder',
       version=version,
       description="A finder to search/select portal objects for Plone",
@@ -50,6 +54,9 @@ setup(name='collective.plonefinder',
           'collective.quickupload',
           'plone.api',
           ],
+      extras_require={
+          'test': tests_require,
+      },
       entry_points="""
       # -*- Entry points: -*-
       [z3c.autoinclude.plugin]
