@@ -32,6 +32,10 @@ jQuery code) and Jean-Mat Grimaldi (everything else) for PloneArticle product.
    anything more in yous site if you install only this component to your Zope
    instance.
 
+Plone 5.2 and later support is in 2.x releases.
+
+Plone 4.3 support in 1.x releases.
+
 Requirements
 ============
 

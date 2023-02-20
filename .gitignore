@@ -84,3 +84,5 @@ share
 .idea
 pyvenv.cfg
 src
+.mr.developer.cfg
+pip-selfcheck.json
