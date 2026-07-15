@@ -4,7 +4,11 @@ Changelog
 2.0.0a2 (unreleased)
 --------------------
 
-- Nothing changed yet.
+- Guard against ``request['SESSION']`` being ``None`` (happens on Plone 6
+  where ``zodb-temporary-storage`` is off by default), which previously
+  triggered ``AttributeError: 'NoneType' object has no attribute 'get'``
+  in ``@@plone_finder``.
+  [gotcha]
 
 
 2.0.0a1 (2023-02-20)

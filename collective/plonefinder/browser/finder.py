@@ -186,7 +186,12 @@ class Finder(BrowserView):
         """
         context = aq_inner(self.context)
         request = aq_inner(self.request)
-        session = request.get('SESSION', {})
+        # SESSION may be missing entirely, or present-but-None when Plone is
+        # configured without a temporary storage (the default on Plone 6, where
+        # `zodb-temporary-storage` defaults to off). Fall back to an empty
+        # mapping so subsequent ``session.get(...)`` / ``session.set(...)``
+        # calls degrade gracefully instead of raising AttributeError.
+        session = request.get('SESSION') or {}
 
         pleaseDontCache(context, request)
 
